@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: ./docker/compose/php-fpm
+      args:
+        APP_NAME: ${APP_NAME}
+        FPM_PORT: ${FPM_PORT}
+    container_name: ${APP_NAME}_app
+    volumes:
+      - .:/var/www/${APP_NAME}
+      - ./docker/config/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./db:/data/db
+    environment:
+      PHP_IDE_CONFIG: "serverName=${APP_NAME}"
+      TZ: '${TZ}'
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    # restart: unless-stopped
+
+  nginx:
+    build:
+      context: ./docker/compose/nginx
+      args:
+        APP_NAME: ${APP_NAME}
+        FPM_PORT: ${FPM_PORT}
+    container_name: ${APP_NAME}_nginx
+    hostname: ${APP_NAME}_nginx
+    volumes:
+      - .:/var/www/${APP_NAME}
+    depends_on:
+      - app
+    # restart: unless-stopped
+    ports:
+      - 8102:80
+
+  memcached:
+    image: memcached:latest
+    container_name: ${APP_NAME}_memcached
+    hostname: ${APP_NAME}_memcached
+    ports:
+      - "11213:11211"
+
+  mysql:
+    image: mysql:8.0
+    container_name: ${APP_NAME}_mysql
+    hostname: ${APP_NAME}_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    # restart: unless-stopped
+
+volumes:
+  mysql-data:
+    driver: local

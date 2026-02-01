@@ -1,0 +1,196 @@
+<?php
+
+namespace Titanbot\Daemon\Tests\E2E\Habit;
+
+use PHPUnit\Framework\Attributes\Test;
+use Titanbot\Daemon\Tests\E2E\E2eTestCase;
+use Symfony\Component\HttpFoundation\Response;
+use Titanbot\Daemon\Domain\Entity\Habit\Habit;
+use Titanbot\Daemon\Domain\Entity\Habit\Pixel;
+
+class HabitTest extends E2eTestCase
+{
+    #[Test]
+    public function testLifeCycle(): void
+    {
+        $repository = self::getContainer()->get('doctrine')->getRepository(Habit::class);
+
+        /** CREATE */
+        $data = [
+            'priority' => 1000,
+            'trigger_ocr' => null,
+            'pixel_list' => [
+                ['x' => 1, 'y' => 1, 'rgb_hex' => 'FF0099', 'deviation' => 12],
+                ['x' => 2, 'y' => 2, 'rgb_hex' => '220099', 'deviation' => 4],
+            ],
+            'trigger_shell' => 'trigger_shell',
+            'action' => 'action',
+        ];
+
+        $entity = $this->createHabit($data);
+        
+        $this->assertNotEmpty($entity->getPixelList()->toArray());
+        $this->assertTrue(array_any($entity->getPixelList()->toArray(), fn (Pixel $pixel) => $pixel->getDot()->getX() === 2 && $pixel->getDot()->getY() === 2 && $pixel->getColor()->getRgbHex() === '220099' ));
+        $this->assertSame(1000, $entity->getPriority());
+        $this->assertNull($entity->getTriggerOcr());
+        $this->assertSame('trigger_shell', $entity->getTriggerShell());
+
+        /** READ */
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
+
+        $this->assertSame('trigger_shell', $data['habit']['trigger_shell']);
+        $this->assertSame(1000, $data['habit']['priority']);
+        $this->assertNull($data['habit']['trigger_ocr']);
+
+        /** INDEX */
+        $this->getAdminClient()->jsonRequest('GET', '/habit');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
+
+        $this->assertNotEmpty($data['uuid_to_habit_map']);
+        $this->assertSame('trigger_shell', current($data['uuid_to_habit_map'])['trigger_shell']);
+
+        /** UPDATE */
+        $data = [
+            'priority' => 1001,
+            'action' => 'action2',
+            'trigger_shell' => 'trigger_shell2',
+        ];
+
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), $data);
+        $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
+
+
+
+        $em = self::getContainer()->get('doctrine')->getManager();
+        $entity = $em->getRepository(Habit::class)->find($entity->getUuid());
+
+        $this->assertNotNull($entity);
+        $this->assertSame(1001, $entity->getPriority());
+        $this->assertNull($entity->getTriggerOcr());
+        $this->assertSame('trigger_shell2', $entity->getTriggerShell());
+
+        /** DELETE */
+        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+
+        $entity = $repository->findOneBy(['uuid' => $entity->getUuid()]);
+        $this->assertNull($entity);
+    }
+
+    #[Test]
+    public function testEmptyRequests(): void
+    {
+        $this->getAdminClient()->jsonRequest('POST', '/habit', []);
+        $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
+
+        $this->getAdminClient()->jsonRequest('DELETE', '/habit');
+        $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
+    }
+
+    #[Test]
+    public function testNullableFieldsCreation(): void
+    {
+        $data = ['action' => 'action'];
+        $entity = $this->createHabit($data);
+
+        $this->assertNull($entity->getTriggerOcr());
+        $this->assertNull($entity->getPriority());
+    }
+
+    #[Test]
+    public function testNotFoundStatus(): void
+    {
+        $uuid = $this->uuidHelper->create();
+
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $uuid));
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
+    #[Test]
+    public function testAccessAnonimous(): void
+    {
+        $entity = $this->createHabit(['action' => 'action']);
+
+        $this->getAnonimousClient()->jsonRequest('POST', '/habit', []);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getAnonimousClient()->jsonRequest('GET', '/habit?slug=slug');
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getAnonimousClient()->jsonRequest('GET', '/habit');
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        
+        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), []);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+
+    #[Test]
+    public function testAccessHacker(): void
+    {
+        $entity = $this->createHabit(['action' => 'action']);
+
+        $this->getHackerClient()->jsonRequest('POST', '/habit', []);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getHackerClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getHackerClient()->jsonRequest('GET', '/habit');
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        
+        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), []);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+
+    #[Test]
+    public function testAccessDaemon(): void
+    {
+        $entity = $this->createHabit(['action' => 'action']);
+
+        $this->getDaemonClient()->jsonRequest('POST', '/habit', []);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->getDaemonClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->getDaemonClient()->jsonRequest('GET', '/habit');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        
+        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), []);
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+    }
+
+    private function createHabit(array $data): Habit
+    {
+        $repository = self::getContainer()->get('doctrine')->getRepository(Habit::class);
+
+        $this->getAdminClient()->jsonRequest('POST', '/habit', $data);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
+        $this->assertNotNull($data['uuid']);
+        $uuid = $this->uuidHelper->fromString($data['uuid']);
+
+        /** @var Habit $entity */
+        $entity = $repository->findOneBy(['uuid' => $uuid]);
+
+        $this->assertNotNull($entity);
+        $this->assertEquals($uuid, $entity->getUuid());
+
+        return $entity;
+    }
+}

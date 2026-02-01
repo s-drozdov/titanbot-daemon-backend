@@ -1,0 +1,72 @@
+flowchart TD
+    subgraph "Client Network"
+        C1[Client 1]
+        C2[Client 2]
+        Cn[Client N]
+    end
+
+    subgraph "Admin Network"
+        AF[Admin Frontend]
+    end
+
+    subgraph "Public Network"
+        LB[Load Balancer<br/>Public]
+    end
+
+    subgraph "Cluster (Internal Network)"
+        subgraph "Replica Set 1: RO Mode"
+            RS1_Pod1[Pod: Backend RO]
+            RS1_Pod2[Pod: Backend RO]
+        end
+
+        subgraph "Replica Set 2: Admin Mode"
+            RS2_Pod1[Pod: Backend Admin]
+            RS2_Pod2[Pod: Backend Admin]
+        end
+
+        AM[Admin Middleware]
+        Vault[(Hashicorp Vault)]
+        DB[(Database)]
+        
+        OIDC[OAuth 2.0 Provider]
+    end
+
+    %% Client requests
+    C1 -- "HTTPS + X-API-KEY: DaemonToken" --> LB
+    C2 -- "HTTPS + X-API-KEY: DaemonToken" --> LB
+    Cn -- "HTTPS + X-API-KEY: DaemonToken" --> LB
+    
+    LB -- "RO Requests" --> RS1_Pod1
+    LB -- "RO Requests" --> RS1_Pod2
+
+    %% Admin requests
+    AF -- "OAuth 2.0 Flow" --> OIDC
+    AF -- "Authenticated API Request" --> AM
+    AM -- "X-API-KEY: AdminToken" --> RS2_Pod1
+    AM -- "X-API-KEY: AdminToken" --> RS2_Pod2
+
+    %% Internal communications
+    RS1_Pod1 -- "Validate DaemonToken" --> DB
+    RS1_Pod2 -- "Validate DaemonToken" --> DB
+    
+    RS2_Pod1 -- "Request AdminToken" --> Vault
+    RS2_Pod2 -- "Request AdminToken" --> Vault
+    
+    RS2_Pod1 -- "Write/Read Operations" --> DB
+    RS2_Pod2 -- "Write/Read Operations" --> DB
+
+
+    style C1 fill:#666,stroke:#888,stroke-width:2px,color:#fff
+    style C2 fill:#666,stroke:#888,stroke-width:2px,color:#fff
+    style Cn fill:#666,stroke:#888,stroke-width:2px,color:#fff
+    style AF fill:#4a5568,stroke:#718096,stroke-width:2px,color:#fff
+    style LB fill:#333,stroke:#555,stroke-width:2px,color:#fff
+    style RS1_Pod1 fill:#2c5282,stroke:#4299e1,stroke-width:2px,color:#fff
+    style RS1_Pod2 fill:#2c5282,stroke:#4299e1,stroke-width:2px,color:#fff
+    style RS2_Pod1 fill:#742a2a,stroke:#c53030,stroke-width:2px,color:#fff
+    style RS2_Pod2 fill:#742a2a,stroke:#c53030,stroke-width:2px,color:#fff
+    style AM fill:#444,stroke:#666,stroke-width:2px,color:#fff
+    style Vault fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#fff
+    style DB fill:#2d3748,stroke:#4a5568,stroke-width:2px,color:#fff
+    style OIDC fill:#234e52,stroke:#38b2ac,stroke-width:2px,color:#fff
+    

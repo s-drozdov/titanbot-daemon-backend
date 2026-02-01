@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Titanbot\Daemon\Domain\Entity\Device\Account" table="accounts">
+        <id name="uuid" type="uuid_binary" column="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <many-to-many
+            field="deviceList"
+            target-entity="Titanbot\Daemon\Domain\Entity\Device\Device"
+            mapped-by="accountList"
+        />
+
+        <one-to-many
+            field="currentDeviceList"
+            target-entity="Titanbot\Daemon\Domain\Entity\Device\Device"
+            mapped-by="currentAccount"
+        >
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <many-to-one
+            field="legion"
+            target-entity="Titanbot\Daemon\Domain\Entity\Device\Legion"
+            inversed-by="accountList"
+        >
+            <join-column
+                name="legion_uuid"
+                referenced-column-name="uuid"
+                nullable="true"
+                on-delete="SET NULL"
+            />
+        </many-to-one>
+
+        <field name="logicalId" column="logical_id" type="integer" nullable="false" unique="true"/>
+
+        <field name="firstName" column="first_name" type="string" length="255" nullable="false"/>
+
+        <field name="lastName" column="last_name" type="string" length="255" nullable="false"/>
+
+        <field name="birthDate" column="birth_date" type="date_immutable" nullable="false"/>
+
+        <field name="gender" column="gender" type="gender_enum" length="255" nullable="false"/>
+
+        <field name="googleLogin" column="google_login" type="string" length="255" nullable="false"/>
+
+        <field name="googlePassword" column="google_password" type="string" length="255" nullable="false"/>
+    </entity>
+</doctrine-mapping>

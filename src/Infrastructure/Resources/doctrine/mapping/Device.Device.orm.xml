@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Titanbot\Daemon\Domain\Entity\Device\Device" table="devices">
+        <id name="uuid" type="uuid_binary" column="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <many-to-many
+            field="accountList"
+            target-entity="Titanbot\Daemon\Domain\Entity\Device\Account"
+            inversed-by="deviceList"
+        >
+            <join-table name="device_accounts">
+                <join-columns>
+                    <join-column
+                        name="device_uuid"
+                        referenced-column-name="uuid"
+                        on-delete="CASCADE"
+                    />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column
+                        name="account_uuid"
+                        referenced-column-name="uuid"
+                        on-delete="CASCADE"
+                    />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <many-to-one
+            field="currentAccount"
+            target-entity="Titanbot\Daemon\Domain\Entity\Device\Account"
+            inversed-by="currentDeviceList"
+        >
+            <join-column
+                name="current_account_uuid"
+                referenced-column-name="uuid"
+                nullable="true"
+                on-delete="SET NULL"
+            />
+        </many-to-one>
+
+        <field name="physicalId" column="physical_id" type="integer" nullable="false" unique="true"/>
+
+        <field name="isActive" column="is_active" type="boolean" nullable="false"/>
+
+        <field name="activityType" column="activity_type" type="activity_type_enum" length="255" nullable="false"/>
+
+        <field name="isEmpireSleeping" column="is_empire_sleeping" type="boolean" nullable="false"/>
+
+        <field name="isFullServerDetection" column="is_full_server_detection" type="boolean" nullable="false"/>
+
+        <field name="isAbleToClearCache" column="is_able_to_clear_cache" type="boolean" nullable="false"/>
+
+        <field name="goTimeLimitSeconds" column="go_time_limit_seconds" type="integer" nullable="false"/>
+        
+        <indexes>
+            <index name="idx__devices__physical_id" columns="physical_id"/>
+        </indexes>
+    </entity>
+</doctrine-mapping>

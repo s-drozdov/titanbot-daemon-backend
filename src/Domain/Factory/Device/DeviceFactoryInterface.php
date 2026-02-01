@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Titanbot\Daemon\Domain\Factory\Device;
+
+use InvalidArgumentException;
+use Titanbot\Daemon\Domain\Enum\ActivityType;
+use Titanbot\Daemon\Domain\Factory\FactoryInterface;
+use Titanbot\Daemon\Domain\Entity\Device\Device;
+
+interface DeviceFactoryInterface extends FactoryInterface
+{
+    public const bool DEFAULT_IS_ACTIVE = false;
+    public const ActivityType DEFAULT_ACTIVITY_TYPE = ActivityType::Rowgplay;
+    public const bool DEFAULT_IS_EMPIRE_SLEEPING = false;
+    public const bool DEFAULT_IS_FULL_SERVER_DETECTION = false;
+    public const bool DEFAULT_IS_ABLE_TO_CLEAR_CACHE = false;
+    public const int DEFAULT_GO_TIME_LIMIT_SECONDS = 100;
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function create(
+        int $physicalId,
+        ?bool $isActive = null,
+        ?ActivityType $activityType = null,
+        ?bool $isEmpireSleeping = null,
+        ?bool $isFullServerDetection = null,
+        ?bool $isAbleToClearCache = null,
+        ?int $goTimeLimitSeconds = null,
+    ): Device;
+}

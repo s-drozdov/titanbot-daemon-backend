@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Device\Create;
+
+use OpenApi\Attributes as OA;
+use Titanbot\Daemon\Library\Enum\PhpType;
+use Titanbot\Daemon\Domain\Enum\ActivityType;
+
+/**
+ * @psalm-suppress MissingConstructor [INFO]
+ */
+#[OA\Schema()]
+final class DeviceCreateCommand
+{
+    public int $physical_id;
+
+    public ?bool $is_active;
+
+    #[OA\Property(type: PhpType::string->value, nullable: true)]
+    public ?ActivityType $activity_type;
+
+    public ?bool $is_empire_sleeping;
+
+    public ?bool $is_full_server_detection;
+
+    public ?bool $is_able_to_clear_cache;
+    
+    public ?int $go_time_limit_seconds;
+}

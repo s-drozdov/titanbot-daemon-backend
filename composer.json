@@ -1,0 +1,124 @@
+{
+    "name": "s-drozdov/titanbot-daemon-backend",
+    "description": "Titanbot daemon backend",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.4",
+        "ext-ctype": "*",
+        "ext-dom": "*",
+        "ext-iconv": "*",
+        "ext-intl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-memcached": "*",
+        "ext-pdo_mysql": "*",
+        "ext-simplexml": "*",
+        "api-platform/core": "^4.2.15",
+        "doctrine/doctrine-bundle": "^3.2.2",
+        "doctrine/doctrine-migrations-bundle": "^4.0",
+        "doctrine/migrations": "^3.9.5",
+        "doctrine/orm": "^3.6.2",
+        "mezzio/mezzio-problem-details": ">=1.18",
+        "nelmio/api-doc-bundle": "^5.9.2",
+        "nyholm/psr7": "^1.8.2",
+        "phpdocumentor/reflection-docblock": "^5.6.6",
+        "phpstan/phpdoc-parser": "^2.3.2",
+        "psr/http-client": "^1.0.3",
+        "psr/simple-cache": ">=3",
+        "ramsey/uuid": "^4.9.2",
+        "ramsey/uuid-doctrine": ">=2.1",
+        "symfony/cache": "^8.0.5",
+        "symfony/console": "^8.0.4",
+        "symfony/dotenv": "^8.0",
+        "symfony/flex": "^2.10",
+        "symfony/framework-bundle": "^8.0.5",
+        "symfony/http-client": "^8.0.5",
+        "symfony/messenger": "^8.0.4",
+        "symfony/mime": "^8.0.5",
+        "symfony/monolog-bundle": "^4.0",
+        "symfony/process": "^8.0",
+        "symfony/property-access": "^8.0.4",
+        "symfony/property-info": "^8.0.5",
+        "symfony/psr-http-message-bridge": "^8.0.4",
+        "symfony/runtime": "^8.0.1",
+        "symfony/security-bundle": "^8.0.4",
+        "symfony/serializer": "^8.0.5",
+        "symfony/twig-bridge": "^8.0.5",
+        "symfony/twig-bundle": "^8.0.4",
+        "symfony/validator": "^8.0.5",
+        "symfony/yaml": "^8.0.1",
+        "webmozart/assert": "^1.12.1"
+    },
+    "require-dev": {
+        "ext-pcov": "*",
+        "ext-xml": "*",
+        "dama/doctrine-test-bundle": "^8.6",
+        "deptrac/deptrac": "^4.5",
+        "fakerphp/faker": "^1.24.1",
+        "phpstan/extension-installer": "^1.4.3",
+        "phpstan/phpstan": "^2.1.38",
+        "phpstan/phpstan-symfony": "^2.0.12",
+        "phpunit/phpunit": "^12.5.8",
+        "s-drozdov/check-psr4": ">=0.0.3",
+        "symfony/browser-kit": "^8.0",
+        "vimeo/psalm": "^6.15.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "bump-after-update": true,
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Titanbot\\Daemon\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Titanbot\\Daemon\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "^8.0"
+        },
+        "hooks": {
+            "config": {
+                "stop-on-failure": ["pre-commit", "pre-push"]
+            },
+            "pre-commit": [
+                "./vendor/bin/deptrac analyse --no-progress",
+                "./vendor/bin/phpstan analyse --memory-limit=1G --no-progress",
+                "./vendor/bin/psalm --no-cache --show-info=true --no-diff",
+                "./vendor/bin/checkPsr4",
+                "./bin/console"
+            ],
+            "pre-push": [
+                "./vendor/bin/phpunit tests/Unit"
+            ]
+        }
+    }
+}

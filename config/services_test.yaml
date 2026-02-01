@@ -1,0 +1,13 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true 
+        public: true
+
+    Titanbot\Daemon\Infrastructure\Security\ApiKeyAuthenticator:
+        arguments:
+            $adminApiKey: '%env(ADMIN_API_KEY)%'
+            $isRoMode: '%env(bool:IS_RO_MODE)%'
+        public: true
+        
+# helpers

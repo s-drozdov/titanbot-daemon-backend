@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Titanbot\Daemon\Domain\Entity\Habit\Color" table="colors">
+        <id name="uuid" type="uuid_binary" column="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="rgbHex" column="rgb_hex" type="string" length="255" nullable="true"/>
+
+        <field name="deviation" column="deviation" type="integer" nullable="false">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+
+        <one-to-many
+            field="pixelList"
+            target-entity="Titanbot\Daemon\Domain\Entity\Habit\Pixel"
+            mapped-by="color"
+            orphan-removal="true">
+
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-many>
+
+        <unique-constraints>
+            <unique-constraint columns="rgb_hex,deviation"/>
+        </unique-constraints>
+    </entity>
+</doctrine-mapping>

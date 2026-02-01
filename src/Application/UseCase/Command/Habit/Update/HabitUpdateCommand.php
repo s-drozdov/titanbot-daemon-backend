@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Titanbot\Daemon\Application\UseCase\Command\Habit\Update;
+
+use Titanbot\Daemon\Application\Dto\PixelRequestDto;
+use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
+use Titanbot\Daemon\Library\Collection\ListInterface;
+use Titanbot\Daemon\Application\Bus\Command\CommandInterface;
+
+final readonly class HabitUpdateCommand implements CommandInterface
+{
+    public function __construct(
+        public UuidInterface $uuid,
+        public ?string $action = null,
+
+        /** @var ListInterface<PixelRequestDto>|null $pixel_list */
+        public ?ListInterface $pixel_list = null,
+
+        public ?int $account_logical_id = null,
+        public ?int $priority = null,
+        public ?string $trigger_ocr = null,
+        public ?string $trigger_shell = null,
+        public ?bool $is_active = null,
+    ) {
+        /*_*/
+    }
+}

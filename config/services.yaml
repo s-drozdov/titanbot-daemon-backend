@@ -1,0 +1,377 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    isHtmlExceptions: '%env(IS_HTML_EXCEPTIONS)%'
+
+services:
+
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    
+    Titanbot\Daemon\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Infrastructure/Kernel.php'
+    
+    _instanceof:
+        Titanbot\Daemon\Infrastructure\Http\ValueResolver\AbstractValueResolver:
+            tags: ['controller.argument_value_resolver']
+        Titanbot\Daemon\Application\Bus\Event\EventHandlerInterface:
+            tags: ['messenger.message_handler']
+    
+    Nyholm\Psr7\Factory\Psr17Factory:
+        class: Nyholm\Psr7\Factory\Psr17Factory
+
+    Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory:
+        arguments:
+            - '@Nyholm\Psr7\Factory\Psr17Factory'
+            - '@Nyholm\Psr7\Factory\Psr17Factory'
+            - '@Nyholm\Psr7\Factory\Psr17Factory'
+            - '@Nyholm\Psr7\Factory\Psr17Factory'
+    
+    Symfony\Bridge\PsrHttpMessage\HttpFoundationFactoryInterface:
+        class: Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory
+
+    http_client.external.symfony:
+        class: Symfony\Component\HttpClient\HttpClient
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+        arguments:
+            - { }
+
+    http_client.external.psr18:
+        class: Symfony\Component\HttpClient\Psr18Client
+        arguments:
+            - '@http_client.external.symfony'
+    
+    http_client.internal.symfony:
+        class: Symfony\Component\HttpClient\HttpClient
+        factory: ['Symfony\Component\HttpClient\HttpClient', 'create']
+        arguments:
+            - { verify_peer: false, verify_host: false }
+
+    http_client.internal.psr18:
+        class: Symfony\Component\HttpClient\Psr18Client
+        arguments:
+            - '@http_client.internal.symfony'
+
+    Psr\Http\Client\ClientInterface: '@http_client.external.psr18'
+
+    Mezzio\ProblemDetails\ProblemDetailsResponseFactory:
+        arguments:
+            $responseFactory: '@Psr\Http\Message\ResponseFactoryInterface'
+            $isDebug: '%kernel.debug%'
+            $jsonFlags: 448
+
+    Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\EventResponse\EventResponseProviderInterface:
+        class: Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\EventResponse\EventResponseDispatcher
+        arguments:
+            $typeToProviderMap:
+                Symfony\Component\Validator\Exception\ValidationFailedException: 
+                    '@Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\ExceptionResponse\ValidationFailedResponseProvider'
+                Symfony\Component\Serializer\Exception\NotNormalizableValueException: 
+                    '@Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\ExceptionResponse\NotNormalizableValueResponseProvider'
+        
+    Titanbot\Daemon\Application\Bus\Resolver\ResultFqcn\ResultFqcnResolverInterface:
+        class: Titanbot\Daemon\Application\Bus\Resolver\ResultFqcn\ConcatenationResultFqcnResolver
+    
+    Titanbot\Daemon\Library\DbTransaction\DbTransactionInterface:
+        class: Titanbot\Daemon\Library\DbTransaction\DoctrineDbTransaction
+
+    Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor: ~
+
+    Psr\SimpleCache\CacheInterface:
+        class: Symfony\Component\Cache\Psr16Cache
+        arguments:
+            - '@cache.app'
+
+    Titanbot\Daemon\Infrastructure\Factory\Cache\MemcachedFactory: ~
+
+    Memcached:
+        class: Memcached
+        factory: ['@Titanbot\Daemon\Infrastructure\Factory\Cache\MemcachedFactory', create]
+        arguments:
+            $dsn: '%env(MEMCACHED_DSN)%'
+
+    Titanbot\Daemon\Infrastructure\Security\ApiKeyAuthenticator:
+        arguments:
+            $adminApiKey: '%env(ADMIN_API_KEY)%'
+            $isRoMode: '%env(bool:IS_RO_MODE)%'
+
+# controllers
+
+    Titanbot\Daemon\Infrastructure\Http\Controller\DaemonDb\Get\DaemonDbGetAction:
+        arguments:
+            $dbExportFilename: '%env(DB_EXPORT_FILENAME)%'
+
+# result converters
+
+    Titanbot\Daemon\Application\Dto\Converter\PaginationResultToDtoConverter: ~
+
+# buses
+
+    Titanbot\Daemon\Application\Bus\Command\CommandBusInterface:
+        class: Titanbot\Daemon\Infrastructure\Bus\CommandBus
+
+    Titanbot\Daemon\Application\Bus\Event\EventBusInterface:
+        class: Titanbot\Daemon\Infrastructure\Bus\EventBus
+
+    Titanbot\Daemon\Application\Bus\Query\QueryBusInterface:
+        class: Titanbot\Daemon\Infrastructure\Bus\QueryBus
+
+# application services
+
+    Titanbot\Daemon\Application\Service\Cache\HealthCheck\CacheHealthCheckServiceInterface:
+        class: Titanbot\Daemon\Infrastructure\Service\Cache\HealthCheck\MemcachedHealthCheckService
+
+    Titanbot\Daemon\Application\Service\DaemonDb\Export\DaemonDbExportServiceInterface:
+        class: Titanbot\Daemon\Application\Service\DaemonDb\Export\DaemonDbExportService
+
+    Titanbot\Daemon\Application\Service\Log\Clear\LogClearServiceInterface:
+        class: Titanbot\Daemon\Infrastructure\Service\Log\Clear\LogClearService
+        arguments:
+            $logDir: '%kernel.logs_dir%'
+            $filePrefix: '%env(LOG_PREFIX)%'
+
+    Titanbot\Daemon\Application\Service\Log\Index\LogIndexGetServiceInterface:
+        class: Titanbot\Daemon\Infrastructure\Service\Log\Index\LogIndexGetService
+        arguments:
+            $logDir: '%kernel.logs_dir%'
+            $filePrefix: '%env(LOG_PREFIX)%'
+            $shellTimeout: '%env(int:LOG_SHELL_TIMEOUT)%'
+
+# domain Services
+
+    Titanbot\Daemon\Domain\Service\DaemonDb\Get\DaemonDbGetServiceInterface:
+        class: Titanbot\Daemon\Infrastructure\Service\DaemonDb\Get\DaemonDbGetService
+        arguments:
+            $daemonDbDriver: '%env(DB_EXPORT_DRIVER)%'
+        
+# library
+
+    Titanbot\Daemon\Library\Generator\PageGeneratorInterface:
+        class: Titanbot\Daemon\Library\Generator\PageGenerator
+        
+# helpers
+
+    Titanbot\Daemon\Domain\Helper\DateTime\DateTimeHelperInterface:
+        class: Titanbot\Daemon\Infrastructure\Helper\DateTime\DateTimeHelper
+
+    Titanbot\Daemon\Domain\Helper\String\StringHelperInterface:
+        class: Titanbot\Daemon\Infrastructure\Helper\String\StringHelper
+
+    Titanbot\Daemon\Domain\Helper\Uuid\UuidHelperInterface:
+        class: Titanbot\Daemon\Infrastructure\Helper\Uuid\RamseyUuidHelper
+
+# providers
+
+    # Titanbot\Daemon\Library\Provider\Cache\CacheProviderInterface:
+    #     class: Titanbot\Daemon\Library\Provider\Cache\CacheProvider
+    #     arguments:
+    #         $servicePrefix: '%env(APP_NAME)%'
+
+# normalizers
+
+    Titanbot\Daemon\Infrastructure\Serializer\Normalizer\ListInterfaceNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 500 }
+
+    Titanbot\Daemon\Infrastructure\Serializer\Normalizer\MapInterfaceNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 500 }
+
+    Titanbot\Daemon\Infrastructure\Serializer\Normalizer\ExceptionNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 500 }
+
+    Titanbot\Daemon\Infrastructure\Serializer\Normalizer\UuidInterfaceNormalizer:
+        tags:
+            - { name: 'serializer.normalizer', priority: 500 }
+
+# denormalizers
+
+    Titanbot\Daemon\Infrastructure\Serializer\Denormalizer\NullDenormalizer:
+        tags:
+            - { name: 'serializer.denormalizer', priority: 500 }
+
+# event handlers
+
+    Titanbot\Daemon\Application\EventHandler\Habit\PixelListReleased\RemoveOrphanPixels: ~
+
+# event subscribers
+
+    Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\ExceptionSubscriber:
+        tags: ['kernel.event_subscriber']
+
+# bus handlers
+
+    Titanbot\Daemon\Application\UseCase\Query\Cache\HealthCheck\CacheHealthCheckQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Cache\HealthCheck\CacheHealthCheckQuery }
+
+    Titanbot\Daemon\Application\UseCase\Query\Cache\Dump\CacheDumpQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Cache\Dump\CacheDumpQuery }
+    
+    # Account
+    
+    Titanbot\Daemon\Application\UseCase\Command\Account\Create\AccountCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Account\Create\AccountCreateCommand }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Account\Get\AccountGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Account\Get\AccountGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Account\Index\AccountIndexQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Account\Index\AccountIndexQuery }
+
+    Titanbot\Daemon\Application\UseCase\Command\Account\Update\AccountUpdateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Account\Update\AccountUpdateCommand }
+
+    Titanbot\Daemon\Application\UseCase\Command\Account\Delete\AccountDeleteCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Account\Delete\AccountDeleteCommand }
+
+    # DaemonDb
+
+    Titanbot\Daemon\Application\UseCase\Query\DaemonDb\Get\DaemonDbGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\DaemonDb\Get\DaemonDbGetQuery }
+
+    Titanbot\Daemon\Application\UseCase\Query\DaemonDb\Checksum\DaemonDbChecksumGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\DaemonDb\Checksum\DaemonDbChecksumGetQuery }
+    
+    # DaemonToken
+    
+    Titanbot\Daemon\Application\UseCase\Command\DaemonToken\Create\DaemonTokenCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\DaemonToken\Create\DaemonTokenCreateCommand }
+    
+    Titanbot\Daemon\Application\UseCase\Query\DaemonToken\Get\DaemonTokenGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\DaemonToken\Get\DaemonTokenGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Query\DaemonToken\Index\DaemonTokenIndexQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\DaemonToken\Index\DaemonTokenIndexQuery }
+
+    Titanbot\Daemon\Application\UseCase\Command\DaemonToken\Delete\DaemonTokenDeleteCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\DaemonToken\Delete\DaemonTokenDeleteCommand }
+    
+    Titanbot\Daemon\Application\UseCase\Command\DaemonToken\DeleteByValue\DaemonTokenByValueDeleteCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\DaemonToken\DeleteByValue\DaemonTokenByValueDeleteCommand }
+
+    # Device
+    
+    Titanbot\Daemon\Application\UseCase\Command\Device\Create\DeviceCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Device\Create\DeviceCreateCommand }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Device\Get\DeviceGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Device\Get\DeviceGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Device\Index\DeviceIndexQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Device\Index\DeviceIndexQuery }
+
+    Titanbot\Daemon\Application\UseCase\Command\Device\Update\DeviceUpdateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Device\Update\DeviceUpdateCommand }
+
+    Titanbot\Daemon\Application\UseCase\Command\Device\Delete\DeviceDeleteCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Device\Delete\DeviceDeleteCommand }
+    
+    # EmpireDate
+    
+    Titanbot\Daemon\Application\UseCase\Command\EmpireDate\Create\EmpireDateCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\EmpireDate\Create\EmpireDateCreateCommand }
+    
+    Titanbot\Daemon\Application\UseCase\Query\EmpireDate\Get\EmpireDateGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\EmpireDate\Get\EmpireDateGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Query\EmpireDate\GetNext\EmpireDateNextGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\EmpireDate\GetNext\EmpireDateNextGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Query\EmpireDate\Index\EmpireDateIndexQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\EmpireDate\Index\EmpireDateIndexQuery }
+
+    Titanbot\Daemon\Application\UseCase\Command\EmpireDate\Delete\EmpireDateDeleteCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\EmpireDate\Delete\EmpireDateDeleteCommand }
+
+    # Habit
+    
+    Titanbot\Daemon\Application\UseCase\Command\Habit\Create\HabitCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Habit\Create\HabitCreateCommand }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Habit\Get\HabitGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Habit\Get\HabitGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Habit\Index\HabitIndexQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Habit\Index\HabitIndexQuery }
+
+    Titanbot\Daemon\Application\UseCase\Command\Habit\Update\HabitUpdateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Habit\Update\HabitUpdateCommand }
+
+    Titanbot\Daemon\Application\UseCase\Command\Habit\Delete\HabitDeleteCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Habit\Delete\HabitDeleteCommand }
+    
+    # Legion
+    
+    Titanbot\Daemon\Application\UseCase\Command\Legion\Create\LegionCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Legion\Create\LegionCreateCommand }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Legion\Get\LegionGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Legion\Get\LegionGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Query\Legion\Index\LegionIndexQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Legion\Index\LegionIndexQuery }
+
+    Titanbot\Daemon\Application\UseCase\Command\Legion\Update\LegionUpdateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Legion\Update\LegionUpdateCommand }
+
+    Titanbot\Daemon\Application\UseCase\Command\Legion\Delete\LegionDeleteCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Legion\Delete\LegionDeleteCommand }
+
+    # Log
+    
+    Titanbot\Daemon\Application\UseCase\Command\Log\Create\LogCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Log\Create\LogCreateCommand }
+        arguments:
+            $daemonLogger: '@monolog.logger.daemon'
+    
+    Titanbot\Daemon\Application\UseCase\Query\Log\Index\LogIndexQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Log\Index\LogIndexQuery }
+
+    Titanbot\Daemon\Application\UseCase\Command\Log\Clear\LogClearCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Log\Clear\LogClearCommand }

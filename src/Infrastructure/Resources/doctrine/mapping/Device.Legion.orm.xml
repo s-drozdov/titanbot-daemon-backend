@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Titanbot\Daemon\Domain\Entity\Device\Legion" table="legions">
+        <id name="uuid" type="uuid_binary" column="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <one-to-many
+            field="accountList"
+            target-entity="Titanbot\Daemon\Domain\Entity\Device\Account"
+            mapped-by="legion"
+            orphan-removal="false"
+        >
+            <cascade>
+                <cascade-persist/>
+            </cascade>
+        </one-to-many>
+
+        <field name="title" column="title" type="string" length="255" nullable="false"/>
+
+        <field name="extTitle" column="ext_title" type="string" length="255" nullable="true"/>
+
+        <field name="payDayOfMonth" column="pay_day_of_month" type="integer" nullable="true"/>
+    </entity>
+</doctrine-mapping>
