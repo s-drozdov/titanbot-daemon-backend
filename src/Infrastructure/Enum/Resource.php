@@ -9,11 +9,11 @@ enum Resource: string
     case Account = '/accounts';
     case AccountByUuid = '/accounts/{uuid}';
 
-    case DaemonDb = '/daemon-db';
-    case DaemonDbChecksum = '/daemon-db/checksum';
+    case DaemonDb = '/db';
+    case DaemonDbChecksum = '/db/checksum';
 
-    case DaemonToken = '/daemon/tokens';
-    case DaemonTokenByUuid = '/daemon/tokens/{uuid}';
+    case DaemonToken = '/tokens';
+    case DaemonTokenByUuid = '/tokens/{uuid}';
 
     case Device = '/devices';
     case DeviceByUuid = '/devices/{uuid}';
@@ -24,8 +24,8 @@ enum Resource: string
 
     case HealthCheck = '/health-check';
 
-    case Habit = '/habit';
-    case HabitByUuid = '/habit/{uuid}';
+    case Habit = '/habits';
+    case HabitByUuid = '/habits/{uuid}';
 
     case Legion = '/legions';
     case LegionByUuid = '/legions/{uuid}';

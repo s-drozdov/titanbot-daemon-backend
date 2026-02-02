@@ -28,7 +28,7 @@ class LegionTest extends E2eTestCase
         $this->assertSame(13, $entity->getPayDayOfMonth());
 
         /** READ */
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -37,7 +37,7 @@ class LegionTest extends E2eTestCase
         $this->assertSame(13, $data['legion']['pay_day_of_month']);
 
         /** INDEX */
-        $this->getAdminClient()->jsonRequest('GET', '/legions');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/legions');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -51,7 +51,7 @@ class LegionTest extends E2eTestCase
             'pay_day_of_month' => 14,
         ];
 
-        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/legions/%s', (string) $entity->getUuid()), $data);
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/legions/%s', (string) $entity->getUuid()), $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
 
         /** @var Legion $entity */
@@ -63,7 +63,7 @@ class LegionTest extends E2eTestCase
         $this->assertSame(14, $entity->getPayDayOfMonth());
 
         /** DELETE */
-        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
         $entity = $repository->findOneBy(['uuid' => $entity->getUuid()]);
@@ -73,10 +73,10 @@ class LegionTest extends E2eTestCase
     #[Test]
     public function testEmptyRequests(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/legions', []);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/legions', []);
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
 
-        $this->getAdminClient()->jsonRequest('DELETE', '/legions');
+        $this->getAdminClient()->jsonRequest('DELETE', '/daemon/legions');
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
     }
 
@@ -96,7 +96,7 @@ class LegionTest extends E2eTestCase
     {
         $uuid = $this->uuidHelper->create();
 
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/legions/%s', (string) $uuid));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/legions/%s', (string) $uuid));
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
@@ -105,19 +105,19 @@ class LegionTest extends E2eTestCase
     {
         $entity = $this->createLegion(['title' => 'Title']);
 
-        $this->getAnonimousClient()->jsonRequest('POST', '/legions', []);
+        $this->getAnonimousClient()->jsonRequest('POST', '/daemon/legions', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/legions');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/legions');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/legions/%s', (string) $entity->getUuid()), []);
+        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/daemon/legions/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -126,19 +126,19 @@ class LegionTest extends E2eTestCase
     {
         $entity = $this->createLegion(['title' => 'Title']);
 
-        $this->getHackerClient()->jsonRequest('POST', '/legions', []);
+        $this->getHackerClient()->jsonRequest('POST', '/daemon/legions', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('GET', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/legions');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/legions');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/legions/%s', (string) $entity->getUuid()), []);
+        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/daemon/legions/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -147,19 +147,19 @@ class LegionTest extends E2eTestCase
     {
         $entity = $this->createLegion(['title' => 'Title']);
 
-        $this->getDaemonClient()->jsonRequest('POST', '/legions', []);
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/legions', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('GET', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/legions');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/legions');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         
-        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/legions/%s', (string) $entity->getUuid()), []);
+        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/daemon/legions/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/legions/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/daemon/legions/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -167,7 +167,7 @@ class LegionTest extends E2eTestCase
     {
         $repository = self::getContainer()->get('doctrine')->getRepository(Legion::class);
 
-        $this->getAdminClient()->jsonRequest('POST', '/legions', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/legions', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotNull($data['uuid']);

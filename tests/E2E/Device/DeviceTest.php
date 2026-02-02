@@ -32,7 +32,7 @@ class DeviceTest extends E2eTestCase
         $this->assertSame(220, $entity->getGoTimeLimitSeconds());
 
         /** READ */
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -42,7 +42,7 @@ class DeviceTest extends E2eTestCase
         $this->assertSame(false, $data['device']['is_active']);
 
         /** READ by physical_id */
-        $this->getDaemonClient()->jsonRequest('GET', '/devices?physical_id=834221');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/devices?physical_id=834221');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
         $device = current($data['uuid_to_device_map']);
@@ -53,7 +53,7 @@ class DeviceTest extends E2eTestCase
         $this->assertSame(false, $device['is_active']);
 
         /** INDEX */
-        $this->getAdminClient()->jsonRequest('GET', '/devices');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/devices');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -70,7 +70,7 @@ class DeviceTest extends E2eTestCase
             'go_time_limit_seconds' => 100,
         ];
 
-        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/devices/%s', (string) $entity->getUuid()), $data);
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/devices/%s', (string) $entity->getUuid()), $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
 
         /** @var Device $entity */
@@ -85,7 +85,7 @@ class DeviceTest extends E2eTestCase
         $this->assertSame(100, $entity->getGoTimeLimitSeconds());
 
         /** DELETE */
-        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
         $entity = $repository->findOneBy(['uuid' => $entity->getUuid()]);
@@ -95,10 +95,10 @@ class DeviceTest extends E2eTestCase
     #[Test]
     public function testEmptyRequests(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/devices', []);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', []);
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
 
-        $this->getAdminClient()->jsonRequest('DELETE', '/devices');
+        $this->getAdminClient()->jsonRequest('DELETE', '/daemon/devices');
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
     }
 
@@ -111,7 +111,7 @@ class DeviceTest extends E2eTestCase
             'physical_id' => 834221,
         ];
 
-        $this->getAdminClient()->jsonRequest('POST', '/devices', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotNull($data['uuid']);
@@ -134,7 +134,7 @@ class DeviceTest extends E2eTestCase
     {
         $uuid = $this->uuidHelper->create();
 
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/devices/%s', (string) $uuid));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/devices/%s', (string) $uuid));
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
@@ -143,19 +143,19 @@ class DeviceTest extends E2eTestCase
     {
         $entity = $this->createDevice(['physical_id' => 123456]);
 
-        $this->getAnonimousClient()->jsonRequest('POST', '/devices', []);
+        $this->getAnonimousClient()->jsonRequest('POST', '/daemon/devices', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/devices?physical_id=834221');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/devices?physical_id=834221');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/devices/%s', (string) $entity->getUuid()), []);
+        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/daemon/devices/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -164,19 +164,19 @@ class DeviceTest extends E2eTestCase
     {
         $entity = $this->createDevice(['physical_id' => 123456]);
 
-        $this->getHackerClient()->jsonRequest('POST', '/devices', []);
+        $this->getHackerClient()->jsonRequest('POST', '/daemon/devices', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('GET', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/devices?physical_id=834221');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/devices?physical_id=834221');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/devices/%s', (string) $entity->getUuid()), []);
+        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/daemon/devices/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -185,22 +185,22 @@ class DeviceTest extends E2eTestCase
     {
         $entity = $this->createDevice(['physical_id' => 123456]);
 
-        $this->getDaemonClient()->jsonRequest('POST', '/devices', []);
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/devices', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('GET', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/devices?physical_id=123456');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/devices?physical_id=123456');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/devices');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/devices');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         
-        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/devices/%s', (string) $entity->getUuid()), []);
+        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/daemon/devices/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/devices/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -208,7 +208,7 @@ class DeviceTest extends E2eTestCase
     {   
         $repository = self::getContainer()->get('doctrine')->getRepository(Device::class);
 
-        $this->getAdminClient()->jsonRequest('POST', '/devices', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotNull($data['uuid']);

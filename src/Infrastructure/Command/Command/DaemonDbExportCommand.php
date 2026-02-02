@@ -14,7 +14,7 @@ use Titanbot\Daemon\Application\UseCase\Query\DaemonDb\Get\DaemonDbGetQuery;
 use Titanbot\Daemon\Application\UseCase\Query\DaemonDb\Get\DaemonDbGetQueryResult;
 
 #[AsCommand(
-    name: 'daemon-db:export',
+    name: 'db:export',
     description: 'Export daemon db',
 )]
 final class DaemonDbExportCommand extends Command
@@ -33,7 +33,7 @@ final class DaemonDbExportCommand extends Command
         $this->setHelp(
             <<<HELPBLOCK
                     usage:
-                        bin/console daemon-db:export
+                        bin/console db:export
                 HELPBLOCK,
         );
     }

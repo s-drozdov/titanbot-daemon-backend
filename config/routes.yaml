@@ -3,4 +3,4 @@ controllers:
         path: ../src/Infrastructure/Http/Controller/
         namespace: Titanbot\Daemon\Infrastructure\Http\Controller
     type: attribute
-    prefix: /
+    prefix: /daemon/

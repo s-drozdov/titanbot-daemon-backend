@@ -36,9 +36,9 @@ class DaemonDbTest extends E2eTestCase
     #[Test]
     public function testChecksum(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/devices', self::DEVICE_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', self::DEVICE_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', self::ACCOUNT_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', self::ACCOUNT_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         $this->getChecksum(44646);
@@ -47,12 +47,12 @@ class DaemonDbTest extends E2eTestCase
     #[Test]
     public function testDownload(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/devices', self::DEVICE_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', self::DEVICE_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', self::ACCOUNT_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', self::ACCOUNT_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/daemon-db?logical_id=44646');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/db?logical_id=44646');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $this->assertResponseHeaderSame('Content-Type', 'application/vnd.sqlite3');
@@ -62,13 +62,13 @@ class DaemonDbTest extends E2eTestCase
     #[Test]
     public function testChecksumChanging(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/devices', self::DEVICE_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', self::DEVICE_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', self::ACCOUNT_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', self::ACCOUNT_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->getAdminClient()->jsonRequest('POST', '/devices', self::DEVICE_DATA2);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', self::DEVICE_DATA2);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', self::ACCOUNT_DATA2);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', self::ACCOUNT_DATA2);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         $checksum1 = $this->getChecksum(44646);
@@ -86,36 +86,36 @@ class DaemonDbTest extends E2eTestCase
     #[Test]
     public function testAccessAnonimous(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/devices', self::DEVICE_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', self::DEVICE_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', self::ACCOUNT_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', self::ACCOUNT_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/daemon-db/checksum?logical_id=44646');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/db/checksum?logical_id=44646');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/daemon-db?logical_id=44646');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/db?logical_id=44646');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     #[Test]
     public function testAccessHacker(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/devices', self::DEVICE_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', self::DEVICE_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', self::ACCOUNT_DATA);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', self::ACCOUNT_DATA);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/daemon-db/checksum?logical_id=44646');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/db/checksum?logical_id=44646');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/daemon-db?logical_id=44646');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/db?logical_id=44646');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     private function getChecksum(int $logicalId): string
     {
-        $this->getDaemonClient()->jsonRequest('GET', sprintf('/daemon-db/checksum?logical_id=%d', $logicalId));
+        $this->getDaemonClient()->jsonRequest('GET', sprintf('/daemon/db/checksum?logical_id=%d', $logicalId));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
         
@@ -127,7 +127,7 @@ class DaemonDbTest extends E2eTestCase
 
     private function createHabit(array $data): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/habit', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/habits', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 }

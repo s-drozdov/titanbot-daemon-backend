@@ -36,7 +36,7 @@ class HabitTest extends E2eTestCase
         $this->assertSame('trigger_shell', $entity->getTriggerShell());
 
         /** READ */
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -45,7 +45,7 @@ class HabitTest extends E2eTestCase
         $this->assertNull($data['habit']['trigger_ocr']);
 
         /** INDEX */
-        $this->getAdminClient()->jsonRequest('GET', '/habit');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/habits');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -59,7 +59,7 @@ class HabitTest extends E2eTestCase
             'trigger_shell' => 'trigger_shell2',
         ];
 
-        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), $data);
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/habits/%s', (string) $entity->getUuid()), $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
 
 
@@ -73,7 +73,7 @@ class HabitTest extends E2eTestCase
         $this->assertSame('trigger_shell2', $entity->getTriggerShell());
 
         /** DELETE */
-        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
         $entity = $repository->findOneBy(['uuid' => $entity->getUuid()]);
@@ -83,10 +83,10 @@ class HabitTest extends E2eTestCase
     #[Test]
     public function testEmptyRequests(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/habit', []);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/habits', []);
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
 
-        $this->getAdminClient()->jsonRequest('DELETE', '/habit');
+        $this->getAdminClient()->jsonRequest('DELETE', '/daemon/habits');
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
     }
 
@@ -105,7 +105,7 @@ class HabitTest extends E2eTestCase
     {
         $uuid = $this->uuidHelper->create();
 
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $uuid));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/habits/%s', (string) $uuid));
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
@@ -114,22 +114,22 @@ class HabitTest extends E2eTestCase
     {
         $entity = $this->createHabit(['action' => 'action']);
 
-        $this->getAnonimousClient()->jsonRequest('POST', '/habit', []);
+        $this->getAnonimousClient()->jsonRequest('POST', '/daemon/habits', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/habit?slug=slug');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/habits?slug=slug');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/habit');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/habits');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), []);
+        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/daemon/habits/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -138,19 +138,19 @@ class HabitTest extends E2eTestCase
     {
         $entity = $this->createHabit(['action' => 'action']);
 
-        $this->getHackerClient()->jsonRequest('POST', '/habit', []);
+        $this->getHackerClient()->jsonRequest('POST', '/daemon/habits', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('GET', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/habit');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/habits');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), []);
+        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/daemon/habits/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -159,19 +159,19 @@ class HabitTest extends E2eTestCase
     {
         $entity = $this->createHabit(['action' => 'action']);
 
-        $this->getDaemonClient()->jsonRequest('POST', '/habit', []);
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/habits', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('GET', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/habit');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/habits');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
         
-        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/habit/%s', (string) $entity->getUuid()), []);
+        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/daemon/habits/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/habit/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -179,7 +179,7 @@ class HabitTest extends E2eTestCase
     {
         $repository = self::getContainer()->get('doctrine')->getRepository(Habit::class);
 
-        $this->getAdminClient()->jsonRequest('POST', '/habit', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/habits', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotNull($data['uuid']);

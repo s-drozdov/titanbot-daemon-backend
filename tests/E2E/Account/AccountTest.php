@@ -41,7 +41,7 @@ class AccountTest extends E2eTestCase
         $this->assertSame('123456', $entity->getGooglePassword());
 
         /** READ */
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -49,7 +49,7 @@ class AccountTest extends E2eTestCase
         $this->assertSame('male', $data['account']['gender']);
 
         /** READ by logical_id */
-        $this->getDaemonClient()->jsonRequest('GET', '/accounts?logical_id=654321');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/accounts?logical_id=654321');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
 
@@ -61,7 +61,7 @@ class AccountTest extends E2eTestCase
         $this->assertSame((string) $entity->getUuid(), $accountData['uuid']);
 
         /** INDEX */
-        $this->getAdminClient()->jsonRequest('GET', '/accounts');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/accounts');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -79,7 +79,7 @@ class AccountTest extends E2eTestCase
             'google_password' => '1234567',
         ];
 
-        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/accounts/%s', (string) $entity->getUuid()), $data);
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()), $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
 
         $em = self::getContainer()->get('doctrine')->getManager();
@@ -96,7 +96,7 @@ class AccountTest extends E2eTestCase
         $this->assertNotNull($entity);
 
         /** DELETE */
-        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
         $entity = $repository->findOneBy(['uuid' => $entity->getUuid()]);
@@ -106,10 +106,10 @@ class AccountTest extends E2eTestCase
     #[Test]
     public function testEmptyRequests(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', []);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', []);
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
 
-        $this->getAdminClient()->jsonRequest('DELETE', '/accounts');
+        $this->getAdminClient()->jsonRequest('DELETE', '/daemon/accounts');
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
     }
 
@@ -118,7 +118,7 @@ class AccountTest extends E2eTestCase
     {
         $uuid = $this->uuidHelper->create();
 
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/accounts/%s', (string) $uuid));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/accounts/%s', (string) $uuid));
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
@@ -141,22 +141,22 @@ class AccountTest extends E2eTestCase
 
         $entity = $this->createAccount($data);
 
-        $this->getAnonimousClient()->jsonRequest('POST', '/accounts', []);
+        $this->getAnonimousClient()->jsonRequest('POST', '/daemon/accounts', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/accounts?logical_id=654321');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/accounts?logical_id=654321');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/accounts');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/accounts');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/accounts/%s', (string) $entity->getUuid()), []);
+        $this->getAnonimousClient()->jsonRequest('PATCH', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -179,22 +179,22 @@ class AccountTest extends E2eTestCase
 
         $entity = $this->createAccount($data);
 
-        $this->getHackerClient()->jsonRequest('POST', '/accounts', []);
+        $this->getHackerClient()->jsonRequest('POST', '/daemon/accounts', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('GET', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/accounts?logical_id=654321');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/accounts?logical_id=654321');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/accounts');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/accounts');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         
-        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/accounts/%s', (string) $entity->getUuid()), []);
+        $this->getHackerClient()->jsonRequest('PATCH', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -217,22 +217,22 @@ class AccountTest extends E2eTestCase
 
         $entity = $this->createAccount($data);
 
-        $this->getDaemonClient()->jsonRequest('POST', '/accounts', []);
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/accounts', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('GET', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/accounts?logical_id=654321');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/accounts?logical_id=654321');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/accounts');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/accounts');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         
-        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/accounts/%s', (string) $entity->getUuid()), []);
+        $this->getDaemonClient()->jsonRequest('PATCH', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()), []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/accounts/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -240,7 +240,7 @@ class AccountTest extends E2eTestCase
     {
         $repository = self::getContainer()->get('doctrine')->getRepository(Account::class);
 
-        $this->getAdminClient()->jsonRequest('POST', '/accounts', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotNull($data['uuid']);
@@ -257,7 +257,7 @@ class AccountTest extends E2eTestCase
     {
         $repository = self::getContainer()->get('doctrine')->getRepository(Device::class);
 
-        $this->getAdminClient()->jsonRequest('POST', '/devices', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', $data);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $uuid = $this->uuidHelper->fromString($data['uuid']);

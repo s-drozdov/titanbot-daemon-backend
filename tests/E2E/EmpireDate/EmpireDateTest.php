@@ -23,21 +23,21 @@ class EmpireDateTest extends E2eTestCase
         $this->assertEquals($dt->format(DateTimeImmutable::ATOM), $entity->getDate()->format(DateTimeImmutable::ATOM));
 
         /** READ */
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertEquals($dt->format(DateTimeImmutable::ATOM), $data['empire_date']['date']);
 
         /** GET NEXT DATE */
-        $this->getDaemonClient()->jsonRequest('GET', '/empire-dates-next');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/empire-dates-next');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
 
         $this->assertNull($data['empire_date']['date']);
 
         /** INDEX */
-        $this->getAdminClient()->jsonRequest('GET', '/empire-dates');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/empire-dates');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -45,7 +45,7 @@ class EmpireDateTest extends E2eTestCase
         $this->assertEquals($dt->format(DateTimeImmutable::ATOM), current($data['uuid_to_empire_date_map'])['date']);
 
         /** DELETE */
-        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
         $entity = $repository->findOneBy(['uuid' => $entity->getUuid()]);
@@ -55,10 +55,10 @@ class EmpireDateTest extends E2eTestCase
     #[Test]
     public function testEmptyRequests(): void
     {
-        $this->getAdminClient()->jsonRequest('POST', '/empire-dates', []);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/empire-dates', []);
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
 
-        $this->getAdminClient()->jsonRequest('DELETE', '/empire-dates');
+        $this->getAdminClient()->jsonRequest('DELETE', '/daemon/empire-dates');
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
     }
 
@@ -75,15 +75,15 @@ class EmpireDateTest extends E2eTestCase
         $entity = $this->createEmpireDate(['date' => $dt2->format(DateTimeImmutable::ATOM)]);
         $this->createEmpireDate(['date' => $dt3->format(DateTimeImmutable::ATOM)]);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/empire-dates-next');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/empire-dates-next');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
         $this->assertEquals($dateTimeHelper->getNextEmpireLimitUnixTs($dt2), $data['unix_timestamp']);
 
-        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/empire-dates-next');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/empire-dates-next');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
         $this->assertEquals($dateTimeHelper->getNextEmpireLimitUnixTs($dt3), $data['unix_timestamp']);
@@ -95,19 +95,19 @@ class EmpireDateTest extends E2eTestCase
         $dt = new DateTimeImmutable()->add(new DateInterval('P1W'));
         $entity = $this->createEmpireDate(['date' => $dt->format(DateTimeImmutable::ATOM)]);
 
-        $this->getAnonimousClient()->jsonRequest('POST', '/empire-dates', []);
+        $this->getAnonimousClient()->jsonRequest('POST', '/daemon/empire-dates', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('GET', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/empire-dates-next');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/empire-dates-next');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/empire-dates');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/empire-dates');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getAnonimousClient()->jsonRequest('DELETE', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -117,19 +117,19 @@ class EmpireDateTest extends E2eTestCase
         $dt = new DateTimeImmutable()->sub(new DateInterval('P1W'));
         $entity = $this->createEmpireDate(['date' => $dt->format(DateTimeImmutable::ATOM)]);
 
-        $this->getHackerClient()->jsonRequest('POST', '/empire-dates', []);
+        $this->getHackerClient()->jsonRequest('POST', '/daemon/empire-dates', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('GET', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/empire-dates-next');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/empire-dates-next');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/empire-dates');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/empire-dates');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getHackerClient()->jsonRequest('DELETE', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -139,19 +139,19 @@ class EmpireDateTest extends E2eTestCase
         $dt = new DateTimeImmutable()->sub(new DateInterval('P1W'));
         $entity = $this->createEmpireDate(['date' => $dt->format(DateTimeImmutable::ATOM)]);
 
-        $this->getDaemonClient()->jsonRequest('POST', '/empire-dates', []);
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/empire-dates', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('GET', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/empire-dates-next');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/empire-dates-next');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/empire-dates');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/empire-dates');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
 
-        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/empire-dates/%s', (string) $entity->getUuid()));
+        $this->getDaemonClient()->jsonRequest('DELETE', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -159,7 +159,7 @@ class EmpireDateTest extends E2eTestCase
     {
         $repository = self::getContainer()->get('doctrine')->getRepository(EmpireDate::class);
 
-        $this->getAdminClient()->jsonRequest('POST', '/empire-dates', $data);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/empire-dates', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotNull($data['uuid']);

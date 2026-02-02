@@ -5,7 +5,7 @@ security:
         
     firewalls:
         public:
-            pattern: ^/api/doc.json$
+            pattern: ^/daemon/doc.json$
             security: false
             stateless: true 
 
@@ -17,15 +17,15 @@ security:
 
     access_control:
         - { path: ^/daemon/tokens, roles: [ ROLE_ADMIN ] }
-        - { path: ^/daemon-db, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
-        - { path: ^/devices$, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
-        - { path: ^/devices, roles: [ ROLE_ADMIN ] }
-        - { path: ^/accounts$, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
-        - { path: ^/accounts, roles: [ ROLE_ADMIN ] }
-        - { path: ^/legions/, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
-        - { path: ^/legions, roles: [ ROLE_ADMIN ] }
-        - { path: ^/logs, roles: [ ROLE_DAEMON ], methods: [ POST ] }
-        - { path: ^/logs, roles: [ ROLE_ADMIN ], methods: [ GET, DELETE ] }
-        - { path: ^/empire-dates-next, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
-        - { path: ^/empire-dates, roles: [ ROLE_ADMIN ] }
+        - { path: ^/daemon/db, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
+        - { path: ^/daemon/devices$, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
+        - { path: ^/daemon/devices, roles: [ ROLE_ADMIN ] }
+        - { path: ^/daemon/accounts$, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
+        - { path: ^/daemon/accounts, roles: [ ROLE_ADMIN ] }
+        - { path: ^/daemon/legions/, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
+        - { path: ^/daemon/legions, roles: [ ROLE_ADMIN ] }
+        - { path: ^/daemon/logs, roles: [ ROLE_DAEMON ], methods: [ POST ] }
+        - { path: ^/daemon/logs, roles: [ ROLE_ADMIN ], methods: [ GET, DELETE ] }
+        - { path: ^/daemon/empire-dates-next, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
+        - { path: ^/daemon/empire-dates, roles: [ ROLE_ADMIN ] }
         - { path: .*, roles: [ ROLE_ADMIN ] }

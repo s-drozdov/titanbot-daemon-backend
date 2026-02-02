@@ -24,7 +24,7 @@ final class ApiKeyAAuthenticatorTest extends WebTestCase
 
         $client = static::createClient();
         $client->setServerParameter(self::HEADER_X_API_KEY, self::ADMIN_API_KEY);
-        $client->jsonRequest('GET', '/devices');
+        $client->jsonRequest('GET', '/daemon/devices');
         
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
@@ -42,7 +42,7 @@ final class ApiKeyAAuthenticatorTest extends WebTestCase
 
         $client = static::createClient();
         $client->setServerParameter(self::HEADER_X_API_KEY, self::ADMIN_API_KEY);
-        $client->jsonRequest('GET', '/devices');
+        $client->jsonRequest('GET', '/daemon/devices');
         
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }

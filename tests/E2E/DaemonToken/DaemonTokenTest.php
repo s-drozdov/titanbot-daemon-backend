@@ -99,7 +99,7 @@ class DaemonTokenTest extends E2eTestCase
     {
         $uuid = $this->uuidHelper->create();
 
-        $this->getAdminClient()->jsonRequest('GET', sprintf('/token/%s', (string) $uuid));
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/tokens/%s', (string) $uuid));
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
@@ -111,17 +111,17 @@ class DaemonTokenTest extends E2eTestCase
         $this->assertNotNull($entity->getToken());
         $apiKey = $entity->getToken();
 
-        $this->getAdminClient()->jsonRequest('POST', '/devices', ['physical_id' => 123456]);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', ['physical_id' => 123456]);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
         $anonimousClient = $this->getAnonimousClient();
 
-        $anonimousClient->jsonRequest('GET', '/devices?physical_id=123456');
+        $anonimousClient->jsonRequest('GET', '/daemon/devices?physical_id=123456');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
         $anonimousClient->setServerParameter(self::HEADER_X_API_KEY, $apiKey);
 
-        $anonimousClient->jsonRequest('GET', '/devices?physical_id=123456');
+        $anonimousClient->jsonRequest('GET', '/daemon/devices?physical_id=123456');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
 

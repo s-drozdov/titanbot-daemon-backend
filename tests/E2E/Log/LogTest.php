@@ -12,7 +12,7 @@ class LogTest extends E2eTestCase
     {
         parent::setUp();
 
-        $this->getAdminClient()->jsonRequest('DELETE', '/logs');
+        $this->getAdminClient()->jsonRequest('DELETE', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
@@ -25,7 +25,7 @@ class LogTest extends E2eTestCase
         $this->createLog($message);
 
         /** INDEX */
-        $this->getAdminClient()->jsonRequest('GET', '/logs');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -33,10 +33,10 @@ class LogTest extends E2eTestCase
         $this->assertStringContainsString($message, current($data['log_list'])['message']);
 
         /** Clear */
-        $this->getAdminClient()->jsonRequest('DELETE', '/logs');
+        $this->getAdminClient()->jsonRequest('DELETE', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
-        $this->getAdminClient()->jsonRequest('GET', '/logs');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
@@ -49,27 +49,27 @@ class LogTest extends E2eTestCase
         $this->createLog('[38] f:10 94% Waiting team...');
         $this->createLog('[78] f:10 94% GO is ACTIVE!');
 
-        $this->getAdminClient()->jsonRequest('GET', '/logs');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotEmpty($data['log_list']);
         $this->assertStringContainsString('[38] f:10 94% Waiting team...', current($data['log_list'])['message']);
 
-        $this->getAdminClient()->jsonRequest('GET', '/logs?message=[78]');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/logs?message=[78]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotEmpty($data['log_list']);
         $this->assertSame(1, count($data['log_list']));
         $this->assertStringContainsString('[78] f:10 94% GO is ACTIVE!', current($data['log_list'])['message']);
 
-        $this->getAdminClient()->jsonRequest('GET', '/logs?message=[38]');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/logs?message=[38]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertNotEmpty($data['log_list']);
         $this->assertSame(1, count($data['log_list']));
         $this->assertStringContainsString('[38] f:10 94% Waiting team...', current($data['log_list'])['message']);
 
-        $this->getAdminClient()->jsonRequest('GET', '/logs?message=[39]');
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/logs?message=[39]');
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
         $this->assertEmpty($data['log_list']);
@@ -78,30 +78,30 @@ class LogTest extends E2eTestCase
     #[Test]
     public function testAccessAnonimous(): void
     {
-        $this->getAnonimousClient()->jsonRequest('POST', '/logs', []);
+        $this->getAnonimousClient()->jsonRequest('POST', '/daemon/logs', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getAnonimousClient()->jsonRequest('GET', '/logs');
+        $this->getAnonimousClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     #[Test]
     public function testAccessHacker(): void
     {
-        $this->getHackerClient()->jsonRequest('POST', '/logs', []);
+        $this->getHackerClient()->jsonRequest('POST', '/daemon/logs', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
-        $this->getHackerClient()->jsonRequest('GET', '/logs');
+        $this->getHackerClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     #[Test]
     public function testAccessDaemon(): void
     {
-        $this->getDaemonClient()->jsonRequest('POST', '/logs', ['message' => 'hi']);
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/logs', ['message' => 'hi']);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
-        $this->getDaemonClient()->jsonRequest('GET', '/logs');
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
@@ -109,7 +109,7 @@ class LogTest extends E2eTestCase
     {
         $data = ['message' => $message];
 
-        $this->getDaemonClient()->jsonRequest('POST', '/logs', $data);
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/logs', $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 }
