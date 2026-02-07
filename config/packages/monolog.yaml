@@ -12,7 +12,7 @@ monolog:
 
         rotating_file:
             type: rotating_file
-            path: "%kernel.logs_dir%/%env(LOG_PREFIX)%.log"
+            path: "%kernel.project_dir%/daemon-log/%env(LOG_PREFIX)%.log"
             level: info
             max_files: 10
             formatter: monolog.formatter.line

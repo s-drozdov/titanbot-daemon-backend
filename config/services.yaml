@@ -135,13 +135,13 @@ services:
     Titanbot\Daemon\Application\Service\Log\Clear\LogClearServiceInterface:
         class: Titanbot\Daemon\Infrastructure\Service\Log\Clear\LogClearService
         arguments:
-            $logDir: '%kernel.logs_dir%'
+            $logDir: '%kernel.project_dir%/daemon-log'
             $filePrefix: '%env(LOG_PREFIX)%'
 
     Titanbot\Daemon\Application\Service\Log\Index\LogIndexGetServiceInterface:
         class: Titanbot\Daemon\Infrastructure\Service\Log\Index\LogIndexGetService
         arguments:
-            $logDir: '%kernel.logs_dir%'
+            $logDir: '%kernel.project_dir%/daemon-log'
             $filePrefix: '%env(LOG_PREFIX)%'
             $shellTimeout: '%env(int:LOG_SHELL_TIMEOUT)%'
 
