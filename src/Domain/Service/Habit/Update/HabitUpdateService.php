@@ -13,6 +13,7 @@ use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Library\Collection\ListInterface;
 use Titanbot\Daemon\Domain\Event\Habit\PixelListReleased;
 use Titanbot\Daemon\Domain\Repository\HabitRepositoryInterface;
+use Titanbot\Daemon\Domain\Dto\Habit\Update\HabitUpdateParamsDto;
 
 final readonly class HabitUpdateService implements HabitUpdateServiceInterface
 {
@@ -23,44 +24,35 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
     }
 
     #[Override]
-    public function perform(
-        UuidInterface $uuid,
-        ?string $action,
-        ?ListInterface $pixelList,
-        ?int $accountLogicalId,
-        ?int $priority,
-        ?string $triggerOcr,
-        ?string $triggerShell,
-        ?bool $isActive,
-    ): Habit {
-        $entity = $this->habitRepository->getByUuid($uuid);
+    public function perform(HabitUpdateParamsDto $paramsDto): Habit {
+        $entity = $this->habitRepository->getByUuid($paramsDto->uuid);
 
-        if ($action !== null) {
-            $entity->setAction($action);
+        if ($paramsDto->action !== null) {
+            $entity->setAction($paramsDto->action);
         }
 
-        if ($pixelList !== null) {
-            $this->modifyHabitWithPixelList($entity, $pixelList);
+        if ($paramsDto->pixelList !== null) {
+            $this->modifyHabitWithPixelList($entity, $paramsDto->pixelList);
         }
 
-        if ($accountLogicalId !== null) {
-            $entity->setAccountLogicalId($accountLogicalId);
+        if ($paramsDto->accountLogicalId !== null) {
+            $entity->setAccountLogicalId($paramsDto->accountLogicalId);
         }
 
-        if ($priority !== null) {
-            $entity->setPriority($priority);
+        if ($paramsDto->priority !== null) {
+            $entity->setPriority($paramsDto->priority);
         }
 
-        if ($triggerOcr !== null) {
-            $entity->setTriggerOcr($triggerOcr);
+        if ($paramsDto->triggerOcr !== null) {
+            $entity->setTriggerOcr($paramsDto->triggerOcr);
         }
 
-        if ($triggerShell !== null) {
-            $entity->setTriggerShell($triggerShell);
+        if ($paramsDto->triggerShell !== null) {
+            $entity->setTriggerShell($paramsDto->triggerShell);
         }
 
-        if ($isActive !== null) {
-            $entity->setIsActive($isActive);
+        if ($paramsDto->isActive !== null) {
+            $entity->setIsActive($paramsDto->isActive);
         }
 
         $this->habitRepository->update($entity);

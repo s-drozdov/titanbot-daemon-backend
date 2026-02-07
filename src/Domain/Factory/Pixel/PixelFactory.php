@@ -15,6 +15,7 @@ use Titanbot\Daemon\Domain\Repository\Filter\ColorFilter;
 use Titanbot\Daemon\Domain\Helper\Uuid\UuidHelperInterface;
 use Titanbot\Daemon\Domain\Repository\DotRepositoryInterface;
 use Titanbot\Daemon\Domain\Repository\ColorRepositoryInterface;
+use Titanbot\Daemon\Domain\Dto\Pixel\Create\PixelCreateParamsDto;
 
 final readonly class PixelFactory implements PixelFactoryInterface
 {
@@ -30,18 +31,13 @@ final readonly class PixelFactory implements PixelFactoryInterface
     }
 
     #[Override]
-    public function create(
-        int $x,
-        int $y,
-        string $rgbHex,
-        ?int $deviation = null,
-    ): Pixel {
-        $this->guardInput($x, $y, $rgbHex, $deviation);
+    public function create(PixelCreateParamsDto $paramsDto): Pixel {
+        $this->guardInput($paramsDto);
 
         $entity = new Pixel(
             uuid: $this->uuidHelper->create(),
-            dot: $this->getDot($x, $y),
-            color: $this->getColor($rgbHex, $deviation),
+            dot: $this->getDot($paramsDto->x, $paramsDto->y),
+            color: $this->getColor($paramsDto->rgbHex, $paramsDto->deviation),
         );
 
         $this->dotRepository->save($entity->getDot());
@@ -53,19 +49,14 @@ final readonly class PixelFactory implements PixelFactoryInterface
     /** 
      * @throws InvalidArgumentException
      */
-    public function guardInput(
-        int $x,
-        int $y,
-        string $rgbHex,
-        ?int $deviation = null,
-    ): void {
-        Assert::positiveInteger($x);
-        Assert::positiveInteger($y);
-        Assert::notEmpty($rgbHex);
-        Assert::regex($rgbHex, self::REGEX_HEX_COLOR);
+    public function guardInput(PixelCreateParamsDto $paramsDto): void {
+        Assert::positiveInteger($paramsDto->x);
+        Assert::positiveInteger($paramsDto->y);
+        Assert::notEmpty($paramsDto->rgbHex);
+        Assert::regex($paramsDto->rgbHex, self::REGEX_HEX_COLOR);
 
-        if ($deviation !== null && $deviation !== 0) {
-            Assert::positiveInteger($deviation);
+        if ($paramsDto->deviation !== null && $paramsDto->deviation !== 0) {
+            Assert::positiveInteger($paramsDto->deviation);
         }
     }
 

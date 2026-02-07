@@ -6,9 +6,9 @@ namespace Titanbot\Daemon\Domain\Service\Habit\Create;
 
 use Override;
 use Titanbot\Daemon\Domain\Entity\Habit\Habit;
-use Titanbot\Daemon\Library\Collection\ListInterface;
 use Titanbot\Daemon\Domain\Factory\Habit\HabitFactoryInterface;
 use Titanbot\Daemon\Domain\Repository\HabitRepositoryInterface;
+use Titanbot\Daemon\Domain\Dto\Habit\Create\HabitCreateParamsDto;
 
 final readonly class HabitCreateService implements HabitCreateServiceInterface
 {
@@ -20,24 +20,8 @@ final readonly class HabitCreateService implements HabitCreateServiceInterface
     }
 
     #[Override]
-    public function perform(
-        string $action,
-        ?ListInterface $pixelList = null,
-        ?int $accountLogicalId = null,
-        ?int $priority = null,
-        ?string $triggerOcr = null,
-        ?string $triggerShell = null,
-        bool $isActive = true,
-    ): Habit {
-        $entity = $this->habitFactory->create(
-            action: $action,
-            pixelList: $pixelList,
-            accountLogicalId: $accountLogicalId,
-            priority: $priority,
-            triggerOcr: $triggerOcr,
-            triggerShell: $triggerShell,
-            isActive: $isActive,
-        );
+    public function perform(HabitCreateParamsDto $paramsDto): Habit {
+        $entity = $this->habitFactory->create($paramsDto);
         
         $this->habitRepository->save($entity);
 

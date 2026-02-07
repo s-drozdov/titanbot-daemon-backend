@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Domain\Service\Account\Create;
 
 use Override;
-use DateTimeImmutable;
-use Titanbot\Daemon\Domain\Enum\Gender;
 use Titanbot\Daemon\Domain\Entity\Device\Account;
 use Titanbot\Daemon\Domain\Repository\AccountRepositoryInterface;
 use Titanbot\Daemon\Domain\Factory\Account\AccountFactoryInterface;
+use Titanbot\Daemon\Domain\Dto\Account\Create\AccountCreateParamsDto;
 
 final readonly class AccountCreateService implements AccountCreateServiceInterface
 {
@@ -21,24 +20,8 @@ final readonly class AccountCreateService implements AccountCreateServiceInterfa
     }
 
     #[Override]
-    public function perform(
-        int $logicalId,
-        string $firstName,
-        string $lastName,
-        DateTimeImmutable $birthDate,
-        Gender $gender,
-        string $googleLogin,
-        string $googlePassword,
-    ): Account {
-        $entity = $this->accountFactory->create(
-            logicalId: $logicalId,
-            firstName: $firstName,
-            lastName: $lastName,
-            birthDate: $birthDate,
-            gender: $gender,
-            googleLogin: $googleLogin,
-            googlePassword: $googlePassword,
-        );
+    public function perform(AccountCreateParamsDto $paramsDto): Account {
+        $entity = $this->accountFactory->create($paramsDto);
         
         $this->accountRepository->save($entity);
 

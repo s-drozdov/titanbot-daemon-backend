@@ -6,8 +6,9 @@ namespace Titanbot\Daemon\Domain\Factory\Device;
 
 use InvalidArgumentException;
 use Titanbot\Daemon\Domain\Enum\ActivityType;
-use Titanbot\Daemon\Domain\Factory\FactoryInterface;
 use Titanbot\Daemon\Domain\Entity\Device\Device;
+use Titanbot\Daemon\Domain\Factory\FactoryInterface;
+use Titanbot\Daemon\Domain\Dto\Device\Create\DeviceCreateParamsDto;
 
 interface DeviceFactoryInterface extends FactoryInterface
 {
@@ -21,13 +22,5 @@ interface DeviceFactoryInterface extends FactoryInterface
     /**
      * @throws InvalidArgumentException
      */
-    public function create(
-        int $physicalId,
-        ?bool $isActive = null,
-        ?ActivityType $activityType = null,
-        ?bool $isEmpireSleeping = null,
-        ?bool $isFullServerDetection = null,
-        ?bool $isAbleToClearCache = null,
-        ?int $goTimeLimitSeconds = null,
-    ): Device;
+    public function create(DeviceCreateParamsDto $paramsDto): Device;
 }

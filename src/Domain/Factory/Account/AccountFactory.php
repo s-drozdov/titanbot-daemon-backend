@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Domain\Factory\Account;
 
 use Override;
-use DateTimeImmutable;
-use Titanbot\Daemon\Domain\Enum\Gender;
 use Titanbot\Daemon\Domain\Entity\Device\Account;
 use Titanbot\Daemon\Domain\Helper\Uuid\UuidHelperInterface;
+use Titanbot\Daemon\Domain\Dto\Account\Create\AccountCreateParamsDto;
 
 final readonly class AccountFactory implements AccountFactoryInterface
 {
@@ -19,24 +18,16 @@ final readonly class AccountFactory implements AccountFactoryInterface
     }
 
     #[Override]
-    public function create(
-        int $logicalId,
-        string $firstName,
-        string $lastName,
-        DateTimeImmutable $birthDate,
-        Gender $gender,
-        string $googleLogin,
-        string $googlePassword,
-    ): Account {
+    public function create(AccountCreateParamsDto $paramsDto): Account {
         return new Account(
             uuid: $this->uuidHelper->create(),
-            logicalId: $logicalId,
-            firstName: $firstName,
-            lastName: $lastName,
-            birthDate: $birthDate,
-            gender: $gender,
-            googleLogin: $googleLogin,
-            googlePassword: $googlePassword,
+            logicalId: $paramsDto->logicalId,
+            firstName: $paramsDto->firstName,
+            lastName: $paramsDto->lastName,
+            birthDate: $paramsDto->birthDate,
+            gender: $paramsDto->gender,
+            googleLogin: $paramsDto->googleLogin,
+            googlePassword: $paramsDto->googlePassword,
         );
     }
 }

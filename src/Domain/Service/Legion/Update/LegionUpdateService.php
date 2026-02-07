@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Domain\Service\Legion\Update;
 
 use Override;
-use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Domain\Entity\Device\Legion;
 use Titanbot\Daemon\Domain\Repository\LegionRepositoryInterface;
+use Titanbot\Daemon\Domain\Dto\Legion\Update\LegionUpdateParamsDto;
 
 final readonly class LegionUpdateService implements LegionUpdateServiceInterface
 {
@@ -18,24 +18,19 @@ final readonly class LegionUpdateService implements LegionUpdateServiceInterface
     }
 
     #[Override]
-    public function perform(
-        UuidInterface $uuid,
-        ?string $title,
-        ?string $extTitle,
-        ?int $payDayOfMonth,
-    ): Legion {
-        $entity = $this->legionRepository->getByUuid($uuid);
+    public function perform(LegionUpdateParamsDto $paramsDto): Legion {
+        $entity = $this->legionRepository->getByUuid($paramsDto->uuid);
 
-        if ($title !== null) {
-            $entity->setTitle($title);
+        if ($paramsDto->title !== null) {
+            $entity->setTitle($paramsDto->title);
         }
 
-        if ($extTitle !== null) {
-            $entity->setExtTitle($extTitle);
+        if ($paramsDto->extTitle !== null) {
+            $entity->setExtTitle($paramsDto->extTitle);
         }
 
-        if ($payDayOfMonth !== null) {
-            $entity->setPayDayOfMonth($payDayOfMonth);
+        if ($paramsDto->payDayOfMonth !== null) {
+            $entity->setPayDayOfMonth($paramsDto->payDayOfMonth);
         }
 
         $this->legionRepository->update($entity);

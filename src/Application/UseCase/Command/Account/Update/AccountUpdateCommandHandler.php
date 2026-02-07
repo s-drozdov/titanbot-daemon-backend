@@ -8,6 +8,7 @@ use Override;
 use Titanbot\Daemon\Application\Bus\CqrsElementInterface;
 use Titanbot\Daemon\Application\Dto\Mapper\AccountMapper;
 use Titanbot\Daemon\Application\Bus\Command\CommandHandlerInterface;
+use Titanbot\Daemon\Domain\Dto\Account\Update\AccountUpdateParamsDto;
 use Titanbot\Daemon\Domain\Service\Account\Update\AccountUpdateServiceInterface;
 
 /**
@@ -27,7 +28,7 @@ final readonly class AccountUpdateCommandHandler implements CommandHandlerInterf
     #[Override]
     public function __invoke(CqrsElementInterface $command): AccountUpdateCommandResult
     {
-        $entity = $this->accountUpdateService->perform(
+        $paramsDto = new AccountUpdateParamsDto(
             uuid: $command->uuid,
             firstName: $command->first_name,
             lastName: $command->last_name,
@@ -36,6 +37,8 @@ final readonly class AccountUpdateCommandHandler implements CommandHandlerInterf
             googleLogin: $command->google_login,
             googlePassword: $command->google_password,
         );
+
+        $entity = $this->accountUpdateService->perform($paramsDto);
 
         return new AccountUpdateCommandResult(
             account: $this->accountMapper->mapDomainObjectToDto($entity),

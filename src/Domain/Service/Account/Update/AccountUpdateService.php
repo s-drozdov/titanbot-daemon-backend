@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Domain\Service\Account\Update;
 
 use Override;
-use DateTimeImmutable;
-use Titanbot\Daemon\Domain\Enum\Gender;
-use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Domain\Entity\Device\Account;
 use Titanbot\Daemon\Domain\Repository\AccountRepositoryInterface;
+use Titanbot\Daemon\Domain\Dto\Account\Update\AccountUpdateParamsDto;
 
 final readonly class AccountUpdateService implements AccountUpdateServiceInterface
 {
@@ -20,39 +18,31 @@ final readonly class AccountUpdateService implements AccountUpdateServiceInterfa
     }
 
     #[Override]
-    public function perform(
-        UuidInterface $uuid,
-        ?string $firstName,
-        ?string $lastName,
-        ?DateTimeImmutable $birthDate,
-        ?Gender $gender,
-        ?string $googleLogin,
-        ?string $googlePassword,
-    ): Account {
-        $entity = $this->accountRepository->getByUuid($uuid);
+    public function perform(AccountUpdateParamsDto $paramsDto): Account {
+        $entity = $this->accountRepository->getByUuid($paramsDto->uuid);
 
-        if ($firstName !== null) {
-            $entity->setFirstName($firstName);
+        if ($paramsDto->firstName !== null) {
+            $entity->setFirstName($paramsDto->firstName);
         }
 
-        if ($lastName !== null) {
-            $entity->setLastName($lastName);
+        if ($paramsDto->lastName !== null) {
+            $entity->setLastName($paramsDto->lastName);
         }
 
-        if ($birthDate !== null) {
-            $entity->setBirthDate($birthDate);
+        if ($paramsDto->birthDate !== null) {
+            $entity->setBirthDate($paramsDto->birthDate);
         }
 
-        if ($gender !== null) {
-            $entity->setGender($gender);
+        if ($paramsDto->gender !== null) {
+            $entity->setGender($paramsDto->gender);
         }
 
-        if ($googleLogin !== null) {
-            $entity->setGoogleLogin($googleLogin);
+        if ($paramsDto->googleLogin !== null) {
+            $entity->setGoogleLogin($paramsDto->googleLogin);
         }
 
-        if ($googlePassword !== null) {
-            $entity->setGooglePassword($googlePassword);
+        if ($paramsDto->googlePassword !== null) {
+            $entity->setGooglePassword($paramsDto->googlePassword);
         }
 
         $this->accountRepository->update($entity);

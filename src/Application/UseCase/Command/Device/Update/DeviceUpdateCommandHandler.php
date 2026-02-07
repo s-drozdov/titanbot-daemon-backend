@@ -8,6 +8,7 @@ use Override;
 use Titanbot\Daemon\Application\Dto\Mapper\DeviceMapper;
 use Titanbot\Daemon\Application\Bus\CqrsElementInterface;
 use Titanbot\Daemon\Application\Bus\Event\EventBusInterface;
+use Titanbot\Daemon\Domain\Dto\Device\Update\DeviceUpdateParamsDto;
 use Titanbot\Daemon\Application\Bus\Command\CommandHandlerInterface;
 use Titanbot\Daemon\Domain\Service\Device\Update\DeviceUpdateServiceInterface;
 
@@ -30,7 +31,7 @@ final readonly class DeviceUpdateCommandHandler implements CommandHandlerInterfa
     #[Override]
     public function __invoke(CqrsElementInterface $command): DeviceUpdateCommandResult
     {
-        $entity = $this->deviceUpdateService->perform(
+        $paramsDto = new DeviceUpdateParamsDto(
             uuid: $command->uuid,
             isActive: $command->is_active,
             activityType: $command->activity_type,
@@ -39,6 +40,8 @@ final readonly class DeviceUpdateCommandHandler implements CommandHandlerInterfa
             isAbleToClearCache: $command->is_able_to_clear_cache,
             goTimeLimitSeconds: $command->go_time_limit_seconds,
         );
+
+        $entity = $this->deviceUpdateService->perform($paramsDto);
 
         $this->eventBus->dispatch(...$entity->pullEvents());
 

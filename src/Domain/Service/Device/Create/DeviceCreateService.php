@@ -6,9 +6,9 @@ namespace Titanbot\Daemon\Domain\Service\Device\Create;
 
 use Override;
 use Titanbot\Daemon\Domain\Entity\Device\Device;
-use Titanbot\Daemon\Domain\Enum\ActivityType;
-use Titanbot\Daemon\Domain\Factory\Device\DeviceFactoryInterface;
 use Titanbot\Daemon\Domain\Repository\DeviceRepositoryInterface;
+use Titanbot\Daemon\Domain\Factory\Device\DeviceFactoryInterface;
+use Titanbot\Daemon\Domain\Dto\Device\Create\DeviceCreateParamsDto;
 
 final readonly class DeviceCreateService implements DeviceCreateServiceInterface
 {
@@ -20,24 +20,8 @@ final readonly class DeviceCreateService implements DeviceCreateServiceInterface
     }
 
     #[Override]
-    public function perform(
-        int $physicalId,
-        ?ActivityType $activityType = null,
-        ?bool $isActive = null,
-        ?bool $isEmpireSleeping = null,
-        ?bool $isFullServerDetection = null,
-        ?bool $isAbleToClearCache = null,
-        ?int $goTimeLimitSeconds = null,
-    ): Device {
-        $entity = $this->deviceFactory->create(
-            physicalId: $physicalId,
-            isActive: $isActive,
-            activityType: $activityType,
-            isEmpireSleeping: $isEmpireSleeping,
-            isFullServerDetection: $isFullServerDetection,
-            isAbleToClearCache: $isAbleToClearCache,
-            goTimeLimitSeconds: $goTimeLimitSeconds,
-        );
+    public function perform(DeviceCreateParamsDto $paramsDto): Device {
+        $entity = $this->deviceFactory->create($paramsDto);
         
         $this->deviceRepository->save($entity);
 

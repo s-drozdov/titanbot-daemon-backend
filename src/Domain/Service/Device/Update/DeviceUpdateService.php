@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Domain\Service\Device\Update;
 
 use Override;
-use Titanbot\Daemon\Domain\Enum\ActivityType;
-use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Domain\Entity\Device\Device;
 use Titanbot\Daemon\Domain\Repository\DeviceRepositoryInterface;
+use Titanbot\Daemon\Domain\Dto\Device\Update\DeviceUpdateParamsDto;
 
 final readonly class DeviceUpdateService implements DeviceUpdateServiceInterface
 {
@@ -19,39 +18,31 @@ final readonly class DeviceUpdateService implements DeviceUpdateServiceInterface
     }
 
     #[Override]
-    public function perform(
-        UuidInterface $uuid,
-        ?bool $isActive = null,
-        ?ActivityType $activityType = null,
-        ?bool $isEmpireSleeping = null,
-        ?bool $isFullServerDetection = null,
-        ?bool $isAbleToClearCache = null,
-        ?int $goTimeLimitSeconds = null,
-    ): Device {
-        $entity = $this->deviceRepository->getByUuid($uuid);
+    public function perform(DeviceUpdateParamsDto $paramsDto): Device {
+        $entity = $this->deviceRepository->getByUuid($paramsDto->uuid);
 
-        if ($isActive !== null) {
-            $entity->setIsActive($isActive);
+        if ($paramsDto->isActive !== null) {
+            $entity->setIsActive($paramsDto->isActive);
         }
 
-        if ($activityType !== null) {
-            $entity->setActivityType($activityType);
+        if ($paramsDto->activityType !== null) {
+            $entity->setActivityType($paramsDto->activityType);
         }
 
-        if ($isEmpireSleeping !== null) {
-            $entity->setIsEmpireSleeping($isEmpireSleeping);
+        if ($paramsDto->isEmpireSleeping !== null) {
+            $entity->setIsEmpireSleeping($paramsDto->isEmpireSleeping);
         }
 
-        if ($isFullServerDetection !== null) {
-            $entity->setIsFullServerDetection($isFullServerDetection);
+        if ($paramsDto->isFullServerDetection !== null) {
+            $entity->setIsFullServerDetection($paramsDto->isFullServerDetection);
         }
 
-        if ($isAbleToClearCache !== null) {
-            $entity->setIsAbleToClearCache($isAbleToClearCache);
+        if ($paramsDto->isAbleToClearCache !== null) {
+            $entity->setIsAbleToClearCache($paramsDto->isAbleToClearCache);
         }
 
-        if ($goTimeLimitSeconds !== null) {
-            $entity->setGoTimeLimitSeconds($goTimeLimitSeconds);
+        if ($paramsDto->goTimeLimitSeconds !== null) {
+            $entity->setGoTimeLimitSeconds($paramsDto->goTimeLimitSeconds);
         }
 
         $this->deviceRepository->update($entity);

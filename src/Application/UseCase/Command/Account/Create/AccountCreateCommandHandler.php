@@ -7,6 +7,7 @@ namespace Titanbot\Daemon\Application\UseCase\Command\Account\Create;
 use Override;
 use Titanbot\Daemon\Application\Bus\CqrsElementInterface;
 use Titanbot\Daemon\Application\Bus\Command\CommandHandlerInterface;
+use Titanbot\Daemon\Domain\Dto\Account\Create\AccountCreateParamsDto;
 use Titanbot\Daemon\Domain\Service\Account\Create\AccountCreateServiceInterface;
 
 /**
@@ -23,7 +24,7 @@ final readonly class AccountCreateCommandHandler implements CommandHandlerInterf
     #[Override]
     public function __invoke(CqrsElementInterface $command): AccountCreateCommandResult
     {
-        $entity = $this->accountCreateService->perform(
+        $paramsDto = new AccountCreateParamsDto(
             logicalId: $command->logical_id,
             firstName: $command->first_name,
             lastName: $command->last_name,
@@ -32,6 +33,8 @@ final readonly class AccountCreateCommandHandler implements CommandHandlerInterf
             googleLogin: $command->google_login,
             googlePassword: $command->google_password,
         );
+
+        $entity = $this->accountCreateService->perform($paramsDto);
 
         return new AccountCreateCommandResult(uuid: $entity->getUuid());
     }

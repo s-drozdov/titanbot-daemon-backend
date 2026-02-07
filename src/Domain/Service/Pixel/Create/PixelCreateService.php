@@ -8,6 +8,7 @@ use Override;
 use Titanbot\Daemon\Domain\Entity\Habit\Pixel;
 use Titanbot\Daemon\Domain\Factory\Pixel\PixelFactoryInterface;
 use Titanbot\Daemon\Domain\Repository\PixelRepositoryInterface;
+use Titanbot\Daemon\Domain\Dto\Pixel\Create\PixelCreateParamsDto;
 
 final readonly class PixelCreateService implements PixelCreateServiceInterface
 {
@@ -19,9 +20,9 @@ final readonly class PixelCreateService implements PixelCreateServiceInterface
     }
 
     #[Override]
-    public function perform(int $x, int $y, string $rgbHex, ?int $deviation): Pixel 
+    public function perform(PixelCreateParamsDto $paramsDto): Pixel 
     {
-        $entity = $this->pixelFactory->create($x, $y, $rgbHex, $deviation);
+        $entity = $this->pixelFactory->create($paramsDto);
         
         $this->pixelRepository->save($entity);
 

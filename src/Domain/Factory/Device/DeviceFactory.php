@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Domain\Factory\Device;
 
 use Override;
-use Titanbot\Daemon\Domain\Enum\ActivityType;
 use Titanbot\Daemon\Domain\Entity\Device\Device;
 use Titanbot\Daemon\Domain\Helper\Uuid\UuidHelperInterface;
+use Titanbot\Daemon\Domain\Dto\Device\Create\DeviceCreateParamsDto;
 
 final readonly class DeviceFactory implements DeviceFactoryInterface
 {
@@ -18,25 +18,17 @@ final readonly class DeviceFactory implements DeviceFactoryInterface
     }
 
     #[Override]
-    public function create(
-        int $physicalId,
-        ?bool $isActive = null,
-        ?ActivityType $activityType = null,
-        ?bool $isEmpireSleeping = null,
-        ?bool $isFullServerDetection = null,
-        ?bool $isAbleToClearCache = null,
-        ?int $goTimeLimitSeconds = null,
-    ): Device {
+    public function create(DeviceCreateParamsDto $paramsDto): Device {
 
         return new Device(
             uuid: $this->uuidHelper->create(),
-            physicalId: $physicalId,
-            isActive: $isActive ?? self::DEFAULT_IS_ACTIVE,
-            activityType: $activityType ?? self::DEFAULT_ACTIVITY_TYPE,
-            isEmpireSleeping: $isEmpireSleeping ?? self::DEFAULT_IS_EMPIRE_SLEEPING,
-            isFullServerDetection: $isFullServerDetection ?? self::DEFAULT_IS_FULL_SERVER_DETECTION,
-            isAbleToClearCache: $isAbleToClearCache ?? self::DEFAULT_IS_ABLE_TO_CLEAR_CACHE,
-            goTimeLimitSeconds: $goTimeLimitSeconds ?? self::DEFAULT_GO_TIME_LIMIT_SECONDS,
+            physicalId: $paramsDto->physicalId,
+            isActive: $paramsDto->isActive ?? self::DEFAULT_IS_ACTIVE,
+            activityType: $paramsDto->activityType ?? self::DEFAULT_ACTIVITY_TYPE,
+            isEmpireSleeping: $paramsDto->isEmpireSleeping ?? self::DEFAULT_IS_EMPIRE_SLEEPING,
+            isFullServerDetection: $paramsDto->isFullServerDetection ?? self::DEFAULT_IS_FULL_SERVER_DETECTION,
+            isAbleToClearCache: $paramsDto->isAbleToClearCache ?? self::DEFAULT_IS_ABLE_TO_CLEAR_CACHE,
+            goTimeLimitSeconds: $paramsDto->goTimeLimitSeconds ?? self::DEFAULT_GO_TIME_LIMIT_SECONDS,
         );
     }
 }
