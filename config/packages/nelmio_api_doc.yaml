@@ -4,6 +4,15 @@ nelmio_api_doc:
             title: Titanbot daemon API
             description: Titanbot daemon module
             version: 1.0.0
+        components:
+            securitySchemes:
+                ApiKeyAuth:
+                    type: apiKey
+                    in: header
+                    name: X-API-Key
+        security:
+            - ApiKeyAuth: []
+
     models:
         use_jms: false
         names: true
