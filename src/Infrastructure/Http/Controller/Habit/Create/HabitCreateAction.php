@@ -44,13 +44,13 @@ final class HabitCreateAction
         path: Resource::Habit->value,
         operationId: OpenApiOperationId::HabitCreate->value,
         summary: OpenApiSummary::HabitCreate->value,
-        tags: [OpenApiTag::Habit->value],
+        tags: [OpenApiTag::Habit->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::habit->value,
             content: new OA\JsonContent(
-                ref: new Model(type: HabitCreateCommandSchema::class)
-            )
+                ref: new Model(type: HabitCreateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

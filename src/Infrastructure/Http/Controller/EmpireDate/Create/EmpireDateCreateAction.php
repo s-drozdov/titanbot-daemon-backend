@@ -44,13 +44,13 @@ final class EmpireDateCreateAction
         path: Resource::EmpireDate->value,
         operationId: OpenApiOperationId::EmpireDateCreate->value,
         summary: OpenApiSummary::EmpireDateCreate->value,
-        tags: [OpenApiTag::EmpireDate->value],
+        tags: [OpenApiTag::EmpireDate->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::empire_date->value,
             content: new OA\JsonContent(
-                ref: new Model(type: EmpireDateCreateCommandSchema::class)
-            )
+                ref: new Model(type: EmpireDateCreateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

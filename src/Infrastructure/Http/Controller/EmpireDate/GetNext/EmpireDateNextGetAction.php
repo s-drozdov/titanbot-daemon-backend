@@ -43,7 +43,7 @@ final class EmpireDateNextGetAction
         path: Resource::EmpireDateNext->value,
         operationId: OpenApiOperationId::EmpireDateNextGet->value,
         summary: OpenApiSummary::EmpireDateNextGet->value,
-        tags: [OpenApiTag::EmpireDate->value],
+        tags: [OpenApiTag::EmpireDate->value, OpenApiTag::AdminAccess->value, OpenApiTag::DaemonAccess->value],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,

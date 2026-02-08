@@ -44,13 +44,13 @@ final class DeviceIndexAction
         path: Resource::Device->value,
         operationId: OpenApiOperationId::DeviceIndex->value,
         summary: OpenApiSummary::DeviceIndex->value,
-        tags: [OpenApiTag::Device->value],
+        tags: [OpenApiTag::Device->value, OpenApiTag::AdminAccess->value, OpenApiTag::DaemonAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'physical_id',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::int->value)
+                schema: new OA\Schema(type: PhpType::int->value),
             ),
         ],
         responses: [

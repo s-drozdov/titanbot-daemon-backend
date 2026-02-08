@@ -46,12 +46,12 @@ final class DaemonTokenByValueDeleteAction
         path: Resource::DaemonToken->value,
         operationId: OpenApiOperationId::DaemonTokenDeleteByValue->value,
         summary: OpenApiSummary::DaemonTokenDeleteByValue->value,
-        tags: [OpenApiTag::DaemonToken->value],
+        tags: [OpenApiTag::DaemonToken->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::daemon_token->value,
             content: new OA\JsonContent(
-                ref: new Model(type: DaemonTokenByValueDeleteCommandSchema::class)
+                ref: new Model(type: DaemonTokenByValueDeleteCommandSchema::class),
             ),
         ),
         responses: [

@@ -44,13 +44,13 @@ final class EmpireDateIndexAction
         path: Resource::EmpireDate->value,
         operationId: OpenApiOperationId::EmpireDateIndex->value,
         summary: OpenApiSummary::EmpireDateIndex->value,
-        tags: [OpenApiTag::EmpireDate->value],
+        tags: [OpenApiTag::EmpireDate->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'date',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::string->value)
+                schema: new OA\Schema(type: PhpType::string->value),
             ),
         ],
         responses: [

@@ -44,13 +44,13 @@ final class DeviceUpdateAction
         path: Resource::DeviceByUuid->value,
         operationId: OpenApiOperationId::DeviceUpdate->value,
         summary: OpenApiSummary::DeviceUpdate->value,
-        tags: [OpenApiTag::Device->value],
+        tags: [OpenApiTag::Device->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::device->value,
             content: new OA\JsonContent(
-                ref: new Model(type: DeviceUpdateCommandSchema::class)
-            )
+                ref: new Model(type: DeviceUpdateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

@@ -44,14 +44,14 @@ final class DeviceGetAction
         path: Resource::DeviceByUuid->value,
         operationId: OpenApiOperationId::DeviceGet->value,
         summary: OpenApiSummary::DeviceGet->value,
-        tags: [OpenApiTag::Device->value],
+        tags: [OpenApiTag::Device->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value)
-            )
+                schema: new OA\Schema(type: PhpType::string->value),
+            ),
         ],
         responses: [
             new OA\Response(

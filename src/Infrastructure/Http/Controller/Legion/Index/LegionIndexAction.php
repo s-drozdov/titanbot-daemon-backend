@@ -44,19 +44,19 @@ final class LegionIndexAction
         path: Resource::Legion->value,
         operationId: OpenApiOperationId::LegionIndex->value,
         summary: OpenApiSummary::LegionIndex->value,
-        tags: [OpenApiTag::Legion->value],
+        tags: [OpenApiTag::Legion->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'title',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::string->value)
+                schema: new OA\Schema(type: PhpType::string->value),
             ),
             new OA\Parameter(
                 name: 'pay_day_of_month',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::int->value)
+                schema: new OA\Schema(type: PhpType::int->value),
             ),
         ],
         responses: [

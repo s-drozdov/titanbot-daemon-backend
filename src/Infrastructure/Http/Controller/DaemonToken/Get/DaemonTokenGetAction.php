@@ -44,14 +44,14 @@ final class DaemonTokenGetAction
         path: Resource::DaemonToken->value,
         operationId: OpenApiOperationId::DaemonTokenGet->value,
         summary: OpenApiSummary::DaemonTokenGet->value,
-        tags: [OpenApiTag::DaemonToken->value],
+        tags: [OpenApiTag::DaemonToken->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value)
-            )
+                schema: new OA\Schema(type: PhpType::string->value),
+            ),
         ],
         responses: [
             new OA\Response(

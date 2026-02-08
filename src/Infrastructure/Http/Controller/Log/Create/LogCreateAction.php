@@ -44,13 +44,13 @@ final class LogCreateAction
         path: Resource::Log->value,
         operationId: OpenApiOperationId::LogCreate->value,
         summary: OpenApiSummary::LogCreate->value,
-        tags: [OpenApiTag::Log->value],
+        tags: [OpenApiTag::Log->value, OpenApiTag::DaemonAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::log->value,
             content: new OA\JsonContent(
-                ref: new Model(type: LogCreateCommandSchema::class)
-            )
+                ref: new Model(type: LogCreateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

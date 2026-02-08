@@ -15,4 +15,7 @@ enum OpenApiTag: string
     case Legion = 'legion';
     case Log = 'log';
     case Status = 'status';
+
+    case AdminAccess = 'admin_access';
+    case DaemonAccess = 'daemon_access';
 }

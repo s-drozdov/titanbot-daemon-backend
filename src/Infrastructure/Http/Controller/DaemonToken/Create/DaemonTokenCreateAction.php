@@ -44,13 +44,13 @@ final class DaemonTokenCreateAction
         path: Resource::DaemonToken->value,
         operationId: OpenApiOperationId::DaemonTokenCreate->value,
         summary: OpenApiSummary::DaemonTokenCreate->value,
-        tags: [OpenApiTag::DaemonToken->value],
+        tags: [OpenApiTag::DaemonToken->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::daemon_token->value,
             content: new OA\JsonContent(
-                ref: new Model(type: DaemonTokenCreateCommandSchema::class)
-            )
+                ref: new Model(type: DaemonTokenCreateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

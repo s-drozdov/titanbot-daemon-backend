@@ -6,29 +6,29 @@ namespace Titanbot\Daemon\Infrastructure\Enum;
 
 enum Resource: string
 {
-    case Account = '/accounts';
-    case AccountByUuid = '/accounts/{uuid}';
+    case Account = '/daemon/accounts';
+    case AccountByUuid = '/daemon/accounts/{uuid}';
 
-    case DaemonDb = '/db';
-    case DaemonDbChecksum = '/db/checksum';
+    case DaemonDb = '/daemon/db';
+    case DaemonDbChecksum = '/daemon/db/checksum';
 
-    case DaemonToken = '/tokens';
-    case DaemonTokenByUuid = '/tokens/{uuid}';
+    case DaemonToken = '/daemon/tokens';
+    case DaemonTokenByUuid = '/daemon/tokens/{uuid}';
 
-    case Device = '/devices';
-    case DeviceByUuid = '/devices/{uuid}';
+    case Device = '/daemon/devices';
+    case DeviceByUuid = '/daemon/devices/{uuid}';
 
-    case EmpireDate = '/empire-dates';
-    case EmpireDateNext = '/empire-dates-next';
-    case EmpireDateByUuid = '/empire-dates/{uuid}';
+    case EmpireDate = '/daemon/empire-dates';
+    case EmpireDateNext = '/daemon/empire-dates-next';
+    case EmpireDateByUuid = '/daemon/empire-dates/{uuid}';
 
-    case HealthCheck = '/health-check';
+    case HealthCheck = '/daemon/health-check';
 
-    case Habit = '/habits';
-    case HabitByUuid = '/habits/{uuid}';
+    case Habit = '/daemon/habits';
+    case HabitByUuid = '/daemon/habits/{uuid}';
 
-    case Legion = '/legions';
-    case LegionByUuid = '/legions/{uuid}';
+    case Legion = '/daemon/legions';
+    case LegionByUuid = '/daemon/legions/{uuid}';
 
-    case Log = '/logs';
+    case Log = '/daemon/logs';
 }

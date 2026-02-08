@@ -44,14 +44,14 @@ final class HabitDeleteAction
         path: Resource::HabitByUuid->value,
         operationId: OpenApiOperationId::HabitDelete->value,
         summary: OpenApiSummary::HabitDelete->value,
-        tags: [OpenApiTag::Habit->value],
+        tags: [OpenApiTag::Habit->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value)
-            )
+                schema: new OA\Schema(type: PhpType::string->value),
+            ),
         ],
         responses: [
             new OA\Response(

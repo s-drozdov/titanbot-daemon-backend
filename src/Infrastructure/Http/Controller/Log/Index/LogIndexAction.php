@@ -44,13 +44,13 @@ final class LogIndexAction
         path: Resource::Log->value,
         operationId: OpenApiOperationId::LogIndex->value,
         summary: OpenApiSummary::LogIndex->value,
-        tags: [OpenApiTag::Log->value],
+        tags: [OpenApiTag::Log->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'message',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::string->value)
+                schema: new OA\Schema(type: PhpType::string->value),
             ),
         ],
         responses: [

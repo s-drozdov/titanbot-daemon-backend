@@ -44,13 +44,13 @@ final class DaemonTokenIndexAction
         path: Resource::DaemonToken->value,
         operationId: OpenApiOperationId::DaemonTokenIndex->value,
         summary: OpenApiSummary::DaemonTokenIndex->value,
-        tags: [OpenApiTag::DaemonToken->value],
+        tags: [OpenApiTag::DaemonToken->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'token',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::string->value)
+                schema: new OA\Schema(type: PhpType::string->value),
             ),
         ],
         responses: [

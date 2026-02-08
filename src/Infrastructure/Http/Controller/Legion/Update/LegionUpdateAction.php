@@ -44,13 +44,13 @@ final class LegionUpdateAction
         path: Resource::LegionByUuid->value,
         operationId: OpenApiOperationId::LegionUpdate->value,
         summary: OpenApiSummary::LegionUpdate->value,
-        tags: [OpenApiTag::Legion->value],
+        tags: [OpenApiTag::Legion->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::legion->value,
             content: new OA\JsonContent(
-                ref: new Model(type: LegionUpdateCommandSchema::class)
-            )
+                ref: new Model(type: LegionUpdateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

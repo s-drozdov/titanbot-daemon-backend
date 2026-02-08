@@ -44,14 +44,14 @@ final class DaemonDbChecksumGetAction
         path: Resource::DaemonDbChecksum->value,
         operationId: OpenApiOperationId::DaemonDbChecksumGet->value,
         summary: OpenApiSummary::DaemonDbChecksumGet->value,
-        tags: [OpenApiTag::DaemonDb->value],
+        tags: [OpenApiTag::DaemonDb->value, OpenApiTag::AdminAccess->value, OpenApiTag::DaemonAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'logical_id',
                 in: 'query',
                 required: true,
-                schema: new OA\Schema(type: PhpType::int->value)
-            )
+                schema: new OA\Schema(type: PhpType::int->value),
+            ),
         ],
         responses: [
             new OA\Response(

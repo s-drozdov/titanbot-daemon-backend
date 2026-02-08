@@ -44,7 +44,7 @@ final class LogClearAction
         path: Resource::Log->value,
         operationId: OpenApiOperationId::LogClear->value,
         summary: OpenApiSummary::LogClear->value,
-        tags: [OpenApiTag::Log->value],
+        tags: [OpenApiTag::Log->value, OpenApiTag::AdminAccess->value],
         responses: [
             new OA\Response(
                 response: Response::HTTP_NO_CONTENT,

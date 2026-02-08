@@ -44,13 +44,13 @@ final class DeviceCreateAction
         path: Resource::Device->value,
         operationId: OpenApiOperationId::DeviceCreate->value,
         summary: OpenApiSummary::DeviceCreate->value,
-        tags: [OpenApiTag::Device->value],
+        tags: [OpenApiTag::Device->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::device->value,
             content: new OA\JsonContent(
-                ref: new Model(type: DeviceCreateCommandSchema::class)
-            )
+                ref: new Model(type: DeviceCreateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

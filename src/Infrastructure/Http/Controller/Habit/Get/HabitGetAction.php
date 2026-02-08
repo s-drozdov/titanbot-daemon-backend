@@ -44,14 +44,14 @@ final class HabitGetAction
         path: Resource::HabitByUuid->value,
         operationId: OpenApiOperationId::HabitGet->value,
         summary: OpenApiSummary::HabitGet->value,
-        tags: [OpenApiTag::Habit->value],
+        tags: [OpenApiTag::Habit->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value)
-            )
+                schema: new OA\Schema(type: PhpType::string->value),
+            ),
         ],
         responses: [
             new OA\Response(

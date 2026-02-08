@@ -44,14 +44,14 @@ final class AccountDeleteAction
         path: Resource::AccountByUuid->value,
         operationId: OpenApiOperationId::AccountDelete->value,
         summary: OpenApiSummary::AccountDelete->value,
-        tags: [OpenApiTag::Account->value],
+        tags: [OpenApiTag::Account->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value)
-            )
+                schema: new OA\Schema(type: PhpType::string->value),
+            ),
         ],
         responses: [
             new OA\Response(

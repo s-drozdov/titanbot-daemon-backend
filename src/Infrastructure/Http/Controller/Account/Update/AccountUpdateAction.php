@@ -44,13 +44,13 @@ final class AccountUpdateAction
         path: Resource::AccountByUuid->value,
         operationId: OpenApiOperationId::AccountUpdate->value,
         summary: OpenApiSummary::AccountUpdate->value,
-        tags: [OpenApiTag::Account->value],
+        tags: [OpenApiTag::Account->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::account->value,
             content: new OA\JsonContent(
-                ref: new Model(type: AccountUpdateCommandSchema::class)
-            )
+                ref: new Model(type: AccountUpdateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

@@ -26,7 +26,7 @@ final readonly class HealthCheckAction
         path: Resource::HealthCheck->value,
         operationId: OpenApiOperationId::HealthCheck->value,
         summary: OpenApiSummary::HealthCheck->value,
-        tags: [OpenApiTag::Status->value],
+        tags: [OpenApiTag::Status->value, OpenApiTag::AdminAccess->value, OpenApiTag::DaemonAccess->value],
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,

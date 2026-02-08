@@ -44,14 +44,14 @@ final class EmpireDateDeleteAction
         path: Resource::EmpireDateByUuid->value,
         operationId: OpenApiOperationId::EmpireDateDelete->value,
         summary: OpenApiSummary::EmpireDateDelete->value,
-        tags: [OpenApiTag::EmpireDate->value],
+        tags: [OpenApiTag::EmpireDate->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value)
-            )
+                schema: new OA\Schema(type: PhpType::string->value),
+            ),
         ],
         responses: [
             new OA\Response(

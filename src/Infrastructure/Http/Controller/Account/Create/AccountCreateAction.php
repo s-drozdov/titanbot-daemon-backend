@@ -44,13 +44,13 @@ final class AccountCreateAction
         path: Resource::Account->value,
         operationId: OpenApiOperationId::AccountCreate->value,
         summary: OpenApiSummary::AccountCreate->value,
-        tags: [OpenApiTag::Account->value],
+        tags: [OpenApiTag::Account->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::account->value,
             content: new OA\JsonContent(
-                ref: new Model(type: AccountCreateCommandSchema::class)
-            )
+                ref: new Model(type: AccountCreateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(

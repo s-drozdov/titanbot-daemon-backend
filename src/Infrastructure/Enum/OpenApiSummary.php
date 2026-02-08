@@ -6,11 +6,11 @@ namespace Titanbot\Daemon\Infrastructure\Enum;
 
 enum OpenApiSummary: string
 {
-    case AccountCreate = 'Create acccount';
-    case AccountGet = 'Get acccount';
-    case AccountIndex = 'Get acccount index';
-    case AccountUpdate = 'Update acccount';
-    case AccountDelete = 'Delete acccount';
+    case AccountCreate = 'Create account';
+    case AccountGet = 'Get account';
+    case AccountIndex = 'Get account index';
+    case AccountUpdate = 'Update account';
+    case AccountDelete = 'Delete account';
 
     case DaemonDbGet = 'Get daemon db';
     case DaemonDbChecksumGet = 'Get daemon db checksum';

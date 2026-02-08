@@ -44,14 +44,14 @@ final class LegionDeleteAction
         path: Resource::LegionByUuid->value,
         operationId: OpenApiOperationId::LegionDelete->value,
         summary: OpenApiSummary::LegionDelete->value,
-        tags: [OpenApiTag::Legion->value],
+        tags: [OpenApiTag::Legion->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value)
-            )
+                schema: new OA\Schema(type: PhpType::string->value),
+            ),
         ],
         responses: [
             new OA\Response(

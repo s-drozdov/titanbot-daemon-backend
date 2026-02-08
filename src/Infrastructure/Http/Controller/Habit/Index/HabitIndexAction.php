@@ -44,25 +44,25 @@ final class HabitIndexAction
         path: Resource::Habit->value,
         operationId: OpenApiOperationId::HabitIndex->value,
         summary: OpenApiSummary::HabitIndex->value,
-        tags: [OpenApiTag::Habit->value],
+        tags: [OpenApiTag::Habit->value, OpenApiTag::AdminAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'account_logical_id',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::int->value)
+                schema: new OA\Schema(type: PhpType::int->value),
             ),
             new OA\Parameter(
                 name: 'is_active',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::bool->value)
+                schema: new OA\Schema(type: PhpType::bool->value),
             ),
             new OA\Parameter(
                 name: 'action',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::string->value)
+                schema: new OA\Schema(type: PhpType::string->value),
             ),
         ],
         responses: [

@@ -44,13 +44,13 @@ final class AccountIndexAction
         path: Resource::Account->value,
         operationId: OpenApiOperationId::AccountIndex->value,
         summary: OpenApiSummary::AccountIndex->value,
-        tags: [OpenApiTag::Account->value],
+        tags: [OpenApiTag::Account->value, OpenApiTag::AdminAccess->value, OpenApiTag::DaemonAccess->value],
         parameters: [
             new OA\Parameter(
                 name: 'logical_id',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::int->value)
+                schema: new OA\Schema(type: PhpType::int->value),
             ),
         ],
         responses: [

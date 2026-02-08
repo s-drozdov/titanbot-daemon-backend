@@ -44,13 +44,13 @@ final class LegionCreateAction
         path: Resource::Legion->value,
         operationId: OpenApiOperationId::LegionCreate->value,
         summary: OpenApiSummary::LegionCreate->value,
-        tags: [OpenApiTag::Legion->value],
+        tags: [OpenApiTag::Legion->value, OpenApiTag::AdminAccess->value],
         requestBody: new OA\RequestBody(
             required: true,
             description: OpenApiSchemaDescription::legion->value,
             content: new OA\JsonContent(
-                ref: new Model(type: LegionCreateCommandSchema::class)
-            )
+                ref: new Model(type: LegionCreateCommandSchema::class),
+            ),
         ),
         responses: [
             new OA\Response(
