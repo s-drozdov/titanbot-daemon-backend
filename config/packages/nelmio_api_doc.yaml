@@ -9,7 +9,7 @@ nelmio_api_doc:
                 ApiKeyAuth:
                     type: apiKey
                     in: header
-                    name: X-API-Key
+                    name: X-API-KEY
         security:
             - ApiKeyAuth: []
 
