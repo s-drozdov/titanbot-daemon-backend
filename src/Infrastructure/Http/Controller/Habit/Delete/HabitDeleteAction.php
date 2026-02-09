@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Infrastructure\Http\Controller\Habit\Delete;
 
 use OpenApi\Attributes as OA;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,6 +22,7 @@ use Titanbot\Daemon\Application\Bus\Command\CommandBusInterface;
 use Titanbot\Daemon\Infrastructure\Enum\OpenApiSchemaDescription;
 use Titanbot\Daemon\Application\UseCase\Command\Habit\Delete\HabitDeleteCommand;
 use Titanbot\Daemon\Application\UseCase\Command\Habit\Delete\HabitDeleteCommandResult;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Habit\Delete\HabitDeleteCommand as HabitDeleteCommandSchema;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Habit\Delete\HabitDeleteCommandResult as HabitDeleteCommandResultSchema;
 
@@ -50,7 +50,7 @@ final class HabitDeleteAction
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value),
+                schema: new OA\Schema(type: OpenApiType::string->value),
             ),
         ],
         responses: [

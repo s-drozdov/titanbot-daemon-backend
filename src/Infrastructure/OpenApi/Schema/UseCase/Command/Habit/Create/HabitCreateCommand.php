@@ -6,8 +6,8 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Habit\Cr
 
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Attribute\Model;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Titanbot\Daemon\Application\Dto\PixelRequestDto;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Library\Collection\ListInterface;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto\PixelRequestDto as PixelRequestDtoSchema;
 
@@ -23,7 +23,7 @@ final class HabitCreateCommand
      * @var ListInterface<PixelRequestDto>
      */
     #[OA\Property(
-        type: PhpType::array->value,
+        type: OpenApiType::array->value,
         items: new OA\Items(ref: new Model(type: PixelRequestDtoSchema::class)),
     )]
     public ListInterface $pixel_list;

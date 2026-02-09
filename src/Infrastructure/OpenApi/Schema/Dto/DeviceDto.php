@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto;
 
 use OpenApi\Attributes as OA;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Titanbot\Daemon\Domain\Enum\ActivityType;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 
 /**
@@ -15,14 +15,14 @@ use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 #[OA\Schema()]
 final class DeviceDto
 {
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public UuidInterface $uuid;
 
     public int $physical_id;
 
     public bool $is_active;
 
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public ActivityType $activity_type;
 
     public bool $is_empire_sleeping;

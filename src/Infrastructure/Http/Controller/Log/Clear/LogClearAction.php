@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Infrastructure\Http\Controller\Log\Clear;
 
 use OpenApi\Attributes as OA;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

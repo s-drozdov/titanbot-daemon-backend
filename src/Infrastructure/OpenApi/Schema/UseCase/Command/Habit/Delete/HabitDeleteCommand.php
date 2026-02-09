@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Habit\Delete;
 
 use OpenApi\Attributes as OA;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
-use Titanbot\Daemon\Library\Enum\PhpType;
 
 /**
  * @psalm-suppress MissingConstructor [INFO]
@@ -14,6 +14,6 @@ use Titanbot\Daemon\Library\Enum\PhpType;
 #[OA\Schema()]
 final class HabitDeleteCommand
 {
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public UuidInterface $uuid;
 }

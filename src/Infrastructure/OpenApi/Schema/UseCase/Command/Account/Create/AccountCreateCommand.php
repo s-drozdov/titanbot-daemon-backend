@@ -7,7 +7,7 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Account\
 use DateTimeImmutable;
 use OpenApi\Attributes as OA;
 use Titanbot\Daemon\Domain\Enum\Gender;
-use Titanbot\Daemon\Library\Enum\PhpType;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 
 /**
  * @psalm-suppress MissingConstructor [INFO]
@@ -21,10 +21,10 @@ final class AccountCreateCommand
     
     public string $last_name;
     
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public DateTimeImmutable $birth_date;
     
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public Gender $gender;
     
     public string $google_login;

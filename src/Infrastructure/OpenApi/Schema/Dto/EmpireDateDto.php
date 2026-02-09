@@ -6,7 +6,7 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto;
 
 use DateTimeImmutable;
 use OpenApi\Attributes as OA;
-use Titanbot\Daemon\Library\Enum\PhpType;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 
 /**
@@ -15,9 +15,9 @@ use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 #[OA\Schema()]
 final class EmpireDateDto
 {
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public UuidInterface $uuid;
 
-    #[OA\Property(type: PhpType::string->value, nullable: true)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: true)]
     public DateTimeImmutable $date;
 }

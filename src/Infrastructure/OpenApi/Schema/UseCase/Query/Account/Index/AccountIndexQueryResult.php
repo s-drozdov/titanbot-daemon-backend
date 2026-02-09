@@ -6,8 +6,8 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Query\Account\In
 
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Attribute\Model;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Titanbot\Daemon\Application\Dto\AccountDto;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Library\Collection\MapInterface;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto\AccountDto as AccountDtoSchema;
 
@@ -21,7 +21,7 @@ final class AccountIndexQueryResult
      * @var MapInterface<string,AccountDto> $uuid_to_account_map
      */
     #[OA\Property(
-        type: PhpType::object->value,
+        type: OpenApiType::object->value,
         additionalProperties: new OA\AdditionalProperties(
             ref: new Model(type: AccountDtoSchema::class),
         ),

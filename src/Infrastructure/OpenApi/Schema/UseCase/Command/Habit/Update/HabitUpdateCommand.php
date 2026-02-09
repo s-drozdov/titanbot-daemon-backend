@@ -6,8 +6,8 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Habit\Up
 
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Attribute\Model;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Titanbot\Daemon\Application\Dto\PixelRequestDto;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Library\Collection\ListInterface;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto\PixelRequestDto as PixelRequestDtoSchema;
@@ -18,7 +18,7 @@ use Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto\PixelRequestDto as PixelRe
 #[OA\Schema()]
 final class HabitUpdateCommand
 {
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public UuidInterface $uuid;
 
     public ?string $action = null;
@@ -27,7 +27,7 @@ final class HabitUpdateCommand
      * @var ListInterface<PixelRequestDto>|null
      */
     #[OA\Property(
-        type: PhpType::array->value,
+        type: OpenApiType::array->value,
         items: new OA\Items(ref: new Model(type: PixelRequestDtoSchema::class)),
     )]
     public ?ListInterface $pixel_list = null;

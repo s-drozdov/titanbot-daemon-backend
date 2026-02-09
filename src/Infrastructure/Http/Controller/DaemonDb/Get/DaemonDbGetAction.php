@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Infrastructure\Http\Controller\DaemonDb\Get;
 
 use OpenApi\Attributes as OA;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Titanbot\Daemon\Infrastructure\Enum\Action;
 use Titanbot\Daemon\Infrastructure\Enum\Resource;
 use Titanbot\Daemon\Infrastructure\Enum\OpenApiTag;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiFormat;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Titanbot\Daemon\Infrastructure\Enum\OpenApiSummary;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -46,7 +47,7 @@ final class DaemonDbGetAction
                 name: 'logical_id',
                 in: 'query',
                 required: true,
-                schema: new OA\Schema(type: PhpType::int->value),
+                schema: new OA\Schema(type: OpenApiType::integer->value),
             ),
         ],
         responses: [
@@ -56,8 +57,8 @@ final class DaemonDbGetAction
                 content: new OA\MediaType(
                     mediaType: 'application/vnd.sqlite3',
                     schema: new OA\Schema(
-                        type: PhpType::int->value,
-                        format: 'binary',
+                        type: OpenApiType::string->value,
+                        format: OpenApiFormat::binary->value,
                     ),
                 ),
             ),

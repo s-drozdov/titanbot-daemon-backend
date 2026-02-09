@@ -6,7 +6,7 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\EmpireDa
 
 use DateTimeImmutable;
 use OpenApi\Attributes as OA;
-use Titanbot\Daemon\Library\Enum\PhpType;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 
 /**
  * @psalm-suppress MissingConstructor [INFO]
@@ -14,6 +14,6 @@ use Titanbot\Daemon\Library\Enum\PhpType;
 #[OA\Schema()]
 final class EmpireDateCreateCommand
 {
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public DateTimeImmutable $date;
 }

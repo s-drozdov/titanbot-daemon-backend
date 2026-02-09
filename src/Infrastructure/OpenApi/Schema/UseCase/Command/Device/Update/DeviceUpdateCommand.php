@@ -6,7 +6,7 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Device\U
 
 use OpenApi\Attributes as OA;
 use Titanbot\Daemon\Domain\Enum\ActivityType;
-use Titanbot\Daemon\Library\Enum\PhpType;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 
 /**
@@ -15,12 +15,12 @@ use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 #[OA\Schema()]
 final class DeviceUpdateCommand
 {
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public UuidInterface $uuid;
 
     public ?bool $is_active;
 
-    #[OA\Property(type: PhpType::string->value, nullable: true)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: true)]
     public ?ActivityType $activity_type;
 
     public ?bool $is_empire_sleeping;

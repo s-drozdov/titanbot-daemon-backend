@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Titanbot\Daemon\Infrastructure\Http\Controller\Account\Delete;
 
 use OpenApi\Attributes as OA;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,6 +22,7 @@ use Titanbot\Daemon\Application\Bus\Command\CommandBusInterface;
 use Titanbot\Daemon\Infrastructure\Enum\OpenApiSchemaDescription;
 use Titanbot\Daemon\Application\UseCase\Command\Account\Delete\AccountDeleteCommand;
 use Titanbot\Daemon\Application\UseCase\Command\Account\Delete\AccountDeleteCommandResult;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Account\Delete\AccountDeleteCommand as AccountDeleteCommandSchema;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Command\Account\Delete\AccountDeleteCommandResult as AccountDeleteCommandResultSchema;
 
@@ -50,7 +50,7 @@ final class AccountDeleteAction
                 name: 'uuid',
                 in: 'path',
                 required: true,
-                schema: new OA\Schema(type: PhpType::string->value),
+                schema: new OA\Schema(type: OpenApiType::string->value),
             ),
         ],
         responses: [

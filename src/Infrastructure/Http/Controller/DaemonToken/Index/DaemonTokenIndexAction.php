@@ -6,7 +6,6 @@ namespace Titanbot\Daemon\Infrastructure\Http\Controller\DaemonToken\Index;
 
 use OpenApi\Attributes as OA;
 use Nelmio\ApiDocBundle\Attribute\Model;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,6 +23,7 @@ use Titanbot\Daemon\Application\Bus\Query\QueryBusInterface;
 use Titanbot\Daemon\Infrastructure\Enum\OpenApiSchemaDescription;
 use Titanbot\Daemon\Application\UseCase\Query\DaemonToken\Index\DaemonTokenIndexQuery;
 use Titanbot\Daemon\Application\UseCase\Query\DaemonToken\Index\DaemonTokenIndexQueryResult;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 use Titanbot\Daemon\Infrastructure\OpenApi\Schema\UseCase\Query\DaemonToken\Index\DaemonTokenIndexQueryResult as DaemonTokenIndexQueryResultSchema;
 
 #[AsController]
@@ -50,7 +50,7 @@ final class DaemonTokenIndexAction
                 name: 'token',
                 in: 'query',
                 required: false,
-                schema: new OA\Schema(type: PhpType::string->value),
+                schema: new OA\Schema(type: OpenApiType::string->value),
             ),
         ],
         responses: [

@@ -7,8 +7,8 @@ namespace Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto;
 use DateTimeImmutable;
 use OpenApi\Attributes as OA;
 use Titanbot\Daemon\Domain\Enum\Gender;
-use Titanbot\Daemon\Library\Enum\PhpType;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
+use Titanbot\Daemon\Infrastructure\Enum\OpenApiType;
 
 /**
  * @psalm-suppress MissingConstructor [INFO]
@@ -16,7 +16,7 @@ use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 #[OA\Schema()]
 final class AccountDto
 {
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public UuidInterface $uuid;
 
     public int $logical_id;
@@ -25,10 +25,10 @@ final class AccountDto
 
     public string $last_name;
 
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public DateTimeImmutable $birth_date;
 
-    #[OA\Property(type: PhpType::string->value, nullable: false)]
+    #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public Gender $gender;
     
     public string $google_login;
