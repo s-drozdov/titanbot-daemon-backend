@@ -32,6 +32,7 @@ final readonly class AccountCreateCommandHandler implements CommandHandlerInterf
             gender: $command->gender,
             googleLogin: $command->google_login,
             googlePassword: $command->google_password,
+            isEmpireSleeping: $command->is_empire_sleeping,
         );
 
         $entity = $this->accountCreateService->perform($paramsDto);

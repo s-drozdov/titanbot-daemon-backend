@@ -17,7 +17,6 @@ readonly class DeviceDto implements DtoInterface
         public int $physical_id,
         public bool $is_active,
         public ActivityType $activity_type,
-        public bool $is_empire_sleeping,
         public bool $is_full_server_detection,
         public bool $is_able_to_clear_cache,
         public int $go_time_limit_seconds,

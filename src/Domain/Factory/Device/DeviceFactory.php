@@ -25,7 +25,6 @@ final readonly class DeviceFactory implements DeviceFactoryInterface
             physicalId: $paramsDto->physicalId,
             isActive: $paramsDto->isActive ?? self::DEFAULT_IS_ACTIVE,
             activityType: $paramsDto->activityType ?? self::DEFAULT_ACTIVITY_TYPE,
-            isEmpireSleeping: $paramsDto->isEmpireSleeping ?? self::DEFAULT_IS_EMPIRE_SLEEPING,
             isFullServerDetection: $paramsDto->isFullServerDetection ?? self::DEFAULT_IS_FULL_SERVER_DETECTION,
             isAbleToClearCache: $paramsDto->isAbleToClearCache ?? self::DEFAULT_IS_ABLE_TO_CLEAR_CACHE,
             goTimeLimitSeconds: $paramsDto->goTimeLimitSeconds ?? self::DEFAULT_GO_TIME_LIMIT_SECONDS,

@@ -19,6 +19,7 @@ final readonly class AccountUpdateParamsDto implements DtoInterface
         public ?Gender $gender,
         public ?string $googleLogin,
         public ?string $googlePassword,
+        public ?bool $isEmpireSleeping,
     ) {
         /*_*/
     }

@@ -30,5 +30,6 @@ final class AccountCreateCommand
     public string $google_login;
     
     public string $google_password;
-    
+
+    public bool $is_empire_sleeping;
 }

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20260131073329 extends AbstractMigration
+final class Version20260211124030 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -24,6 +24,6 @@ final class Version20260131073329 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE habits MODIFY updated_at updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
+        $this->addSql('ALTER TABLE habits MODIFY updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL');
     }
 }

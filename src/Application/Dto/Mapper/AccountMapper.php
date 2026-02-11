@@ -31,6 +31,7 @@ readonly class AccountMapper implements MapperInterface
             gender: $object->getGender(),
             google_login: $object->getGoogleLogin(),
             google_password: $object->getGooglePassword(),
+            is_empire_sleeping: $object->isEmpireSleeping(),
         );
     }
 

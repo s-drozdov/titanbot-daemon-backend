@@ -33,4 +33,6 @@ final class AccountUpdateCommand
 
     public ?string $google_password;
 
+    public ?bool $is_empire_sleeping;
+
 }

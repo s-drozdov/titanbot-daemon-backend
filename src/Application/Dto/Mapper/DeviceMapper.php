@@ -27,7 +27,6 @@ readonly class DeviceMapper implements MapperInterface
             physical_id: $object->getPhysicalId(),
             is_active: $object->isActive(),
             activity_type: $object->getActivityType(),
-            is_empire_sleeping: $object->isEmpireSleeping(),
             is_full_server_detection: $object->isFullServerDetection(),
             is_able_to_clear_cache: $object->isAbleToClearCache(),
             go_time_limit_seconds: $object->getGoTimeLimitSeconds(),

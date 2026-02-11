@@ -25,8 +25,6 @@ final class DeviceDto
     #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public ActivityType $activity_type;
 
-    public bool $is_empire_sleeping;
-
     public bool $is_full_server_detection;
 
     public bool $is_able_to_clear_cache;

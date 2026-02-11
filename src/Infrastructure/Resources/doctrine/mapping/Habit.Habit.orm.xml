@@ -21,11 +21,7 @@
 
         <field name="isActive" column="is_active" type="boolean" nullable="false"/>
 
-        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="false">
-            <options>
-                <option name="default">CURRENT_TIMESTAMP</option>
-            </options>
-        </field>
+        <field name="updatedAt" column="updated_at" type="datetime_immutable" nullable="false"/>
 
         <many-to-many
             field="pixelList"

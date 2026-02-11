@@ -51,5 +51,7 @@
         <field name="googleLogin" column="google_login" type="string" length="255" nullable="false"/>
 
         <field name="googlePassword" column="google_password" type="string" length="255" nullable="false"/>
+
+        <field name="isEmpireSleeping" column="is_empire_sleeping" type="boolean" nullable="false"/>
     </entity>
 </doctrine-mapping>

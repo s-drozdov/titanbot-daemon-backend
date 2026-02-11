@@ -29,7 +29,6 @@ class Device implements AggregateInterface
         private int $physicalId,
         private bool $isActive,
         private ActivityType $activityType,
-        private bool $isEmpireSleeping,
         private bool $isFullServerDetection,
         private bool $isAbleToClearCache,
         private int $goTimeLimitSeconds,
@@ -68,18 +67,6 @@ class Device implements AggregateInterface
     public function setActivityType(ActivityType $activityType): self
     {
         $this->activityType = $activityType;
-
-        return $this;
-    }
-
-    public function isEmpireSleeping(): bool
-    {
-        return $this->isEmpireSleeping;
-    }
-
-    public function setIsEmpireSleeping(bool $isEmpireSleeping): self
-    {
-        $this->isEmpireSleeping = $isEmpireSleeping;
 
         return $this;
     }

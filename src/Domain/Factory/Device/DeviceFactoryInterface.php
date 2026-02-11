@@ -14,7 +14,6 @@ interface DeviceFactoryInterface extends FactoryInterface
 {
     public const bool DEFAULT_IS_ACTIVE = false;
     public const ActivityType DEFAULT_ACTIVITY_TYPE = ActivityType::Rowgplay;
-    public const bool DEFAULT_IS_EMPIRE_SLEEPING = false;
     public const bool DEFAULT_IS_FULL_SERVER_DETECTION = false;
     public const bool DEFAULT_IS_ABLE_TO_CLEAR_CACHE = false;
     public const int DEFAULT_GO_TIME_LIMIT_SECONDS = 100;

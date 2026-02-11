@@ -45,6 +45,10 @@ final readonly class AccountUpdateService implements AccountUpdateServiceInterfa
             $entity->setGooglePassword($paramsDto->googlePassword);
         }
 
+        if ($paramsDto->isEmpireSleeping !== null) {
+            $entity->setIsEmpireSleeping($paramsDto->isEmpireSleeping);
+        }
+
         $this->accountRepository->update($entity);
 
         return $entity;

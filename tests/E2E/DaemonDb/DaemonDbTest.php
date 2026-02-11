@@ -20,6 +20,7 @@ class DaemonDbTest extends E2eTestCase
         'gender' => 'male',
         'google_login' => 'test',
         'google_password' => '123456',
+        'is_empire_sleeping' => true,
     ];
 
     private const array ACCOUNT_DATA2 = [
@@ -31,6 +32,7 @@ class DaemonDbTest extends E2eTestCase
         'gender' => 'male',
         'google_login' => 'test2',
         'google_password' => '123456',
+        'is_empire_sleeping' => true,
     ];
 
     #[Test]

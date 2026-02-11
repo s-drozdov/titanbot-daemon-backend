@@ -13,7 +13,6 @@ final readonly class DeviceCreateParamsDto implements DtoInterface
         public int $physicalId,
         public ?ActivityType $activityType = null,
         public ?bool $isActive = null,
-        public ?bool $isEmpireSleeping = null,
         public ?bool $isFullServerDetection = null,
         public ?bool $isAbleToClearCache = null,
         public ?int $goTimeLimitSeconds = null,

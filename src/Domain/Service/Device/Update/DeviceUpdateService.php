@@ -29,10 +29,6 @@ final readonly class DeviceUpdateService implements DeviceUpdateServiceInterface
             $entity->setActivityType($paramsDto->activityType);
         }
 
-        if ($paramsDto->isEmpireSleeping !== null) {
-            $entity->setIsEmpireSleeping($paramsDto->isEmpireSleeping);
-        }
-
         if ($paramsDto->isFullServerDetection !== null) {
             $entity->setIsFullServerDetection($paramsDto->isFullServerDetection);
         }

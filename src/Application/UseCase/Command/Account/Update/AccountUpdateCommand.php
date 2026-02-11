@@ -19,6 +19,7 @@ final readonly class AccountUpdateCommand implements CommandInterface
         public ?Gender $gender,
         public ?string $google_login,
         public ?string $google_password,
+        public ?bool $is_empire_sleeping,
     ) {
         /*_*/
     }

@@ -34,6 +34,7 @@ class Account implements EntityInterface
         private Gender $gender,
         private string $googleLogin,
         private string $googlePassword,
+        private bool $isEmpireSleeping,
     ) {
         $this->deviceList = new ArrayCollection();
         $this->currentDeviceList = new ArrayCollection();
@@ -173,6 +174,18 @@ class Account implements EntityInterface
     public function setGooglePassword(string $googlePassword): self
     {
         $this->googlePassword = $googlePassword;
+
+        return $this;
+    }
+
+    public function isEmpireSleeping(): bool
+    {
+        return $this->isEmpireSleeping;
+    }
+
+    public function setIsEmpireSleeping(bool $isEmpireSleeping): self
+    {
+        $this->isEmpireSleeping = $isEmpireSleeping;
 
         return $this;
     }

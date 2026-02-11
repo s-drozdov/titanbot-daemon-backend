@@ -28,6 +28,7 @@ class AccountTest extends E2eTestCase
             'gender' => 'male',
             'google_login' => 'test',
             'google_password' => '123456',
+            'is_empire_sleeping' => true,
         ];
 
         $entity = $this->createAccount($data);
@@ -45,6 +46,7 @@ class AccountTest extends E2eTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
+        $this->assertSame(true, $data['account']['is_empire_sleeping']);
         $this->assertSame('123456', $data['account']['google_password']);
         $this->assertSame('male', $data['account']['gender']);
 
@@ -56,6 +58,7 @@ class AccountTest extends E2eTestCase
         $this->assertNotEmpty($data['uuid_to_account_map']);
         $accountData = current($data['uuid_to_account_map']);
 
+        $this->assertSame(true, $accountData['is_empire_sleeping']);
         $this->assertSame('123456', $accountData['google_password']);
         $this->assertSame('male', $accountData['gender']);
         $this->assertSame((string) $entity->getUuid(), $accountData['uuid']);
@@ -77,6 +80,7 @@ class AccountTest extends E2eTestCase
             'gender' => 'female',
             'google_login' => 'test2',
             'google_password' => '1234567',
+            'is_empire_sleeping' => false,
         ];
 
         $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/accounts/%s', (string) $entity->getUuid()), $data);
@@ -92,6 +96,7 @@ class AccountTest extends E2eTestCase
         $this->assertSame('female', $entity->getGender()->value);
         $this->assertSame('test2', $entity->getGoogleLogin());
         $this->assertSame('1234567', $entity->getGooglePassword());
+        $this->assertSame(false, $entity->isEmpireSleeping());
 
         $this->assertNotNull($entity);
 
@@ -137,6 +142,7 @@ class AccountTest extends E2eTestCase
             'gender' => 'male',
             'google_login' => 'test',
             'google_password' => '123456',
+            'is_empire_sleeping' => true,
         ];
 
         $entity = $this->createAccount($data);
@@ -175,6 +181,7 @@ class AccountTest extends E2eTestCase
             'gender' => 'male',
             'google_login' => 'test',
             'google_password' => '123456',
+            'is_empire_sleeping' => true,
         ];
 
         $entity = $this->createAccount($data);
@@ -213,6 +220,7 @@ class AccountTest extends E2eTestCase
             'gender' => 'male',
             'google_login' => 'test',
             'google_password' => '123456',
+            'is_empire_sleeping' => true,
         ];
 
         $entity = $this->createAccount($data);

@@ -28,6 +28,7 @@ final readonly class AccountFactory implements AccountFactoryInterface
             gender: $paramsDto->gender,
             googleLogin: $paramsDto->googleLogin,
             googlePassword: $paramsDto->googlePassword,
+            isEmpireSleeping: $paramsDto->isEmpireSleeping,
         );
     }
 }

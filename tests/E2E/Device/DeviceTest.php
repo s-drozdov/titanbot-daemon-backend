@@ -19,7 +19,6 @@ class DeviceTest extends E2eTestCase
             'physical_id' => 834221,
             'is_active' => false,
             'activity_type' => 'rowgplay',
-            'is_empire_sleeping' => true,
             'is_full_server_detection' => false,
             'is_able_to_clear_cache' => false,
             'go_time_limit_seconds' => 220,
@@ -36,7 +35,6 @@ class DeviceTest extends E2eTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
-        $this->assertSame(true, $data['device']['is_empire_sleeping']);
         $this->assertSame(834221, $data['device']['physical_id']);
         $this->assertSame(false, $data['device']['is_able_to_clear_cache']);
         $this->assertSame(false, $data['device']['is_active']);
@@ -47,7 +45,6 @@ class DeviceTest extends E2eTestCase
         $data = json_decode($this->getDaemonClient()->getResponse()->getContent(), true);
         $device = current($data['uuid_to_device_map']);
 
-        $this->assertSame(true, $device['is_empire_sleeping']);
         $this->assertSame((string) $entity->getUuid(), $device['uuid']);
         $this->assertSame(false, $device['is_able_to_clear_cache']);
         $this->assertSame(false, $device['is_active']);
@@ -64,7 +61,6 @@ class DeviceTest extends E2eTestCase
         $data = [
             'is_active' => true,
             'activity_type' => 'ajagplay',
-            'is_empire_sleeping' => false,
             'is_full_server_detection' => true,
             'is_able_to_clear_cache' => true,
             'go_time_limit_seconds' => 100,
@@ -79,7 +75,6 @@ class DeviceTest extends E2eTestCase
         $this->assertNotNull($entity);
         $this->assertSame('ajagplay', $entity->getActivityType()?->value);
         $this->assertSame(true, $entity->isActive());
-        $this->assertSame(false, $entity->isEmpireSleeping());
         $this->assertSame(true, $entity->isFullServerDetection());
         $this->assertSame(true, $entity->isAbleToClearCache());
         $this->assertSame(100, $entity->getGoTimeLimitSeconds());
@@ -123,7 +118,6 @@ class DeviceTest extends E2eTestCase
         $this->assertNotNull($entity);
         $this->assertSame(false, $entity->isActive());
         $this->assertSame('rowgplay', $entity->getActivityType()?->value);
-        $this->assertSame(false, $entity->isEmpireSleeping());
         $this->assertSame(false, $entity->isFullServerDetection());
         $this->assertSame(false, $entity->isAbleToClearCache());
         $this->assertSame(100, $entity->getGoTimeLimitSeconds());
