@@ -30,4 +30,6 @@ final class DeviceDto
     public bool $is_able_to_clear_cache;
 
     public int $go_time_limit_seconds;
+    
+    public ?int $current_logical_id;
 }

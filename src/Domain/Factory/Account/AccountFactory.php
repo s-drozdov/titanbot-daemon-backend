@@ -24,7 +24,7 @@ final readonly class AccountFactory implements AccountFactoryInterface
             logicalId: $paramsDto->logicalId,
             firstName: $paramsDto->firstName,
             lastName: $paramsDto->lastName,
-            birthDate: $paramsDto->birthDate,
+            birthDate: $paramsDto->birthDate->setTime(0, 0, 0),
             gender: $paramsDto->gender,
             googleLogin: $paramsDto->googleLogin,
             googlePassword: $paramsDto->googlePassword,

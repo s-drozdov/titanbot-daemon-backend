@@ -17,6 +17,7 @@ final readonly class DeviceUpdateCommand implements CommandInterface
         public ?bool $is_full_server_detection,
         public ?bool $is_able_to_clear_cache,
         public ?int $go_time_limit_seconds,
+        public ?int $current_logical_id,
     ) {
         /*_*/
     }

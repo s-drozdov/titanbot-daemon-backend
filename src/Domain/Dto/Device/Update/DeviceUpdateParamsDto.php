@@ -17,6 +17,7 @@ final readonly class DeviceUpdateParamsDto implements DtoInterface
         public ?bool $isFullServerDetection = null,
         public ?bool $isAbleToClearCache = null,
         public ?int $goTimeLimitSeconds = null,
+        public ?int $currentLogicalId = null,
     ) {
         /*_*/
     }

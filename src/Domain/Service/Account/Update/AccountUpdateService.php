@@ -30,7 +30,7 @@ final readonly class AccountUpdateService implements AccountUpdateServiceInterfa
         }
 
         if ($paramsDto->birthDate !== null) {
-            $entity->setBirthDate($paramsDto->birthDate);
+            $entity->setBirthDate($paramsDto->birthDate->setTime(0, 0, 0));
         }
 
         if ($paramsDto->gender !== null) {

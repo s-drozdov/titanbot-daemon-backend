@@ -38,6 +38,7 @@ final readonly class DeviceUpdateCommandHandler implements CommandHandlerInterfa
             isFullServerDetection: $command->is_full_server_detection,
             isAbleToClearCache: $command->is_able_to_clear_cache,
             goTimeLimitSeconds: $command->go_time_limit_seconds,
+            currentLogicalId: $command->current_logical_id,
         );
 
         $entity = $this->deviceUpdateService->perform($paramsDto);

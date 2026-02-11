@@ -30,6 +30,7 @@ readonly class DeviceMapper implements MapperInterface
             is_full_server_detection: $object->isFullServerDetection(),
             is_able_to_clear_cache: $object->isAbleToClearCache(),
             go_time_limit_seconds: $object->getGoTimeLimitSeconds(),
+            current_logical_id: $object->getCurrentAccount()?->getLogicalId(),
         );
     }
 

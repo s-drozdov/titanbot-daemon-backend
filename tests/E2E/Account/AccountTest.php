@@ -16,12 +16,9 @@ class AccountTest extends E2eTestCase
     {
         $repository = self::getContainer()->get('doctrine')->getRepository(Account::class);
 
-        $device = $this->createDevice(['physical_id' => 123456]);
-
         /** CREATE */
         $data = [
             'logical_id' => 654321,
-            'device_physical_id' => $device->getPhysicalId(),
             'first_name' => 'Test',
             'last_name' => 'Test2',
             'birth_date' => '2002-02-18T00:11:22',
@@ -92,7 +89,7 @@ class AccountTest extends E2eTestCase
         $this->assertSame(654321, $entity->getLogicalId());
         $this->assertSame('Test2', $entity->getFirstName());
         $this->assertSame('Test3', $entity->getLastName());
-        $this->assertEquals(new DateTimeImmutable('2002-02-18T00:11:44'), $entity->getBirthDate());
+        $this->assertEquals(new DateTimeImmutable('2002-02-18T00:00:00'), $entity->getBirthDate());
         $this->assertSame('female', $entity->getGender()->value);
         $this->assertSame('test2', $entity->getGoogleLogin());
         $this->assertSame('1234567', $entity->getGooglePassword());
@@ -128,14 +125,51 @@ class AccountTest extends E2eTestCase
     }
 
     #[Test]
-    public function testAccessAnonimous(): void
+    public function testBindAccount(): void
     {
         $device = $this->createDevice(['physical_id' => 123456]);
 
         /** CREATE */
         $data = [
             'logical_id' => 654321,
-            'device_physical_id' => $device->getPhysicalId(),
+            'first_name' => 'Test',
+            'last_name' => 'Test2',
+            'birth_date' => '2002-02-18T00:11:22',
+            'gender' => 'male',
+            'google_login' => 'test',
+            'google_password' => '123456',
+            'is_empire_sleeping' => true,
+        ];
+
+        $account = $this->createAccount($data);
+
+        $data = ['current_logical_id' => 654321];
+
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/devices/%s', (string) $device->getUuid()), $data);
+        $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
+
+        $repository = self::getContainer()->get('doctrine')->getRepository(Device::class);
+
+        /** @var Device $entity */
+        $entity = $repository->findOneBy(['uuid' => $device->getUuid()]);
+
+        $this->assertNotNull($entity);
+        $this->assertNotNull($entity->getCurrentAccount());
+        $this->assertSame((string) $account->getUuid(), (string) $entity->getCurrentAccount()?->getUuid());
+        $this->assertNotEmpty($entity->getAccountList());
+
+        $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
+        $this->assertSame(654321, $data['device']['current_logical_id']);
+    }
+
+    #[Test]
+    public function testAccessAnonimous(): void
+    {
+        /** CREATE */
+        $data = [
+            'logical_id' => 654321,
             'first_name' => 'Test',
             'last_name' => 'Test2',
             'birth_date' => '2002-02-18T00:11:22',
@@ -169,12 +203,9 @@ class AccountTest extends E2eTestCase
     #[Test]
     public function testAccessHacker(): void
     {
-        $device = $this->createDevice(['physical_id' => 123456]);
-
         /** CREATE */
         $data = [
             'logical_id' => 654321,
-            'device_physical_id' => $device->getPhysicalId(),
             'first_name' => 'Test',
             'last_name' => 'Test2',
             'birth_date' => '2002-02-18T00:11:22',
@@ -213,7 +244,6 @@ class AccountTest extends E2eTestCase
         /** CREATE */
         $data = [
             'logical_id' => 654321,
-            'device_physical_id' => $device->getPhysicalId(),
             'first_name' => 'Test',
             'last_name' => 'Test2',
             'birth_date' => '2002-02-18T00:11:22',
