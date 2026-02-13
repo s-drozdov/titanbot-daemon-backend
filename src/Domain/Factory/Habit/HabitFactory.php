@@ -27,6 +27,7 @@ final readonly class HabitFactory implements HabitFactoryInterface
             priority: $paramsDto->priority,
             triggerOcr: $paramsDto->triggerOcr,
             triggerShell: $paramsDto->triggerShell,
+            logTemplate: $paramsDto->logTemplate,
             action: $paramsDto->action,
             isActive: $paramsDto->isActive,
             updatedAt: new DateTimeImmutable(),

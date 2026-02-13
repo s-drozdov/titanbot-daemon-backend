@@ -24,6 +24,7 @@ class HabitTest extends E2eTestCase
                 ['x' => 2, 'y' => 2, 'rgb_hex' => '220099', 'deviation' => 4],
             ],
             'trigger_shell' => 'trigger_shell',
+            'log_template' => 'log_template',
             'action' => 'action',
         ];
 
@@ -34,6 +35,7 @@ class HabitTest extends E2eTestCase
         $this->assertSame(1000, $entity->getPriority());
         $this->assertNull($entity->getTriggerOcr());
         $this->assertSame('trigger_shell', $entity->getTriggerShell());
+        $this->assertSame('log_template', $entity->getLogTemplate());
 
         /** READ */
         $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/habits/%s', (string) $entity->getUuid()));

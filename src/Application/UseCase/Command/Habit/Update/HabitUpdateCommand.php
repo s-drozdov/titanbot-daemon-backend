@@ -22,6 +22,7 @@ final readonly class HabitUpdateCommand implements CommandInterface
         public ?int $priority = null,
         public ?string $trigger_ocr = null,
         public ?string $trigger_shell = null,
+        public ?string $log_template = null,
         public ?bool $is_active = null,
     ) {
         /*_*/

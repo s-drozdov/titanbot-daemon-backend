@@ -50,6 +50,7 @@ readonly class HabitMapper implements MapperInterface
             priority: $object->getPriority(),
             trigger_ocr: $object->getTriggerOcr(),
             trigger_shell: $object->getTriggerShell(),
+            log_template: $object->getLogTemplate(),
         );
     }
 

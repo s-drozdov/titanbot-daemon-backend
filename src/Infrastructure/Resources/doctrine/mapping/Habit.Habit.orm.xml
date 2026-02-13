@@ -17,6 +17,8 @@
 
         <field name="triggerShell" column="trigger_shell" type="string" length="255" nullable="true"/>
 
+        <field name="logTemplate" column="log_template" type="string" length="255" nullable="true"/>
+
         <field name="action" column="action" type="string" length="255" nullable="false"/>
 
         <field name="isActive" column="is_active" type="boolean" nullable="false"/>

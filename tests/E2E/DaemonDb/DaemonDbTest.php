@@ -76,13 +76,35 @@ class DaemonDbTest extends E2eTestCase
         $checksum1 = $this->getChecksum(44646);
         $this->assertSame($checksum1, $this->getChecksum(44646));
 
-        $this->createHabit(['account_logical_id' => 44647, 'slug' => 's', 'action' => 'a']);
+        $this->createHabit(['account_logical_id' => 44647, 'action' => 'a']);
         $this->assertSame($checksum1, $this->getChecksum(44646));
 
-        $this->createHabit(['account_logical_id' => 44646, 'slug' => 's2', 'action' => 'a2']);
+        $this->createHabit(['account_logical_id' => 44646, 'action' => 'a2']);
         $checksum2 = $this->getChecksum(44646);
         $this->assertNotEquals($checksum1, $checksum2);
         $this->assertSame($checksum2, $this->getChecksum(44646));
+    }
+
+    #[Test]
+    public function testHabitCreationDownload(): void
+    {
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/devices', self::DEVICE_DATA);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        $this->getAdminClient()->jsonRequest('POST', '/daemon/accounts', self::ACCOUNT_DATA);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+
+        $this->createHabit([
+            'account_logical_id' => 44646, 
+            'pixel_list' => [['x' => 8, 'y' => 8, 'rgb_hex' => 'FFFFFF']],
+            'action' => 'echo %%PHYSICAL_ID%%; pwd',
+            'log_template' => 'test started. physicalId: %%PHYSICAL_ID%%',
+        ]);
+
+        $this->getDaemonClient()->jsonRequest('GET', '/daemon/db?logical_id=44646');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $this->assertResponseHeaderSame('Content-Type', 'application/vnd.sqlite3');
+        $this->assertStringContainsString('attachment; filename=', $this->getDaemonClient()->getResponse()->headers->get('Content-Disposition'));
     }
 
     #[Test]

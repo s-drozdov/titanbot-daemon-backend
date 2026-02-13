@@ -51,6 +51,10 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
             $entity->setTriggerShell($paramsDto->triggerShell);
         }
 
+        if ($paramsDto->logTemplate !== null) {
+            $entity->setLogTemplate($paramsDto->logTemplate);
+        }
+
         if ($paramsDto->isActive !== null) {
             $entity->setIsActive($paramsDto->isActive);
         }

@@ -85,12 +85,12 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
 
         while ($row = $result->fetchAssociative()) {
             Assert::string($row['uuid']);
-            Assert::string($row['is_active']);
+            Assert::integer($row['is_active']);
             Assert::string($row['updated_at']);
 
             $this->daemonDbConnection->insert('habits', [
                 'uuid'               => $row['uuid'],
-                'is_active'          => (int) $row['is_active'],
+                'is_active'          => $row['is_active'],
                 'account_logical_id' => $row['account_logical_id'],
                 'priority'           => $row['priority'],
                 'trigger_ocr'        => $row['trigger_ocr'],
@@ -232,6 +232,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 SELECT *
                 FROM habits
                 WHERE account_logical_id IS NULL
+                AND is_active = 1
                 ORDER BY priority DESC
                 SQL,
             );
@@ -241,8 +242,8 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
             <<<SQL
             SELECT *
             FROM habits
-            WHERE account_logical_id = :logical_id
-            OR account_logical_id IS NULL
+            WHERE (account_logical_id = :logical_id OR account_logical_id IS NULL)
+            AND is_active = 1
             ORDER BY priority DESC
             SQL,
             ['logical_id' => $logicalId],

@@ -26,6 +26,7 @@ readonly class HabitDto implements DtoInterface
         public ?int $priority = null,
         public ?string $trigger_ocr = null,
         public ?string $trigger_shell = null,
+        public ?string $log_template = null,
     ) {
         /*_*/
     }

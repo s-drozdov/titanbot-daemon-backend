@@ -28,6 +28,7 @@ class Habit implements AggregateInterface
         private ?int $priority,
         private ?string $triggerOcr,
         private ?string $triggerShell,
+        private ?string $logTemplate,
         private string $action,
         private bool $isActive,
         private DateTimeImmutable $updatedAt,
@@ -85,6 +86,18 @@ class Habit implements AggregateInterface
     public function setTriggerShell(?string $triggerShell): self
     {
         $this->triggerShell = $triggerShell;
+
+        return $this;
+    }
+
+    public function getLogTemplate(): ?string
+    {
+        return $this->logTemplate;
+    }
+
+    public function setLogTemplate(?string $logTemplate): self
+    {
+        $this->logTemplate = $logTemplate;
 
         return $this;
     }

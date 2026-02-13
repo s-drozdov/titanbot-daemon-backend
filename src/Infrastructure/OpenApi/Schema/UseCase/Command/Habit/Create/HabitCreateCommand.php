@@ -35,6 +35,8 @@ final class HabitCreateCommand
     public ?string $trigger_ocr = null;
     
     public ?string $trigger_shell = null;
+
+    public ?string $log_template = null;
     
     public bool $is_active = true;
 }

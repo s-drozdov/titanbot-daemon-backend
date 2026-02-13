@@ -35,6 +35,7 @@ final readonly class HabitCreateCommandHandler implements CommandHandlerInterfac
             priority: $command->priority,
             triggerOcr: $command->trigger_ocr,
             triggerShell: $command->trigger_shell,
+            logTemplate: $command->log_template,
             isActive: $command->is_active,
         );
 
