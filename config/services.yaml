@@ -208,6 +208,9 @@ services:
     Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\ExceptionSubscriber:
         tags: ['kernel.event_subscriber']
 
+    Titanbot\Daemon\Infrastructure\Event\Subscriber\Doctrine\Habit\HabitSubscriber:
+        tags: ['doctrine.event_subscriber']
+
 # bus handlers
 
     Titanbot\Daemon\Application\UseCase\Query\Cache\HealthCheck\CacheHealthCheckQueryHandler:

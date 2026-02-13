@@ -119,6 +119,13 @@ class Habit implements AggregateInterface
         return $this->updatedAt;
     }
 
+    public function setUpdatedAt(DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
     /**
      * @return Collection<array-key,Pixel>
      */

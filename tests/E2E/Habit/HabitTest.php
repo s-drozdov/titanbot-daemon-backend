@@ -64,8 +64,6 @@ class HabitTest extends E2eTestCase
         $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/habits/%s', (string) $entity->getUuid()), $data);
         $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
 
-
-
         $em = self::getContainer()->get('doctrine')->getManager();
         $entity = $em->getRepository(Habit::class)->find($entity->getUuid());
 
