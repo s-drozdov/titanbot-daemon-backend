@@ -31,6 +31,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 priority INTEGER,
                 trigger_ocr TEXT,
                 trigger_shell TEXT,
+                log_template TEXT,
                 action TEXT NOT NULL,
                 updated_at TEXT NOT NULL,
                 PRIMARY KEY (uuid)
@@ -95,6 +96,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 'priority'           => $row['priority'],
                 'trigger_ocr'        => $row['trigger_ocr'],
                 'trigger_shell'      => $row['trigger_shell'],
+                'log_template'      => $row['log_template'],
                 'action'             => $row['action'],
                 'updated_at'         => $row['updated_at'],
             ]);
