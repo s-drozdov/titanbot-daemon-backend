@@ -51,4 +51,5 @@ enum OpenApiSummary: string
     case LogCreate = 'Create log';
     case LogIndex = 'Get log index';
     case LogClear = 'Clear all daemon logs';
+    case LogBulkCreate = 'Create multiple logs';
 }

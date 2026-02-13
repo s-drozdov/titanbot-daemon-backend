@@ -51,4 +51,6 @@ enum Action: string
     case LogPost = 'log_create';
     case LogIndex = 'log_index';
     case LogClear = 'log_clear';
+    
+    case LogBulkPost = 'log_bulk_create';
 }

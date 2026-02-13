@@ -51,4 +51,6 @@ enum OpenApiOperationId: string
     case LogCreate = 'createLog';
     case LogIndex = 'getLogIndex';
     case LogClear = 'crearLog';
+
+    case LogBulkCreate = 'bulkCreateLog';
 }

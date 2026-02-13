@@ -39,8 +39,3 @@ Authentication in the service is intentionally simple and is based on API tokens
 The daemon backend operates as two replica sets. The first replica set runs in RO mode and provides public access for clients using daemon tokens. The second replica set runs with full administrative access but is reachable only via an internal cluster service. All requests to this replica set go through an administrative backend middleware using the admin token. External access to the administrative backend is allowed only via OAuth 2.0
 
 ![](docs/img/security.png)
-
-# TODO
-
-- add bulk log endpoint
-

@@ -31,4 +31,5 @@ enum Resource: string
     case LegionByUuid = '/daemon/legions/{uuid}';
 
     case Log = '/daemon/logs';
+    case LogBulk = '/daemon/logs/bulk';
 }

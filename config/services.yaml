@@ -375,3 +375,9 @@ services:
     Titanbot\Daemon\Application\UseCase\Command\Log\Clear\LogClearCommandHandler:
         tags:
             - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Log\Clear\LogClearCommand }
+
+    Titanbot\Daemon\Application\UseCase\Command\Log\CreateBulk\LogBulkCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Log\CreateBulk\LogBulkCreateCommand }
+        arguments:
+            $daemonLogger: '@monolog.logger.daemon'

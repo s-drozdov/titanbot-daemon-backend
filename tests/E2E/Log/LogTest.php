@@ -44,6 +44,30 @@ class LogTest extends E2eTestCase
     }
 
     #[Test]
+    public function testBulk(): void
+    {
+        $data = [
+            'log_dto_list' => [
+                ['message' => '02-13 11:09:34.615 10955 10955 E TitanbotDaemon: [78] Daemon db download failed'],
+                ['message' => '02-14 11:09:34.615 10955 10955 E TitanbotDaemon: [78] Something is wrong'],
+                ['message' => '02-15 11:09:34.615 10955 10955 E TitanbotDaemon: [78] Critical!'],
+            ],
+        ];
+
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/logs/bulk', $data);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+
+        /** INDEX */
+        $this->getAdminClient()->jsonRequest('GET', '/daemon/logs');
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+        $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
+
+        $this->assertNotEmpty($data['log_list']);
+        $this->assertStringContainsString('Daemon db download failed', current($data['log_list'])['message']);
+        $this->assertSame(3, count($data['log_list']));
+    }
+
+    #[Test]
     public function testFilter(): void
     {
         $this->createLog('[38] f:10 94% Waiting team...');
@@ -83,6 +107,9 @@ class LogTest extends E2eTestCase
 
         $this->getAnonimousClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getAnonimousClient()->jsonRequest('POST', '/daemon/logs/bulk', []);
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     #[Test]
@@ -92,6 +119,9 @@ class LogTest extends E2eTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
 
         $this->getHackerClient()->jsonRequest('GET', '/daemon/logs');
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+
+        $this->getHackerClient()->jsonRequest('POST', '/daemon/logs/bulk', []);
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
@@ -103,6 +133,9 @@ class LogTest extends E2eTestCase
 
         $this->getDaemonClient()->jsonRequest('GET', '/daemon/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+
+        $this->getDaemonClient()->jsonRequest('POST', '/daemon/logs/bulk', ['log_dto_list' => [['message' => '02-13 11:09:34.615 10955 10955 E TitanbotDaemon: [78] Daemon db download failed']]]);
+        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
     private function createLog(string $message): void
