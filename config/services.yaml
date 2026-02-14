@@ -208,8 +208,12 @@ services:
     Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\ExceptionSubscriber:
         tags: ['kernel.event_subscriber']
 
-    Titanbot\Daemon\Infrastructure\Event\Subscriber\Doctrine\Habit\HabitSubscriber:
-        tags: ['doctrine.event_subscriber']
+# doctrine listeners
+
+    Titanbot\Daemon\Infrastructure\Event\Listener\Doctrine\Habit\HabitListener:
+        tags:
+            - { name: doctrine.event_listener, event: onFlush }
+
 
 # bus handlers
 

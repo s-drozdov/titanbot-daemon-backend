@@ -21,6 +21,8 @@ class Habit implements AggregateInterface
 
     /** @var Collection<array-key,Pixel> $pixelList */ 
     private Collection $pixelList;
+
+    private DateTimeImmutable $updatedAt;
     
     public function __construct(
         private UuidInterface $uuid,
@@ -31,8 +33,8 @@ class Habit implements AggregateInterface
         private ?string $logTemplate,
         private string $action,
         private bool $isActive,
-        private DateTimeImmutable $updatedAt,
     ) {
+        $this->updatedAt = new DateTimeImmutable();
         $this->pixelList = new ArrayCollection();
     }
 

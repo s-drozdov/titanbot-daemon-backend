@@ -2,6 +2,7 @@
 
 namespace Titanbot\Daemon\Tests\E2E\Habit;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\Test;
 use Titanbot\Daemon\Tests\E2E\E2eTestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -88,6 +89,34 @@ class HabitTest extends E2eTestCase
 
         $this->getAdminClient()->jsonRequest('DELETE', '/daemon/habits');
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
+    }
+
+    #[Test]
+    public function testUpdatetAtChanges(): void
+    {
+        $repository = self::getContainer()->get('doctrine')->getRepository(Habit::class);
+
+        /** CREATE */
+        $data = [
+            'priority' => 1000,
+            'trigger_ocr' => null,
+            'pixel_list' => [],
+            'trigger_shell' => null,
+            'log_template' => null,
+            'action' => 'action',
+        ];
+
+        $entity = $this->createHabit($data);
+        $updatedAt = $entity->getUpdatedAt()->format(DateTimeImmutable::ATOM);
+
+        usleep(1100000);
+        $data = ['action' => 'action2'];
+
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/habits/%s', (string) $entity->getUuid()), $data);
+        $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
+
+        $entity = $repository->findOneBy(['uuid' => $entity->getUuid()]);
+        $this->assertNotEquals($updatedAt, $entity->getUpdatedAt()->format(DateTimeImmutable::ATOM));
     }
 
     #[Test]

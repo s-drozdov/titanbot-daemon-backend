@@ -30,7 +30,6 @@ final readonly class HabitFactory implements HabitFactoryInterface
             logTemplate: $paramsDto->logTemplate,
             action: $paramsDto->action,
             isActive: $paramsDto->isActive,
-            updatedAt: new DateTimeImmutable(),
         );
 
         if ($paramsDto->pixelList !== null) {
