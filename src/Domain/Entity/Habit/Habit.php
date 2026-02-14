@@ -31,6 +31,7 @@ class Habit implements AggregateInterface
         private ?string $triggerOcr,
         private ?string $triggerShell,
         private ?string $logTemplate,
+        private ?int $postTimeoutMs,
         private string $action,
         private bool $isActive,
     ) {
@@ -100,6 +101,18 @@ class Habit implements AggregateInterface
     public function setLogTemplate(?string $logTemplate): self
     {
         $this->logTemplate = $logTemplate;
+
+        return $this;
+    }
+
+    public function getPostTimeoutMs(): ?int
+    {
+        return $this->postTimeoutMs;
+    }
+
+    public function setPostTimeoutMs(?int $postTimeoutMs): self
+    {
+        $this->postTimeoutMs = $postTimeoutMs;
 
         return $this;
     }

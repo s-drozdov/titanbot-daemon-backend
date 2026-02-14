@@ -55,6 +55,10 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
             $entity->setLogTemplate($paramsDto->logTemplate);
         }
 
+        if ($paramsDto->postTimeoutMs !== null) {
+            $entity->setPostTimeoutMs($paramsDto->postTimeoutMs);
+        }
+
         if ($paramsDto->isActive !== null) {
             $entity->setIsActive($paramsDto->isActive);
         }

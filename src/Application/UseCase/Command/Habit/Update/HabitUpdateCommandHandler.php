@@ -41,6 +41,7 @@ final readonly class HabitUpdateCommandHandler implements CommandHandlerInterfac
             triggerOcr: $command->trigger_ocr,
             triggerShell: $command->trigger_shell,
             logTemplate: $command->log_template,
+            postTimeoutMs: $command->post_timeout_ms,
             isActive: $command->is_active,
         );
 

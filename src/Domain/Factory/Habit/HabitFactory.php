@@ -28,6 +28,7 @@ final readonly class HabitFactory implements HabitFactoryInterface
             triggerOcr: $paramsDto->triggerOcr,
             triggerShell: $paramsDto->triggerShell,
             logTemplate: $paramsDto->logTemplate,
+            postTimeoutMs: $paramsDto->postTimeoutMs,
             action: $paramsDto->action,
             isActive: $paramsDto->isActive,
         );

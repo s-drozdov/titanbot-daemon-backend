@@ -32,6 +32,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 trigger_ocr TEXT,
                 trigger_shell TEXT,
                 log_template TEXT,
+                post_timeout_ms INTEGER,
                 action TEXT NOT NULL,
                 updated_at TEXT NOT NULL,
                 PRIMARY KEY (uuid)
@@ -90,15 +91,16 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
             Assert::string($row['updated_at']);
 
             $this->daemonDbConnection->insert('habits', [
-                'uuid'               => $row['uuid'],
-                'is_active'          => $row['is_active'],
+                'uuid' => $row['uuid'],
+                'is_active' => $row['is_active'],
                 'account_logical_id' => $row['account_logical_id'],
-                'priority'           => $row['priority'],
-                'trigger_ocr'        => $row['trigger_ocr'],
-                'trigger_shell'      => $row['trigger_shell'],
-                'log_template'      => $row['log_template'],
-                'action'             => $row['action'],
-                'updated_at'         => $row['updated_at'],
+                'priority' => $row['priority'],
+                'trigger_ocr' => $row['trigger_ocr'],
+                'trigger_shell' => $row['trigger_shell'],
+                'log_template' => $row['log_template'],
+                'post_timeout_ms' => $row['post_timeout_ms'],
+                'action' => $row['action'],
+                'updated_at' => $row['updated_at'],
             ]);
 
             $habitUuidList[] = $row['uuid'];
