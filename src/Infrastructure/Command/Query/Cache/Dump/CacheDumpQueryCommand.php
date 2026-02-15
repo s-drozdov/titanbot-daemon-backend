@@ -10,18 +10,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Titanbot\Daemon\Infrastructure\Enum\ConsoleAction;
 use Titanbot\Daemon\Domain\Helper\String\StringHelperInterface;
-use Titanbot\Daemon\Infrastructure\Bus\Processor\CommandBusQueryProcessor;
+use Titanbot\Daemon\Infrastructure\Enum\ConsoleActionDescription;
 use Titanbot\Daemon\Application\UseCase\Query\Cache\Dump\CacheDumpQuery;
+use Titanbot\Daemon\Infrastructure\Bus\Processor\CommandBusQueryProcessor;
 use Titanbot\Daemon\Application\UseCase\Query\Cache\Dump\CacheDumpQueryResult;
 
 #[AsCommand(
-    name: 'diagnostics:cache:dump',
-    description: 'Cache dump key',
+    name: ConsoleAction::DignosticsCacheDump->value,
+    description: ConsoleActionDescription::DignosticsCacheDump->value,
 )]
 final class CacheDumpQueryCommand extends Command
 {
-    private const KEY = 'key';
+    private const string KEY = 'key';
 
     public function __construct(
 
@@ -40,12 +42,14 @@ final class CacheDumpQueryCommand extends Command
             sprintf(
                 <<<HELPBLOCK
                     usage:
-                        bin/console diagnostics:cache:dump \
+                        bin/console %s \
                             --%s=KEY
                     example: 
-                        bin/console diagnostics:cache:dump --%s=SomeEntity.d58726ad-eafb-4659-a1b7-9c72a2a38f78
+                        bin/console %s --%s=SomeEntity.d58726ad-eafb-4659-a1b7-9c72a2a38f78
                 HELPBLOCK,
+                ConsoleAction::DignosticsCacheDump->value,
                 self::KEY,
+                ConsoleAction::DignosticsCacheDump->value,
                 self::KEY,
             ),
         );

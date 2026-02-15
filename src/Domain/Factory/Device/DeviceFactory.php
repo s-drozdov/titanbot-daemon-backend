@@ -8,6 +8,7 @@ use Override;
 use Titanbot\Daemon\Domain\Entity\Device\Device;
 use Titanbot\Daemon\Domain\Helper\Uuid\UuidHelperInterface;
 use Titanbot\Daemon\Domain\Dto\Device\Create\DeviceCreateParamsDto;
+use Titanbot\Daemon\Domain\Event\Device\DeviceCreated;
 
 final readonly class DeviceFactory implements DeviceFactoryInterface
 {
@@ -18,9 +19,9 @@ final readonly class DeviceFactory implements DeviceFactoryInterface
     }
 
     #[Override]
-    public function create(DeviceCreateParamsDto $paramsDto): Device {
-
-        return new Device(
+    public function create(DeviceCreateParamsDto $paramsDto): Device 
+    {
+        $device = new Device(
             uuid: $this->uuidHelper->create(),
             physicalId: $paramsDto->physicalId,
             isActive: $paramsDto->isActive ?? self::DEFAULT_IS_ACTIVE,
@@ -29,5 +30,13 @@ final readonly class DeviceFactory implements DeviceFactoryInterface
             isAbleToClearCache: $paramsDto->isAbleToClearCache ?? self::DEFAULT_IS_ABLE_TO_CLEAR_CACHE,
             goTimeLimitSeconds: $paramsDto->goTimeLimitSeconds ?? self::DEFAULT_GO_TIME_LIMIT_SECONDS,
         );
+
+        $device->raise(
+            new DeviceCreated(
+                uuid: $device->getUuid(),
+            ),
+        );
+
+        return $device;
     }
 }

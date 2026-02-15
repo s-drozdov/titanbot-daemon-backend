@@ -52,4 +52,6 @@ enum OpenApiSummary: string
     case LogIndex = 'Get log index';
     case LogClear = 'Clear all daemon logs';
     case LogBulkCreate = 'Create multiple logs';
+
+    case DeviceSshGet = 'Get device ssh';
 }

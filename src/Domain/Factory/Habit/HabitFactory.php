@@ -20,7 +20,8 @@ final readonly class HabitFactory implements HabitFactoryInterface
     }
 
     #[Override]
-    public function create(HabitCreateParamsDto $paramsDto): Habit {
+    public function create(HabitCreateParamsDto $paramsDto): Habit 
+    {
         $entity = new Habit(
             uuid: $this->uuidHelper->create(),
             accountLogicalId: $paramsDto->accountLogicalId,

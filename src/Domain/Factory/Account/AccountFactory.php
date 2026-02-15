@@ -18,7 +18,8 @@ final readonly class AccountFactory implements AccountFactoryInterface
     }
 
     #[Override]
-    public function create(AccountCreateParamsDto $paramsDto): Account {
+    public function create(AccountCreateParamsDto $paramsDto): Account 
+    {
         return new Account(
             uuid: $this->uuidHelper->create(),
             logicalId: $paramsDto->logicalId,

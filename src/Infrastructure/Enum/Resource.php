@@ -17,6 +17,7 @@ enum Resource: string
 
     case Device = '/daemon/devices';
     case DeviceByUuid = '/daemon/devices/{uuid}';
+    case DeviceSsh = '/daemon/devices/{uuid}/ssh';
 
     case EmpireDate = '/daemon/empire-dates';
     case EmpireDateNext = '/daemon/empire-dates-next';

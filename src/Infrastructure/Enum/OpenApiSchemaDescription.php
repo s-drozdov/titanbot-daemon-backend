@@ -14,5 +14,6 @@ enum OpenApiSchemaDescription: string
     case habit = 'habit';
     case legion = 'legion';
     case log = 'log';
+    case ssh = 'ssh';
     case status = 'status';
 }

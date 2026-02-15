@@ -9,13 +9,15 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Titanbot\Daemon\Infrastructure\Enum\ConsoleAction;
 use Titanbot\Daemon\Infrastructure\Bus\Processor\CommandBusQueryProcessor;
 use Titanbot\Daemon\Application\UseCase\Query\Cache\HealthCheck\CacheHealthCheckQuery;
 use Titanbot\Daemon\Application\UseCase\Query\Cache\HealthCheck\CacheHealthCheckQueryResult;
+use Titanbot\Daemon\Infrastructure\Enum\ConsoleActionDescription;
 
 #[AsCommand(
-    name: 'diagnostics:cache:health-check',
-    description: 'Cache health check',
+    name: ConsoleAction::DignosticsCacheHealthCheck->value,
+    description: ConsoleActionDescription::DignosticsCacheHealthCheck->value,
 )]
 final class CacheHealthCheckQueryCommand extends Command
 {
@@ -31,10 +33,13 @@ final class CacheHealthCheckQueryCommand extends Command
     protected function configure(): void
     {
         $this->setHelp(
-            <<<HELPBLOCK
-                usage:
-                    bin/console diagnostics:cache:health-check
-            HELPBLOCK,
+            sprintf(
+                <<<HELPBLOCK
+                    usage:
+                        bin/console %s
+                HELPBLOCK,
+                ConsoleAction::DignosticsCacheHealthCheck->value,
+            ),
         );
     }
 

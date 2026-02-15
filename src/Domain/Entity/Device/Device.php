@@ -21,6 +21,8 @@ class Device implements AggregateInterface
 
     private ?Account $currentAccount = null;
 
+    private ?Ssh $ssh = null;
+
     /** @var Collection<array-key,Account> $accountList */ 
     private Collection $accountList;
     
@@ -133,6 +135,18 @@ class Device implements AggregateInterface
     public function setAccountList(Collection $accountList): self
     {
         $this->accountList = $accountList;
+
+        return $this;
+    }
+
+    public function getSsh(): ?Ssh
+    {
+        return $this->ssh;
+    }
+
+    public function setSsh(?Ssh $ssh): self
+    {
+        $this->ssh = $ssh;
 
         return $this;
     }

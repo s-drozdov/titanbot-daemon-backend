@@ -19,6 +19,7 @@ security:
         - { path: ^/daemon/tokens, roles: [ ROLE_ADMIN ] }
         - { path: ^/daemon/db, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
         - { path: ^/daemon/devices$, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
+        - { path: '^/daemon/devices/[^/]+/ssh$', roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
         - { path: ^/daemon/devices, roles: [ ROLE_ADMIN ] }
         - { path: ^/daemon/accounts$, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
         - { path: ^/daemon/accounts, roles: [ ROLE_ADMIN ] }

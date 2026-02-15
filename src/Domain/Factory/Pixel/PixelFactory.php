@@ -31,7 +31,8 @@ final readonly class PixelFactory implements PixelFactoryInterface
     }
 
     #[Override]
-    public function create(PixelCreateParamsDto $paramsDto): Pixel {
+    public function create(PixelCreateParamsDto $paramsDto): Pixel 
+    {
         $this->guardInput($paramsDto);
 
         $entity = new Pixel(

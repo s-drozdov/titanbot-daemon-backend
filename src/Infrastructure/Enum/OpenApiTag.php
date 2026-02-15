@@ -14,6 +14,7 @@ enum OpenApiTag: string
     case Habit = 'habit';
     case Legion = 'legion';
     case Log = 'log';
+    case Ssh = 'ssh';
     case Status = 'status';
 
     case AdminAccess = 'admin_access';

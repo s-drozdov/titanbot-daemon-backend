@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Titanbot\Daemon\Domain\Entity\Device\Ssh" table="ssh">
+        <id name="uuid" type="uuid_binary" column="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <one-to-one field="device" target-entity="Titanbot\Daemon\Domain\Entity\Device\Device" mapped-by="ssh">
+            <cascade>
+                <cascade-persist/>
+                <cascade-remove/>
+            </cascade>
+        </one-to-one>
+
+        <field name="public" column="public" type="string" length="255" nullable="false"/>
+
+        <field name="private" column="private" type="text" nullable="false"/>
+
+        <field name="port" column="port" type="integer" nullable="false" unique="true"/>
+    </entity>
+</doctrine-mapping>

@@ -32,6 +32,11 @@
             </join-table>
         </many-to-many>
 
+        <one-to-one field="ssh" target-entity="Titanbot\Daemon\Domain\Entity\Device\Ssh" 
+                inversed-by="device" orphan-removal="true">
+            <join-column name="ssh_uuid" referenced-column-name="uuid" nullable="true" on-delete="CASCADE"/>
+        </one-to-one>
+
         <many-to-one
             field="currentAccount"
             target-entity="Titanbot\Daemon\Domain\Entity\Device\Account"

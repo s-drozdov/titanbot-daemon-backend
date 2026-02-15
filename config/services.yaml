@@ -152,6 +152,13 @@ services:
         arguments:
             $daemonDbDriver: '%env(DB_EXPORT_DRIVER)%'
         
+# factories
+
+    Titanbot\Daemon\Domain\Factory\Ssh\SshFactoryInterface:
+        class: Titanbot\Daemon\Domain\Factory\Ssh\SshFactory
+        arguments:
+            $portRangeStart: '%env(int:SSH_PORT_RANGE_START)%'
+        
 # library
 
     Titanbot\Daemon\Library\Generator\PageGeneratorInterface:
@@ -161,6 +168,9 @@ services:
 
     Titanbot\Daemon\Domain\Helper\DateTime\DateTimeHelperInterface:
         class: Titanbot\Daemon\Infrastructure\Helper\DateTime\DateTimeHelper
+
+    Titanbot\Daemon\Domain\Helper\FileSystem\FileSystemHelperInterface:
+        class: Titanbot\Daemon\Infrastructure\Helper\FileSystem\FileSystemHelper
 
     Titanbot\Daemon\Domain\Helper\String\StringHelperInterface:
         class: Titanbot\Daemon\Infrastructure\Helper\String\StringHelper
@@ -388,3 +398,9 @@ services:
             - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Log\CreateBulk\LogBulkCreateCommand }
         arguments:
             $daemonLogger: '@monolog.logger.daemon'
+
+    # SshKey
+    
+    Titanbot\Daemon\Application\UseCase\Query\Ssh\GetByDevice\SshByDeviceGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Ssh\GetByDevice\SshByDeviceGetQuery }

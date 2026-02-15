@@ -53,4 +53,6 @@ enum Action: string
     case LogClear = 'log_clear';
     
     case LogBulkPost = 'log_bulk_create';
+
+    case SshByDeviceGet = 'ssh_by_device_get';
 }
