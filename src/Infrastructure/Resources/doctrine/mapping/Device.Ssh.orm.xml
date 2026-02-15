@@ -9,12 +9,7 @@
             <generator strategy="NONE"/>
         </id>
 
-        <one-to-one field="device" target-entity="Titanbot\Daemon\Domain\Entity\Device\Device" mapped-by="ssh">
-            <cascade>
-                <cascade-persist/>
-                <cascade-remove/>
-            </cascade>
-        </one-to-one>
+        <one-to-one field="device" target-entity="Titanbot\Daemon\Domain\Entity\Device\Device" mapped-by="ssh"/>
 
         <field name="public" column="public" type="string" length="255" nullable="false"/>
 

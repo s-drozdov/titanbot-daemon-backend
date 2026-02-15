@@ -16,6 +16,7 @@ use Titanbot\Daemon\Application\UseCase\Command\Ssh\Create\SshCreateCommand;
 use Titanbot\Daemon\Infrastructure\Bus\Processor\CommandBusCommandProcessor;
 use Titanbot\Daemon\Application\UseCase\Command\Ssh\Create\SshCreateCommandResult;
 use Titanbot\Daemon\Domain\Helper\String\StringHelperInterface;
+use Webmozart\Assert\Assert;
 
 #[AsCommand(
     name: ConsoleAction::SshRotate->value,
@@ -67,6 +68,11 @@ final class SshRotateCommandCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $physicalId = $input->getOption(self::PHYSICAL_ID);
+        Assert::string($physicalId);
+
+        $input->setOption(self::PHYSICAL_ID, (int) $physicalId);
+
         return $this->busProcessor->process($input, $output, SshCreateCommand::class);
     }
 }

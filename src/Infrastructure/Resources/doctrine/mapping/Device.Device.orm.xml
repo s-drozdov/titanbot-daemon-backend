@@ -34,7 +34,7 @@
 
         <one-to-one field="ssh" target-entity="Titanbot\Daemon\Domain\Entity\Device\Ssh" 
                 inversed-by="device" orphan-removal="true">
-            <join-column name="ssh_uuid" referenced-column-name="uuid" nullable="true" on-delete="CASCADE"/>
+            <join-column name="ssh_uuid" referenced-column-name="uuid" nullable="true" on-delete="SET NULL"/>
         </one-to-one>
 
         <many-to-one

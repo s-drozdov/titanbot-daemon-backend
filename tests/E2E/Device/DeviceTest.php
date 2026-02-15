@@ -55,7 +55,7 @@ class DeviceTest extends E2eTestCase
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertNotEmpty($data['uuid_to_device_map']);
-        $this->assertSame(834221, current($data['uuid_to_device_map'])['physical_id']);
+        $this->assertSame(834221, end($data['uuid_to_device_map'])['physical_id']);
 
         /** UPDATE */
         $data = [

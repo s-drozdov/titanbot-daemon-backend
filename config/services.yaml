@@ -399,8 +399,12 @@ services:
         arguments:
             $daemonLogger: '@monolog.logger.daemon'
 
-    # SshKey
+    # Ssh
     
     Titanbot\Daemon\Application\UseCase\Query\Ssh\GetByDevice\SshByDeviceGetQueryHandler:
         tags:
             - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Ssh\GetByDevice\SshByDeviceGetQuery }
+    
+    Titanbot\Daemon\Application\UseCase\Command\Ssh\Create\SshCreateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Ssh\Create\SshCreateCommand }
