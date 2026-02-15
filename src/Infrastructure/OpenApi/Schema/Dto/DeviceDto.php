@@ -22,6 +22,8 @@ final class DeviceDto
 
     public bool $is_active;
 
+    public bool $is_ssh;
+
     #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public ActivityType $activity_type;
 

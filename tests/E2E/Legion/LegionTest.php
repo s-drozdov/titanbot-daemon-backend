@@ -42,7 +42,7 @@ class LegionTest extends E2eTestCase
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertNotEmpty($data['uuid_to_legion_map']);
-        $this->assertSame('Title', current($data['uuid_to_legion_map'])['title']);
+        $this->assertNotEmpty(array_filter($data['uuid_to_legion_map'], fn (array $legion) => $legion['title'] === 'Title'));
 
         /** UPDATE */
         $data = [

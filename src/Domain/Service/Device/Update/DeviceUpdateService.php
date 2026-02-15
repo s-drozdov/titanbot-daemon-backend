@@ -35,6 +35,10 @@ final readonly class DeviceUpdateService implements DeviceUpdateServiceInterface
             $entity->setIsActive($paramsDto->isActive);
         }
 
+        if ($paramsDto->isSsh !== null) {
+            $entity->setIsSsh($paramsDto->isSsh);
+        }
+
         if ($paramsDto->activityType !== null) {
             $entity->setActivityType($paramsDto->activityType);
         }

@@ -13,6 +13,7 @@ final readonly class DeviceUpdateParamsDto implements DtoInterface
     public function __construct(
         public UuidInterface $uuid,
         public ?bool $isActive = null,
+        public ?bool $isSsh = null,
         public ?ActivityType $activityType = null,
         public ?bool $isFullServerDetection = null,
         public ?bool $isAbleToClearCache = null,

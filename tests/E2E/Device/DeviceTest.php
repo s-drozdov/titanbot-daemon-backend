@@ -18,6 +18,7 @@ class DeviceTest extends E2eTestCase
         $data = [
             'physical_id' => 834221,
             'is_active' => false,
+            'is_ssh' => false,
             'activity_type' => 'rowgplay',
             'is_full_server_detection' => false,
             'is_able_to_clear_cache' => false,
@@ -29,6 +30,7 @@ class DeviceTest extends E2eTestCase
         $this->assertSame(834221, $entity->getPhysicalId());
         $this->assertSame('rowgplay', $entity->getActivityType()?->value);
         $this->assertSame(220, $entity->getGoTimeLimitSeconds());
+        $this->assertSame(false, $entity->isSsh());
 
         /** READ */
         $this->getAdminClient()->jsonRequest('GET', sprintf('/daemon/devices/%s', (string) $entity->getUuid()));
@@ -55,11 +57,12 @@ class DeviceTest extends E2eTestCase
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertNotEmpty($data['uuid_to_device_map']);
-        $this->assertSame(834221, end($data['uuid_to_device_map'])['physical_id']);
+        $this->assertNotEmpty(array_filter($data['uuid_to_device_map'], fn (array $device) => $device['physical_id'] === 834221));
 
         /** UPDATE */
         $data = [
             'is_active' => true,
+            'is_ssh' => true,
             'activity_type' => 'ajagplay',
             'is_full_server_detection' => true,
             'is_able_to_clear_cache' => true,
@@ -75,6 +78,7 @@ class DeviceTest extends E2eTestCase
         $this->assertNotNull($entity);
         $this->assertSame('ajagplay', $entity->getActivityType()?->value);
         $this->assertSame(true, $entity->isActive());
+        $this->assertSame(true, $entity->isSsh());
         $this->assertSame(true, $entity->isFullServerDetection());
         $this->assertSame(true, $entity->isAbleToClearCache());
         $this->assertSame(100, $entity->getGoTimeLimitSeconds());

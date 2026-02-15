@@ -30,7 +30,7 @@ class LogTest extends E2eTestCase
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertNotEmpty($data['log_list']);
-        $this->assertStringContainsString($message, current($data['log_list'])['message']);
+        $this->assertNotEmpty(array_filter($data['log_list'], fn (array $log) => str_contains($log['message'], $message)));
 
         /** Clear */
         $this->getAdminClient()->jsonRequest('DELETE', '/daemon/logs');

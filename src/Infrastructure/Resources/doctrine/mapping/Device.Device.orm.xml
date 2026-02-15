@@ -54,6 +54,12 @@
 
         <field name="isActive" column="is_active" type="boolean" nullable="false"/>
 
+        <field name="isSsh" column="is_ssh" type="boolean" nullable="false">
+            <options>
+                <option name="default">false</option>
+            </options>
+        </field>
+
         <field name="activityType" column="activity_type" type="activity_type_enum" length="255" nullable="false"/>
 
         <field name="isFullServerDetection" column="is_full_server_detection" type="boolean" nullable="false"/>

@@ -30,6 +30,7 @@ final readonly class DeviceCreateCommandHandler implements CommandHandlerInterfa
             physicalId: $command->physical_id,
             activityType: $command->activity_type,
             isActive: $command->is_active,
+            isSsh: $command->is_ssh,
             isFullServerDetection: $command->is_full_server_detection,
             isAbleToClearCache: $command->is_able_to_clear_cache,
             goTimeLimitSeconds: $command->go_time_limit_seconds,

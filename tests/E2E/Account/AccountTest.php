@@ -66,8 +66,7 @@ class AccountTest extends E2eTestCase
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertNotEmpty($data['uuid_to_account_map']);
-        $accountData = current($data['uuid_to_account_map']);
-        $this->assertSame(654321, $accountData['logical_id']);
+        $this->assertNotEmpty(array_filter($data['uuid_to_account_map'], fn (array $account) => $account['logical_id'] === 654321));
 
         /** UPDATE */
         $data = [

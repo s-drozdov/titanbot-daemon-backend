@@ -20,6 +20,8 @@ final class DeviceUpdateCommand
 
     public ?bool $is_active;
 
+    public ?bool $is_ssh;
+
     #[OA\Property(type: OpenApiType::string->value, nullable: true)]
     public ?ActivityType $activity_type;
 

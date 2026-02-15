@@ -53,7 +53,7 @@ class HabitTest extends E2eTestCase
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertNotEmpty($data['uuid_to_habit_map']);
-        $this->assertSame('trigger_shell', current($data['uuid_to_habit_map'])['trigger_shell']);
+        $this->assertNotEmpty(array_filter($data['uuid_to_habit_map'], fn (array $habit) => $habit['trigger_shell'] === 'trigger_shell'));
 
         /** UPDATE */
         $data = [

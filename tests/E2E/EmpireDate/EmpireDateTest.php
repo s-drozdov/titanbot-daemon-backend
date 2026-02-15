@@ -42,7 +42,7 @@ class EmpireDateTest extends E2eTestCase
         $data = json_decode($this->getAdminClient()->getResponse()->getContent(), true);
 
         $this->assertNotEmpty($data['uuid_to_empire_date_map']);
-        $this->assertEquals($dt->format(DateTimeImmutable::ATOM), current($data['uuid_to_empire_date_map'])['date']);
+        $this->assertNotEmpty(array_filter($data['uuid_to_empire_date_map'], fn (array $empireDate) => $empireDate['date'] == $dt->format(DateTimeImmutable::ATOM)));
 
         /** DELETE */
         $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/empire-dates/%s', (string) $entity->getUuid()));

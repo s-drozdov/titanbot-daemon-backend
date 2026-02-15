@@ -26,6 +26,7 @@ readonly class DeviceMapper implements MapperInterface
             uuid: $object->getUuid(),
             physical_id: $object->getPhysicalId(),
             is_active: $object->isActive(),
+            is_ssh: $object->isSsh(),
             activity_type: $object->getActivityType(),
             is_full_server_detection: $object->isFullServerDetection(),
             is_able_to_clear_cache: $object->isAbleToClearCache(),
