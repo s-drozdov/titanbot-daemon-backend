@@ -7,6 +7,7 @@ namespace Titanbot\Daemon\Infrastructure\Enum;
 enum OpenApiSchemaDescription: string
 {
     case account = 'account';
+    case backend_public_key = 'backend_public_key';
     case daemon_db = 'daemon_db';
     case daemon_token = 'daemon_token';
     case device = 'device';

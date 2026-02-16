@@ -7,6 +7,7 @@ namespace Titanbot\Daemon\Infrastructure\Enum;
 enum OpenApiTag: string
 {
     case Account = 'account';
+    case Backend = 'backend';
     case DaemonDb = 'daemon_db';
     case DaemonToken = 'daemon_token';
     case Device = 'device';

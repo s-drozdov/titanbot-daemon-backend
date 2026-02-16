@@ -9,6 +9,8 @@ enum Resource: string
     case Account = '/daemon/accounts';
     case AccountByUuid = '/daemon/accounts/{uuid}';
 
+    case BackendPublicKey = '/daemon/backend/public-key';
+
     case DaemonDb = '/daemon/db';
     case DaemonDbChecksum = '/daemon/db/checksum';
 

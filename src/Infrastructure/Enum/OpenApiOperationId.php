@@ -11,6 +11,8 @@ enum OpenApiOperationId: string
     case AccountIndex = 'getAccountIndex';
     case AccountUpdate = 'updateAccount';
     case AccountDelete = 'deleteAccount';
+    
+    case BackendPublicKeyGet = 'getBackendPublicKey';
 
     case DaemonDbGet = 'getDaemonDb';
     case DaemonDbChecksumGet = 'getDaemonDbChecksum';

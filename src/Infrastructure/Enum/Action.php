@@ -12,6 +12,8 @@ enum Action: string
     case AccountUpdate = 'account_update';
     case AccountDelete = 'account_delete';
 
+    case BackendPublicKeyGet = 'backend_public_key_get';
+
     case DaemonTokenPost = 'daemon_token_create';
     case DaemonTokenGet = 'daemon_token_get';
     case DaemonTokenByValueGet = 'daemon_token_by_value_get';

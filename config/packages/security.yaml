@@ -29,4 +29,5 @@ security:
         - { path: ^/daemon/logs, roles: [ ROLE_ADMIN ], methods: [ GET, DELETE ] }
         - { path: ^/daemon/empire-dates-next, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
         - { path: ^/daemon/empire-dates, roles: [ ROLE_ADMIN ] }
+        - { path: ^/daemon/backend/public-key, roles: [ ROLE_ADMIN, ROLE_DAEMON ], methods: [ GET ] }
         - { path: .*, roles: [ ROLE_ADMIN ] }

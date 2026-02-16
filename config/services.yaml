@@ -145,6 +145,11 @@ services:
             $filePrefix: '%env(LOG_PREFIX)%'
             $shellTimeout: '%env(int:LOG_SHELL_TIMEOUT)%'
 
+    Titanbot\Daemon\Application\Service\Backend\PublicKey\BackendPublicKeyGetServiceInterface:
+        class: Titanbot\Daemon\Application\Service\Backend\PublicKey\BackendPublicKeyGetService
+        arguments:
+            $backendPublicKey: '%env(BACKEND_PUBLIC_KEY)%'
+
 # domain Services
 
     Titanbot\Daemon\Domain\Service\DaemonDb\Get\DaemonDbGetServiceInterface:
@@ -234,7 +239,7 @@ services:
     Titanbot\Daemon\Application\UseCase\Query\Cache\Dump\CacheDumpQueryHandler:
         tags:
             - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Cache\Dump\CacheDumpQuery }
-    
+
     # Account
     
     Titanbot\Daemon\Application\UseCase\Command\Account\Create\AccountCreateCommandHandler:
@@ -256,6 +261,12 @@ services:
     Titanbot\Daemon\Application\UseCase\Command\Account\Delete\AccountDeleteCommandHandler:
         tags:
             - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Account\Delete\AccountDeleteCommand }
+  
+    # Backend
+
+    Titanbot\Daemon\Application\UseCase\Query\Backend\PublicKey\BackendPublicKeyGetQueryHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Query\Backend\PublicKey\BackendPublicKeyGetQuery }
 
     # DaemonDb
 

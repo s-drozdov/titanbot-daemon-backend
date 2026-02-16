@@ -12,6 +12,8 @@ enum OpenApiSummary: string
     case AccountUpdate = 'Update account';
     case AccountDelete = 'Delete account';
 
+    case BackendPublicKeyGet = 'Get backend public key';
+
     case DaemonDbGet = 'Get daemon db';
     case DaemonDbChecksumGet = 'Get daemon db checksum';
 
