@@ -42,5 +42,7 @@ final class HabitCreateCommand
 
     public ?string $comment = null;
 
+    public ?int $sequence = null;
+
     public bool $is_active = true;
 }

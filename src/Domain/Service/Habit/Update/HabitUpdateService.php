@@ -63,6 +63,10 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
             $entity->setComment($paramsDto->comment);
         }
 
+        if ($paramsDto->sequence !== null) {
+            $entity->setSequence($paramsDto->sequence);
+        }
+
         if ($paramsDto->isActive !== null) {
             $entity->setIsActive($paramsDto->isActive);
         }

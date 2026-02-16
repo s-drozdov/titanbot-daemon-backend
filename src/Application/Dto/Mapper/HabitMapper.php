@@ -53,6 +53,7 @@ readonly class HabitMapper implements MapperInterface
             log_template: $object->getLogTemplate(),
             post_timeout_ms: $object->getPostTimeoutMs(),
             comment: $object->getComment(),
+            sequence: $object->getSequence(),
         );
     }
 

@@ -51,4 +51,6 @@ final class HabitDto
     public ?int $post_timeout_ms = null;
 
     public ?string $comment = null;
+
+    public ?int $sequence = null;
 }

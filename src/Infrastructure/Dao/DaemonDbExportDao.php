@@ -35,6 +35,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 post_timeout_ms INTEGER,
                 action TEXT NOT NULL,
                 comment TEXT,
+                sequence INTEGER,
                 updated_at TEXT NOT NULL,
                 PRIMARY KEY (uuid)
             );
@@ -102,6 +103,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 'post_timeout_ms' => $row['post_timeout_ms'],
                 'action' => $row['action'],
                 'comment' => $row['comment'],
+                'sequence' => $row['sequence'],
                 'updated_at' => $row['updated_at'],
             ]);
 

@@ -35,6 +35,7 @@ class Habit implements AggregateInterface
         private string $action,
         private bool $isActive,
         private ?string $comment,
+        private ?int $sequence,
     ) {
         $this->updatedAt = new DateTimeImmutable();
         $this->pixelList = new ArrayCollection();
@@ -180,6 +181,18 @@ class Habit implements AggregateInterface
     public function setComment(?string $comment): self
     {
         $this->comment = $comment;
+
+        return $this;
+    }
+
+    public function getSequence(): ?int
+    {
+        return $this->sequence;
+    }
+
+    public function setSequence(?int $sequence): self
+    {
+        $this->sequence = $sequence;
 
         return $this;
     }

@@ -46,5 +46,7 @@ final class HabitUpdateCommand
 
     public ?string $comment = null;
 
+    public ?int $sequence = null;
+
     public ?bool $is_active = null;
 }
