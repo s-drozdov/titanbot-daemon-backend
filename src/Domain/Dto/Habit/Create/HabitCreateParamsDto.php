@@ -24,6 +24,7 @@ final readonly class HabitCreateParamsDto implements DtoInterface
         public ?int $postTimeoutMs = null,
         public ?string $comment = null,
         public ?int $sequence = null,
+        public ?string $context = null,
         public bool $isActive = true,
     ) {
         /*_*/

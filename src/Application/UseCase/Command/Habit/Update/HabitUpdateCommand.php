@@ -26,6 +26,7 @@ final readonly class HabitUpdateCommand implements CommandInterface
         public ?int $post_timeout_ms = null,
         public ?string $comment = null,
         public ?int $sequence = null,
+        public ?string $context = null,
         public ?bool $is_active = null,
     ) {
         /*_*/

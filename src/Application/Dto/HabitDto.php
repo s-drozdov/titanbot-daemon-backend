@@ -30,6 +30,7 @@ readonly class HabitDto implements DtoInterface
         public ?int $post_timeout_ms = null,
         public ?string $comment = null,
         public ?int $sequence = null,
+        public ?string $context = null,
     ) {
         /*_*/
     }

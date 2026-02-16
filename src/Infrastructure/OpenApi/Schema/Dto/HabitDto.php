@@ -53,4 +53,6 @@ final class HabitDto
     public ?string $comment = null;
 
     public ?int $sequence = null;
+
+    public ?string $context = null;
 }

@@ -36,6 +36,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 action TEXT NOT NULL,
                 comment TEXT,
                 sequence INTEGER,
+                context TEXT,
                 updated_at TEXT NOT NULL,
                 PRIMARY KEY (uuid)
             );
@@ -104,6 +105,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 'action' => $row['action'],
                 'comment' => $row['comment'],
                 'sequence' => $row['sequence'],
+                'context' => $row['context'],
                 'updated_at' => $row['updated_at'],
             ]);
 

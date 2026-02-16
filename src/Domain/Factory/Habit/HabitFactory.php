@@ -34,6 +34,7 @@ final readonly class HabitFactory implements HabitFactoryInterface
             isActive: $paramsDto->isActive,
             comment: $paramsDto->comment,
             sequence: $paramsDto->sequence,
+            context: $paramsDto->context,
         );
 
         if ($paramsDto->pixelList !== null) {

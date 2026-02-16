@@ -25,6 +25,8 @@
 
         <field name="sequence" column="sequence" type="integer" nullable="true"/>
 
+        <field name="context" column="context" type="string" length="255" nullable="true"/>
+
         <field name="action" column="action" type="string" length="255" nullable="false"/>
 
         <field name="isActive" column="is_active" type="boolean" nullable="false"/>

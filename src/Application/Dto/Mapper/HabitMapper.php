@@ -54,6 +54,7 @@ readonly class HabitMapper implements MapperInterface
             post_timeout_ms: $object->getPostTimeoutMs(),
             comment: $object->getComment(),
             sequence: $object->getSequence(),
+            context: $object->getContext(),
         );
     }
 
