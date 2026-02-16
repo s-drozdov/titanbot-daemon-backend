@@ -34,6 +34,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 log_template TEXT,
                 post_timeout_ms INTEGER,
                 action TEXT NOT NULL,
+                comment TEXT,
                 updated_at TEXT NOT NULL,
                 PRIMARY KEY (uuid)
             );
@@ -100,6 +101,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 'log_template' => $row['log_template'],
                 'post_timeout_ms' => $row['post_timeout_ms'],
                 'action' => $row['action'],
+                'comment' => $row['comment'],
                 'updated_at' => $row['updated_at'],
             ]);
 

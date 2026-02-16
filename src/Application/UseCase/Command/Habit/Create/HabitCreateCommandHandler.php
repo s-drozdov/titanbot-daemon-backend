@@ -37,6 +37,7 @@ final readonly class HabitCreateCommandHandler implements CommandHandlerInterfac
             triggerShell: $command->trigger_shell,
             logTemplate: $command->log_template,
             postTimeoutMs: $command->post_timeout_ms,
+            comment: $command->comment,
             isActive: $command->is_active,
         );
 

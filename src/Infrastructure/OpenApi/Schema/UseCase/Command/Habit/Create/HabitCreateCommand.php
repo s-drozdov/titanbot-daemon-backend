@@ -39,6 +39,8 @@ final class HabitCreateCommand
     public ?string $log_template = null;
     
     public ?int $post_timeout_ms = null;
-    
+
+    public ?string $comment = null;
+
     public bool $is_active = true;
 }

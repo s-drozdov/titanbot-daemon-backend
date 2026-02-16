@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20260215104343 extends AbstractMigration
+final class Version20260216171211 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,12 +20,12 @@ final class Version20260215104343 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE devices ADD is_ssh TINYINT DEFAULT 0 NOT NULL');
+        $this->addSql('ALTER TABLE habits ADD comment VARCHAR(255) DEFAULT NULL');
     }
 
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE devices DROP is_ssh');
+        $this->addSql('ALTER TABLE habits DROP comment');
     }
 }

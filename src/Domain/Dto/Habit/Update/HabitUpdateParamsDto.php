@@ -24,6 +24,7 @@ final readonly class HabitUpdateParamsDto implements DtoInterface
         public ?string $triggerShell,
         public ?string $logTemplate,
         public ?int $postTimeoutMs,
+        public ?string $comment,
         public ?bool $isActive,
     ) {
         /*_*/

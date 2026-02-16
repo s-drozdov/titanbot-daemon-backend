@@ -32,6 +32,7 @@ final readonly class HabitFactory implements HabitFactoryInterface
             postTimeoutMs: $paramsDto->postTimeoutMs,
             action: $paramsDto->action,
             isActive: $paramsDto->isActive,
+            comment: $paramsDto->comment,
         );
 
         if ($paramsDto->pixelList !== null) {

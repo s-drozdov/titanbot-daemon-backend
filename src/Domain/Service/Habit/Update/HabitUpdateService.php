@@ -59,6 +59,10 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
             $entity->setPostTimeoutMs($paramsDto->postTimeoutMs);
         }
 
+        if ($paramsDto->comment !== null) {
+            $entity->setComment($paramsDto->comment);
+        }
+
         if ($paramsDto->isActive !== null) {
             $entity->setIsActive($paramsDto->isActive);
         }
