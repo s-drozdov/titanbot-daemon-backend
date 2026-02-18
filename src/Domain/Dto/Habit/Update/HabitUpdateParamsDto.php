@@ -27,6 +27,7 @@ final readonly class HabitUpdateParamsDto implements DtoInterface
         public ?string $comment,
         public ?int $sequence,
         public ?string $context,
+        public ?bool $isInterruption,
         public ?bool $isActive,
     ) {
         /*_*/

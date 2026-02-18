@@ -71,6 +71,10 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
             $entity->setContext($paramsDto->context);
         }
 
+        if ($paramsDto->isInterruption !== null) {
+            $entity->setIsInterruption($paramsDto->isInterruption);
+        }
+
         if ($paramsDto->isActive !== null) {
             $entity->setIsActive($paramsDto->isActive);
         }

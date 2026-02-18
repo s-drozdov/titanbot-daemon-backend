@@ -27,6 +27,8 @@
 
         <field name="context" column="context" type="string" length="255" nullable="true"/>
 
+        <field name="isInterruption" column="is_interruption" type="boolean" nullable="false"/>
+
         <field name="action" column="action" type="string" length="255" nullable="false"/>
 
         <field name="isActive" column="is_active" type="boolean" nullable="false"/>

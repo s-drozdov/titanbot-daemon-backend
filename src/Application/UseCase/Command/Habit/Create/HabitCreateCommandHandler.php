@@ -40,6 +40,7 @@ final readonly class HabitCreateCommandHandler implements CommandHandlerInterfac
             comment: $command->comment,
             sequence: $command->sequence,
             context: $command->context,
+            isInterruption: $command->is_interruption,
             isActive: $command->is_active,
         );
 

@@ -50,5 +50,7 @@ final class HabitUpdateCommand
 
     public ?string $context = null;
 
+    public ?bool $is_interruption = null;
+
     public ?bool $is_active = null;
 }

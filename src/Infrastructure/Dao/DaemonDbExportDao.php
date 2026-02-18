@@ -37,6 +37,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 comment TEXT,
                 sequence INTEGER,
                 context TEXT,
+                is_interruption INTEGER NOT NULL DEFAULT 1,
                 updated_at TEXT NOT NULL,
                 PRIMARY KEY (uuid)
             );
@@ -106,6 +107,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 'comment' => $row['comment'],
                 'sequence' => $row['sequence'],
                 'context' => $row['context'],
+                'is_interruption' => $row['is_interruption'],
                 'updated_at' => $row['updated_at'],
             ]);
 

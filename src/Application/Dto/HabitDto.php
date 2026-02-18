@@ -31,6 +31,7 @@ readonly class HabitDto implements DtoInterface
         public ?string $comment = null,
         public ?int $sequence = null,
         public ?string $context = null,
+        public bool $is_interruption = true,
     ) {
         /*_*/
     }

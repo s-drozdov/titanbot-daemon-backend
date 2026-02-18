@@ -46,5 +46,7 @@ final class HabitCreateCommand
 
     public ?string $context = null;
 
+    public bool $is_interruption = true;
+
     public bool $is_active = true;
 }

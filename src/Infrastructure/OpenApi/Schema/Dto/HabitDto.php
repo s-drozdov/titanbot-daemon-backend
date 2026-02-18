@@ -55,4 +55,6 @@ final class HabitDto
     public ?int $sequence = null;
 
     public ?string $context = null;
+
+    public bool $is_interruption = true;
 }

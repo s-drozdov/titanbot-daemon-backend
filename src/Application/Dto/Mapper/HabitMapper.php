@@ -55,6 +55,7 @@ readonly class HabitMapper implements MapperInterface
             comment: $object->getComment(),
             sequence: $object->getSequence(),
             context: $object->getContext(),
+            is_interruption: $object->isInterruption(),
         );
     }
 

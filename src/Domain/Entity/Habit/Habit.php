@@ -37,6 +37,7 @@ class Habit implements AggregateInterface
         private ?string $comment,
         private ?int $sequence,
         private ?string $context,
+        private bool $isInterruption,
     ) {
         $this->updatedAt = new DateTimeImmutable();
         $this->pixelList = new ArrayCollection();
@@ -206,6 +207,18 @@ class Habit implements AggregateInterface
     public function setContext(?string $context): self
     {
         $this->context = $context;
+
+        return $this;
+    }
+
+    public function isInterruption(): bool
+    {
+        return $this->isInterruption;
+    }
+
+    public function setIsInterruption(bool $isInterruption): self
+    {
+        $this->isInterruption = $isInterruption;
 
         return $this;
     }

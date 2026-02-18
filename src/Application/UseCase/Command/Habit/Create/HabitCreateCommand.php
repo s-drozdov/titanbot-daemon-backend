@@ -25,6 +25,7 @@ final readonly class HabitCreateCommand implements CommandInterface
         public ?string $comment = null,
         public ?int $sequence = null,
         public ?string $context = null,
+        public bool $is_interruption = true,
         public bool $is_active = true,
     ) {
         /*_*/
