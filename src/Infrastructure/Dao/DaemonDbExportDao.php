@@ -33,7 +33,7 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 trigger_shell TEXT,
                 log_template TEXT,
                 post_timeout_ms INTEGER,
-                action TEXT NOT NULL,
+                action TEXT,
                 comment TEXT,
                 sequence INTEGER,
                 context TEXT,

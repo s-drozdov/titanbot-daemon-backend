@@ -15,7 +15,7 @@ readonly class HabitDto implements DtoInterface
 {
     public function __construct(
         public UuidInterface $uuid,
-        public string $action,
+        public ?string $action,
 
         /** @var ListInterface<PixelDto> $pixelList */
         public ListInterface $pixelList,

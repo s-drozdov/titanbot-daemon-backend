@@ -17,8 +17,6 @@ use Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto\PixelRequestDto as PixelRe
 #[OA\Schema()]
 final class HabitCreateCommand
 {
-    public string $action;
-
     /** 
      * @var ListInterface<PixelRequestDto>
      */
@@ -27,6 +25,8 @@ final class HabitCreateCommand
         items: new OA\Items(ref: new Model(type: PixelRequestDtoSchema::class)),
     )]
     public ListInterface $pixel_list;
+    
+    public ?string $action = null;
     
     public ?int $account_logical_id = null;
     

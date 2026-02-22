@@ -11,11 +11,10 @@ use Titanbot\Daemon\Library\Collection\ListInterface;
 final readonly class HabitCreateParamsDto implements DtoInterface
 {
     public function __construct(
-        public string $action,
-
         /** @var ListInterface<Pixel>|null $pixelList */
         public ?ListInterface $pixelList = null,
         
+        public ?string $action = null,
         public ?int $accountLogicalId = null,
         public ?int $priority = null,
         public ?string $triggerOcr = null,

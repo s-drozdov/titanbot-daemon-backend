@@ -32,7 +32,7 @@ class Habit implements AggregateInterface
         private ?string $triggerShell,
         private ?string $logTemplate,
         private ?int $postTimeoutMs,
-        private string $action,
+        private ?string $action,
         private bool $isActive,
         private ?string $comment,
         private ?int $sequence,
@@ -121,12 +121,12 @@ class Habit implements AggregateInterface
         return $this;
     }
 
-    public function getAction(): string
+    public function getAction(): ?string
     {
         return $this->action;
     }
 
-    public function setAction(string $action): self
+    public function setAction(?string $action): self
     {
         $this->action = $action;
 

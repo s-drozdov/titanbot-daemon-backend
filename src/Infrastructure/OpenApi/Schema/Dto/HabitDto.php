@@ -22,8 +22,6 @@ final class HabitDto
     #[OA\Property(type: OpenApiType::string->value, nullable: false)]
     public UuidInterface $uuid;
 
-    public string $action;
-
     /** 
      * @var ListInterface<PixelRequestDto>
      */
@@ -37,6 +35,8 @@ final class HabitDto
 
     #[OA\Property(type: OpenApiType::string->value, nullable: true)]
     public ?DateTimeImmutable $updated_at;
+
+    public ?string $action = null;
 
     public ?int $account_logical_id = null;
 

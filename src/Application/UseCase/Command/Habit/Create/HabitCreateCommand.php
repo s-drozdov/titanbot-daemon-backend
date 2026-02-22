@@ -11,7 +11,7 @@ use Titanbot\Daemon\Application\Bus\Command\CommandInterface;
 final readonly class HabitCreateCommand implements CommandInterface
 {
     public function __construct(
-        public string $action,
+        public ?string $action = null,
 
         /** @var ListInterface<PixelRequestDto>|null $pixel_list */
         public ?ListInterface $pixel_list = null,

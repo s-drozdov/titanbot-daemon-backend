@@ -85,7 +85,7 @@ class HabitTest extends E2eTestCase
     public function testEmptyRequests(): void
     {
         $this->getAdminClient()->jsonRequest('POST', '/daemon/habits', []);
-        $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
+        $this->assertTrue($this->getAdminClient()->getResponse()->isSuccessful());
 
         $this->getAdminClient()->jsonRequest('DELETE', '/daemon/habits');
         $this->assertFalse($this->getAdminClient()->getResponse()->isSuccessful());
