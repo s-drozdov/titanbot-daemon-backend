@@ -35,6 +35,7 @@ final readonly class DeviceUpdateCommandHandler implements CommandHandlerInterfa
             uuid: $command->uuid,
             isActive: $command->is_active,
             isSsh: $command->is_ssh,
+            isNeedToUpdate: $command->is_need_to_update,
             activityType: $command->activity_type,
             isFullServerDetection: $command->is_full_server_detection,
             isAbleToClearCache: $command->is_able_to_clear_cache,

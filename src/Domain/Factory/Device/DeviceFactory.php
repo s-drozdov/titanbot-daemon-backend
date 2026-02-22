@@ -26,6 +26,7 @@ final readonly class DeviceFactory implements DeviceFactoryInterface
             physicalId: $paramsDto->physicalId,
             isActive: $paramsDto->isActive ?? self::DEFAULT_IS_ACTIVE,
             isSsh: $paramsDto->isSsh ?? self::DEFAULT_IS_SSH,
+            isNeedToUpdate: $paramsDto->isNeedToUpdate ?? self::DEFAULT_IS_NEED_TO_UPDATE,
             activityType: $paramsDto->activityType ?? self::DEFAULT_ACTIVITY_TYPE,
             isFullServerDetection: $paramsDto->isFullServerDetection ?? self::DEFAULT_IS_FULL_SERVER_DETECTION,
             isAbleToClearCache: $paramsDto->isAbleToClearCache ?? self::DEFAULT_IS_ABLE_TO_CLEAR_CACHE,

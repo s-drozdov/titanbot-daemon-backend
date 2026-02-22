@@ -14,6 +14,7 @@ final readonly class DeviceUpdateParamsDto implements DtoInterface
         public UuidInterface $uuid,
         public ?bool $isActive = null,
         public ?bool $isSsh = null,
+        public ?bool $isNeedToUpdate = null,
         public ?ActivityType $activityType = null,
         public ?bool $isFullServerDetection = null,
         public ?bool $isAbleToClearCache = null,

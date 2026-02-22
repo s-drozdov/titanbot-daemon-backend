@@ -20,6 +20,8 @@ final class DeviceCreateCommand
 
     public ?bool $is_ssh;
 
+    public ?bool $is_need_to_update;
+
     #[OA\Property(type: OpenApiType::string->value, nullable: true)]
     public ?ActivityType $activity_type;
 

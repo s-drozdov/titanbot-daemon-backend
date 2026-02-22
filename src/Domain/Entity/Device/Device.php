@@ -31,6 +31,7 @@ class Device implements AggregateInterface
         private int $physicalId,
         private bool $isActive,
         private bool $isSsh,
+        private bool $isNeedToUpdate,
         private ActivityType $activityType,
         private bool $isFullServerDetection,
         private bool $isAbleToClearCache,
@@ -70,6 +71,18 @@ class Device implements AggregateInterface
     public function setIsSsh(bool $isSsh): self
     {
         $this->isSsh = $isSsh;
+
+        return $this;
+    }
+
+    public function isNeedToUpdate(): bool
+    {
+        return $this->isNeedToUpdate;
+    }
+
+    public function setIsNeedToUpdate(bool $isNeedToUpdate): self
+    {
+        $this->isNeedToUpdate = $isNeedToUpdate;
 
         return $this;
     }

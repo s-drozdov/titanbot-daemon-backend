@@ -60,6 +60,12 @@
             </options>
         </field>
 
+        <field name="isNeedToUpdate" column="is_need_to_update" type="boolean" nullable="false">
+            <options>
+                <option name="default">0</option>
+            </options>
+        </field>
+
         <field name="activityType" column="activity_type" type="activity_type_enum" length="255" nullable="false"/>
 
         <field name="isFullServerDetection" column="is_full_server_detection" type="boolean" nullable="false"/>
