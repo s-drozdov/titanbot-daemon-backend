@@ -22,7 +22,8 @@ final readonly class SshCreateService implements SshCreateServiceInterface
     }
 
     #[Override]
-    public function perform(SshCreateParamsDto $paramsDto): Ssh {
+    public function perform(SshCreateParamsDto $paramsDto): Ssh 
+    {
         $device = $this->deviceRepository->getByUuid($paramsDto->deviceUuid);
         $ssh = $this->sshFactory->create($paramsDto);
 

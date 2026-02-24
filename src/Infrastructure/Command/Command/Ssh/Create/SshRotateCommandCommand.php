@@ -25,7 +25,7 @@ use Webmozart\Assert\Assert;
 final class SshRotateCommandCommand extends Command
 {
     private const string PHYSICAL_ID = 'physical_id';
-    private const string PORT = 'server_device_internal_port';
+    private const string SERVER_DEVICE_INTERNAL_PORT = 'server_device_internal_port';
 
     public function __construct(
 
@@ -52,16 +52,16 @@ final class SshRotateCommandCommand extends Command
                 HELPBLOCK,
                 ConsoleAction::SshRotate->value,
                 self::PHYSICAL_ID,
-                self::PORT,
+                self::SERVER_DEVICE_INTERNAL_PORT,
                 ConsoleAction::SshRotate->value,
                 self::PHYSICAL_ID,
-                self::PORT,
+                self::SERVER_DEVICE_INTERNAL_PORT,
             ),
         );
 
         $this
             ->addOption(self::PHYSICAL_ID, null, InputOption::VALUE_REQUIRED, $this->stringHelper->snakeToHumanReadable(self::PHYSICAL_ID))
-            ->addOption(self::PORT, null, InputOption::VALUE_OPTIONAL, $this->stringHelper->snakeToHumanReadable(self::PORT))
+            ->addOption(self::SERVER_DEVICE_INTERNAL_PORT, null, InputOption::VALUE_OPTIONAL, $this->stringHelper->snakeToHumanReadable(self::SERVER_DEVICE_INTERNAL_PORT))
         ;
     }
 
@@ -69,9 +69,12 @@ final class SshRotateCommandCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $physicalId = $input->getOption(self::PHYSICAL_ID);
+        $serverDeviceInternalPort = $input->getOption(self::SERVER_DEVICE_INTERNAL_PORT);
         Assert::string($physicalId);
+        Assert::string($serverDeviceInternalPort);
 
         $input->setOption(self::PHYSICAL_ID, (int) $physicalId);
+        $input->setOption(self::SERVER_DEVICE_INTERNAL_PORT, (int) $serverDeviceInternalPort);
 
         return $this->busProcessor->process($input, $output, SshCreateCommand::class);
     }
