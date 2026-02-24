@@ -17,14 +17,14 @@ use Titanbot\Daemon\Infrastructure\OpenApi\Schema\Dto\PixelRequestDto as PixelRe
 #[OA\Schema()]
 final class HabitCreateCommand
 {
-    /** 
-     * @var ListInterface<PixelRequestDto>
+    /**
+     * @var ListInterface<PixelRequestDto>|null
      */
     #[OA\Property(
         type: OpenApiType::array->value,
         items: new OA\Items(ref: new Model(type: PixelRequestDtoSchema::class)),
     )]
-    public ListInterface $pixel_list;
+    public ?ListInterface $pixel_list = null;
     
     public ?string $action = null;
     

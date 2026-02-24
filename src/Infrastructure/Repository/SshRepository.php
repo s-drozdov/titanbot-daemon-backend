@@ -33,7 +33,7 @@ final class SshRepository extends EntityRepository implements SshRepositoryInter
     public function findAllPorts(): ListInterface
     {
         $portList = $this->createQueryBuilder('s')
-            ->select('s.port')
+            ->select('s.serverDeviceInternalPort')
             ->getQuery()
             ->getSingleColumnResult();
 

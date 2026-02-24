@@ -27,7 +27,7 @@ final readonly class SshFactory implements SshFactoryInterface
             uuid: $this->uuidHelper->create(),
             public: $paramsDto->public,
             private: $paramsDto->private,
-            port: $paramsDto->port ?? $this->getFreePort(),
+            serverDeviceInternalPort: $paramsDto->serverDeviceInternalPort ?? $this->getFreePort(),
         );
     }
 

@@ -15,6 +15,6 @@
 
         <field name="private" column="private" type="text" nullable="false"/>
 
-        <field name="port" column="port" type="integer" nullable="false" unique="true"/>
+        <field name="serverDeviceInternalPort" column="server_device_internal_port" type="integer" nullable="false" unique="true"/>
     </entity>
 </doctrine-mapping>

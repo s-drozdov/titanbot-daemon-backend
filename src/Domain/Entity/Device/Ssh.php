@@ -19,7 +19,7 @@ class Ssh implements EntityInterface
         private UuidInterface $uuid,
         private string $public,
         private string $private,
-        private int $port,
+        private int $serverDeviceInternalPort,
     ) {
         /*_*/
     }
@@ -52,14 +52,14 @@ class Ssh implements EntityInterface
         return $this->private;
     }
 
-    public function getPort(): int
+    public function getServerDeviceInternalPort(): int
     {
-        return $this->port;
+        return $this->serverDeviceInternalPort;
     }
 
-    public function setPort(int $port): self
+    public function setServerDeviceInternalPort(int $serverDeviceInternalPort): self
     {
-        $this->port = $port;
+        $this->serverDeviceInternalPort = $serverDeviceInternalPort;
 
         return $this;
     }

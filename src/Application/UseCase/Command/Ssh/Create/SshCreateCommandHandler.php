@@ -38,7 +38,7 @@ final readonly class SshCreateCommandHandler implements CommandHandlerInterface
             deviceUuid: $this->getDeviceUuid($command->physical_id),
             public: $sshPairDto->public,
             private: $sshPairDto->private,
-            port: $command->port,
+            serverDeviceInternalPort: $command->server_device_internal_port,
         );
 
         $entity = $this->sshCreateService->perform($paramsDto);

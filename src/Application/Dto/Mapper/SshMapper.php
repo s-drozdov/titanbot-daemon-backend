@@ -20,6 +20,13 @@ use Titanbot\Daemon\Application\Dto\Mapper\MapperInterface;
  */
 readonly class SshMapper implements MapperInterface
 {
+    public function __construct(
+        private string $serverName,
+        private int $serverCommonPort,
+    ) {
+        /*_*/
+    }
+
     #[Override]
     public function mapDomainObjectToDto(DomainObjectInterface $object): SshDto
     {
@@ -31,7 +38,11 @@ readonly class SshMapper implements MapperInterface
             physical_id: $device->getPhysicalId(),
             public: $object->getPublic(),
             private: $object->getPrivate(),
-            port: $object->getPort(),
+
+            server_device_internal_port: $object->getServerDeviceInternalPort(),
+            
+            server_name: $this->serverName,
+            server_common_port: $this->serverCommonPort,
         );
     }
 

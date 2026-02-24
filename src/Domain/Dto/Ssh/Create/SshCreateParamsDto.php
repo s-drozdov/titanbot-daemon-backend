@@ -13,7 +13,7 @@ final readonly class SshCreateParamsDto implements DtoInterface
         public UuidInterface $deviceUuid,
         public string $public,
         public string $private,
-        public ?int $port = null,
+        public ?int $serverDeviceInternalPort = null,
     ) {
         /*_*/
     }

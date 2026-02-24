@@ -25,7 +25,7 @@ use Webmozart\Assert\Assert;
 final class SshRotateCommandCommand extends Command
 {
     private const string PHYSICAL_ID = 'physical_id';
-    private const string PORT = 'port';
+    private const string PORT = 'server_device_internal_port';
 
     public function __construct(
 

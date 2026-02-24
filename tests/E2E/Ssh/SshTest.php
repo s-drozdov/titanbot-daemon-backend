@@ -23,13 +23,15 @@ class SshTest extends E2eTestCase
 
         $this->assertNotEmpty($data['ssh']['private']);
         $this->assertNotEmpty($data['ssh']['public']);
-        $this->assertNotEmpty($data['ssh']['port']);
+        $this->assertNotEmpty($data['ssh']['server_device_internal_port']);
+        $this->assertNotEmpty($data['ssh']['server_name']);
+        $this->assertNotEmpty($data['ssh']['server_common_port']);
 
         /** DELETE */
         $this->getAdminClient()->jsonRequest('DELETE', sprintf('/daemon/devices/%s', (string) $device->getUuid()));
         $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
 
-        $entity = $repository->findOneBy(['port' => $data['ssh']['port']]);
+        $entity = $repository->findOneBy(['serverDeviceInternalPort' => $data['ssh']['server_device_internal_port']]);
         $this->assertNull($entity);
     }
 

@@ -150,6 +150,13 @@ services:
         arguments:
             $backendPublicKey: '%env(BACKEND_PUBLIC_KEY)%'
 
+# mappers
+
+    Titanbot\Daemon\Application\Dto\Mapper\SshMapper:
+        arguments:
+            $serverName: '%env(SSH_SERVER_NAME)%'
+            $serverCommonPort: '%env(int:SSH_SERVER_COMMON_PORT)%'
+
 # domain Services
 
     Titanbot\Daemon\Domain\Service\DaemonDb\Get\DaemonDbGetServiceInterface:

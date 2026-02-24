@@ -23,5 +23,9 @@ final class SshDto
 
     public string $private;
 
-    public int $port;
+    public int $server_device_internal_port;
+
+    public string $server_name;
+
+    public int $server_common_port;
 }

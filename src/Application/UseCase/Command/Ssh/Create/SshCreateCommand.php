@@ -10,7 +10,7 @@ final readonly class SshCreateCommand implements CommandInterface
 {
     public function __construct(
         public int $physical_id,
-        public ?int $port = null,
+        public ?int $server_device_internal_port = null,
     ) {
         /*_*/
     }
