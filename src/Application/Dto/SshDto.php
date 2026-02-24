@@ -18,6 +18,7 @@ readonly class SshDto implements DtoInterface
         public string $private,
         public int $server_device_internal_port,
         public string $server_name,
+        public string $server_ip,
         public int $server_common_port,
     ) {
         /*_*/

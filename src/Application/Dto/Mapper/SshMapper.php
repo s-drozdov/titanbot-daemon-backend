@@ -22,6 +22,7 @@ readonly class SshMapper implements MapperInterface
 {
     public function __construct(
         private string $serverName,
+        private string $serverIp,
         private int $serverCommonPort,
     ) {
         /*_*/
@@ -42,6 +43,7 @@ readonly class SshMapper implements MapperInterface
             server_device_internal_port: $object->getServerDeviceInternalPort(),
             
             server_name: $this->serverName,
+            server_ip: $this->serverIp,
             server_common_port: $this->serverCommonPort,
         );
     }

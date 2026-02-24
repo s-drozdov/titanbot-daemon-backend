@@ -27,5 +27,7 @@ final class SshDto
 
     public string $server_name;
 
+    public string $server_ip;
+
     public int $server_common_port;
 }

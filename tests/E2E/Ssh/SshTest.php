@@ -25,6 +25,7 @@ class SshTest extends E2eTestCase
         $this->assertNotEmpty($data['ssh']['public']);
         $this->assertNotEmpty($data['ssh']['server_device_internal_port']);
         $this->assertNotEmpty($data['ssh']['server_name']);
+        $this->assertNotEmpty($data['ssh']['server_ip']);
         $this->assertNotEmpty($data['ssh']['server_common_port']);
 
         /** DELETE */

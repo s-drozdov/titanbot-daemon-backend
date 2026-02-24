@@ -155,6 +155,7 @@ services:
     Titanbot\Daemon\Application\Dto\Mapper\SshMapper:
         arguments:
             $serverName: '%env(SSH_SERVER_NAME)%'
+            $serverIp: '%env(SSH_SERVER_IP)%'
             $serverCommonPort: '%env(int:SSH_SERVER_COMMON_PORT)%'
 
 # domain Services
