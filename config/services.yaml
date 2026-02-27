@@ -226,6 +226,8 @@ services:
 
     Titanbot\Daemon\Application\EventHandler\Habit\PixelListReleased\RemoveOrphanPixels: ~
 
+    Titanbot\Daemon\Application\EventHandler\Habit\ShapeListReleased\RemoveOrphanShapes: ~
+
 # event subscribers
 
     Titanbot\Daemon\Infrastructure\Event\Subscriber\Exception\ExceptionSubscriber:

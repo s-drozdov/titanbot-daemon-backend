@@ -6,6 +6,7 @@ doctrine:
         types:
             activity_type_enum: 'Titanbot\Daemon\Infrastructure\Persistence\Doctrine\Type\ActivityType'
             gender_enum: 'Titanbot\Daemon\Infrastructure\Persistence\Doctrine\Type\GenderType'
+            shape_type_enum: 'Titanbot\Daemon\Infrastructure\Persistence\Doctrine\Type\ShapeType'
 
     orm:
         mappings:

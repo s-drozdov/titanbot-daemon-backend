@@ -26,7 +26,6 @@ final readonly class HabitFactory implements HabitFactoryInterface
             uuid: $this->uuidHelper->create(),
             accountLogicalId: $paramsDto->accountLogicalId,
             priority: $paramsDto->priority,
-            triggerOcr: $paramsDto->triggerOcr,
             triggerShell: $paramsDto->triggerShell,
             logTemplate: $paramsDto->logTemplate,
             postTimeoutMs: $paramsDto->postTimeoutMs,
@@ -40,6 +39,10 @@ final readonly class HabitFactory implements HabitFactoryInterface
 
         if ($paramsDto->pixelList !== null) {
             $entity->setPixelList(new ArrayCollection($paramsDto->pixelList->toArray()));
+        }
+
+        if ($paramsDto->shapeList !== null) {
+            $entity->setShapeList(new ArrayCollection($paramsDto->shapeList->toArray()));
         }
 
         return $entity;

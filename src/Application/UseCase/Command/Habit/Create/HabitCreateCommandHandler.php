@@ -11,6 +11,7 @@ use Titanbot\Daemon\Domain\Dto\Habit\Create\HabitCreateParamsDto;
 use Titanbot\Daemon\Application\Bus\Command\CommandHandlerInterface;
 use Titanbot\Daemon\Domain\Service\Habit\Create\HabitCreateServiceInterface;
 use Titanbot\Daemon\Application\Service\Pixel\GetList\PixelListGetServiceInterface;
+use Titanbot\Daemon\Application\Service\Shape\GetList\ShapeListGetServiceInterface;
 
 /**
  * @implements CommandHandlerInterface<HabitCreateCommand,HabitCreateCommandResult>
@@ -20,6 +21,7 @@ final readonly class HabitCreateCommandHandler implements CommandHandlerInterfac
     public function __construct(
         private HabitCreateServiceInterface $habitCreateService,
         private PixelListGetServiceInterface $pixelListGetService,
+        private ShapeListGetServiceInterface $shapeListGetService,
         private EventBusInterface $eventBus,
     ) {
         /*_*/
@@ -31,9 +33,9 @@ final readonly class HabitCreateCommandHandler implements CommandHandlerInterfac
         $paramsDto = new HabitCreateParamsDto(
             action: $command->action,
             pixelList: $this->pixelListGetService->perform($command->pixel_list),
+            shapeList: $this->shapeListGetService->perform($command->shape_list),
             accountLogicalId: $command->account_logical_id,
             priority: $command->priority,
-            triggerOcr: $command->trigger_ocr,
             triggerShell: $command->trigger_shell,
             logTemplate: $command->log_template,
             postTimeoutMs: $command->post_timeout_ms,

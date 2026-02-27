@@ -29,7 +29,6 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 is_active INTEGER NOT NULL CHECK (is_active IN (0, 1)),
                 account_logical_id INTEGER,
                 priority INTEGER,
-                trigger_ocr TEXT,
                 trigger_shell TEXT,
                 log_template TEXT,
                 post_timeout_ms INTEGER,
@@ -77,6 +76,28 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 PRIMARY KEY (uuid)
             );
         SQL);
+
+        $this->daemonDbConnection->executeStatement(<<<SQL
+            CREATE TABLE habit_shapes (
+                habit_uuid BLOB NOT NULL,
+                shape_uuid BLOB NOT NULL,
+                PRIMARY KEY (habit_uuid, shape_uuid)
+            );
+        SQL);
+
+        $this->daemonDbConnection->executeStatement(<<<SQL
+            CREATE TABLE shapes (
+                uuid BLOB NOT NULL,
+                type TEXT NOT NULL,
+                x INTEGER NOT NULL,
+                y INTEGER NOT NULL,
+                width INTEGER NOT NULL,
+                height INTEGER NOT NULL,
+                rgb_hex TEXT NOT NULL,
+                size INTEGER NOT NULL,
+                PRIMARY KEY (uuid)
+            );
+        SQL);
     }
 
     /**
@@ -99,7 +120,6 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
                 'is_active' => $row['is_active'],
                 'account_logical_id' => $row['account_logical_id'],
                 'priority' => $row['priority'],
-                'trigger_ocr' => $row['trigger_ocr'],
                 'trigger_shell' => $row['trigger_shell'],
                 'log_template' => $row['log_template'],
                 'post_timeout_ms' => $row['post_timeout_ms'],
@@ -142,6 +162,51 @@ final class DaemonDbExportDao implements DaemonDbExportDaoInterface
         return array_values(
             array_unique($pixelUuidList),
         );
+    }
+
+    #[Override]
+    public function cloneHabitShapes(array $habitUuidList): array
+    {
+        $shapeUuidList = [];
+
+        $result = $this->mainConnection->executeQuery(
+            <<<SQL
+            SELECT habit_uuid, shape_uuid
+            FROM habit_shapes
+            WHERE habit_uuid IN (:habit_uuidList)
+            SQL,
+            ['habit_uuidList' => $habitUuidList],
+            ['habit_uuidList' => ArrayParameterType::BINARY],
+        );
+
+        while ($row = $result->fetchAssociative()) {
+            $this->daemonDbConnection->insert('habit_shapes', $row);
+            Assert::string($row['shape_uuid']);
+
+            $shapeUuidList[] = $row['shape_uuid'];
+        }
+
+        return array_values(
+            array_unique($shapeUuidList),
+        );
+    }
+
+    #[Override]
+    public function cloneShapes(array $shapeUuidList): void
+    {
+        if (empty($shapeUuidList)) {
+            return;
+        }
+
+        $result = $this->mainConnection->executeQuery(
+            'SELECT * FROM shapes WHERE uuid IN (:uuidList)',
+            ['uuidList' => $shapeUuidList],
+            ['uuidList' => ArrayParameterType::BINARY],
+        );
+
+        while ($row = $result->fetchAssociative()) {
+            $this->daemonDbConnection->insert('shapes', $row);
+        }
     }
 
     #[Override]

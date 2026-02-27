@@ -7,11 +7,13 @@ namespace Titanbot\Daemon\Domain\Service\Habit\Update;
 use Override;
 use Titanbot\Daemon\Domain\Entity\Habit\Habit;
 use Titanbot\Daemon\Domain\Entity\Habit\Pixel;
+use Titanbot\Daemon\Domain\Entity\Habit\Shape;
 use Doctrine\Common\Collections\ArrayCollection;
 use Titanbot\Daemon\Library\Collection\Collection;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Library\Collection\ListInterface;
 use Titanbot\Daemon\Domain\Event\Habit\PixelListReleased;
+use Titanbot\Daemon\Domain\Event\Habit\ShapeListReleased;
 use Titanbot\Daemon\Domain\Repository\HabitRepositoryInterface;
 use Titanbot\Daemon\Domain\Dto\Habit\Update\HabitUpdateParamsDto;
 
@@ -43,8 +45,8 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
             $entity->setPriority($paramsDto->priority);
         }
 
-        if ($paramsDto->triggerOcr !== null) {
-            $entity->setTriggerOcr($paramsDto->triggerOcr);
+        if ($paramsDto->shapeList !== null) {
+            $this->modifyHabitWithShapeList($entity, $paramsDto->shapeList);
         }
 
         if ($paramsDto->triggerShell !== null) {
@@ -111,5 +113,34 @@ final readonly class HabitUpdateService implements HabitUpdateServiceInterface
         );
 
         $habit->setPixelList(new ArrayCollection($pixelList->toArray()));
+    }
+
+    /**
+     * @param ListInterface<Shape> $shapeList
+     */
+    private function modifyHabitWithShapeList(Habit $habit, ListInterface $shapeList): void
+    {
+        $currentShapeUuidList = array_map(
+            fn (Shape $shape) => $shape->getUuid(),
+            $habit->getShapeList()->toArray(),
+        );
+
+        $newShapeUuidList = array_map(
+            fn (Shape $shape) => $shape->getUuid(),
+            $shapeList->toArray(),
+        );
+
+        $possibleOrphanUuidList = array_diff($currentShapeUuidList, $newShapeUuidList);
+
+        $habit->raise(
+            new ShapeListReleased(
+                shapeUuidList: new Collection(
+                    value: $possibleOrphanUuidList,
+                    innerType: UuidInterface::class,
+                ),
+            ),
+        );
+
+        $habit->setShapeList(new ArrayCollection($shapeList->toArray()));
     }
 }

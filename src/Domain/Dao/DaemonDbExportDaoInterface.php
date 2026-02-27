@@ -21,6 +21,18 @@ interface DaemonDbExportDaoInterface
     public function cloneHabitPixels(array $habitUuidList): array;
 
     /**
+     * @param array<array-key,string> $habitUuidList
+     *
+     * @return array<array-key,string>
+     */
+    public function cloneHabitShapes(array $habitUuidList): array;
+
+    /**
+     * @param array<array-key,string> $shapeUuidList
+     */
+    public function cloneShapes(array $shapeUuidList): void;
+
+    /**
      * @param string[] $pixelUuidList
      */
     public function clonePixelsWithRelatives(array $pixelUuidList): void;

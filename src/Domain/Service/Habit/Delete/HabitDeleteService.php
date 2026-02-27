@@ -7,9 +7,11 @@ namespace Titanbot\Daemon\Domain\Service\Habit\Delete;
 use Override;
 use Titanbot\Daemon\Domain\Entity\Habit\Habit;
 use Titanbot\Daemon\Domain\Entity\Habit\Pixel;
+use Titanbot\Daemon\Domain\Entity\Habit\Shape;
 use Titanbot\Daemon\Library\Collection\Collection;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Domain\Event\Habit\PixelListReleased;
+use Titanbot\Daemon\Domain\Event\Habit\ShapeListReleased;
 use Titanbot\Daemon\Domain\Repository\HabitRepositoryInterface;
 
 final readonly class HabitDeleteService implements HabitDeleteServiceInterface
@@ -33,11 +35,22 @@ final readonly class HabitDeleteService implements HabitDeleteServiceInterface
             innerType: UuidInterface::class,
         );
 
+        $shapeUuidList = new Collection(
+            value: array_map(
+                fn (Shape $shape) => $shape->getUuid(),
+                $habit->getShapeList()->toArray(),
+            ),
+            innerType: UuidInterface::class,
+        );
+
         $this->habitRepository->delete($habit);
 
-        
         $habit->raise(
             new PixelListReleased(pixelUuidList: $pixelUuidList),
+        );
+
+        $habit->raise(
+            new ShapeListReleased(shapeUuidList: $shapeUuidList),
         );
 
         return $habit;

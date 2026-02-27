@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="Titanbot\Daemon\Domain\Entity\Habit\Shape" table="shapes">
+        <id name="uuid" type="uuid_binary" column="uuid">
+            <generator strategy="NONE"/>
+        </id>
+
+        <field name="type" column="type" type="shape_type_enum" length="255" nullable="false"/>
+
+        <field name="x" column="x" type="integer" nullable="false"/>
+
+        <field name="y" column="y" type="integer" nullable="false"/>
+
+        <field name="width" column="width" type="integer" nullable="false"/>
+
+        <field name="height" column="height" type="integer" nullable="false"/>
+
+        <field name="rgbHex" column="rgb_hex" type="string" length="6" nullable="false"/>
+
+        <field name="size" column="size" type="integer" nullable="false"/>
+
+        <unique-constraints>
+            <unique-constraint columns="type,x,y,width,height,rgb_hex,size" name="shape_unique"/>
+        </unique-constraints>
+
+        <many-to-many
+            field="habitList"
+            target-entity="Titanbot\Daemon\Domain\Entity\Habit\Habit"
+            mapped-by="shapeList"
+        />
+    </entity>
+</doctrine-mapping>

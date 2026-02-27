@@ -8,8 +8,10 @@ use Override;
 use LogicException;
 use Titanbot\Daemon\Application\Dto\HabitDto;
 use Titanbot\Daemon\Application\Dto\PixelDto;
+use Titanbot\Daemon\Application\Dto\ShapeDto;
 use Titanbot\Daemon\Domain\Entity\Habit\Habit;
 use Titanbot\Daemon\Domain\Entity\Habit\Pixel;
+use Titanbot\Daemon\Domain\Entity\Habit\Shape;
 use Titanbot\Daemon\Application\Dto\DtoInterface;
 use Titanbot\Daemon\Domain\DomainObjectInterface;
 use Titanbot\Daemon\Library\Collection\Collection;
@@ -24,6 +26,7 @@ readonly class HabitMapper implements MapperInterface
 {
     public function __construct(
         private PixelMapper $pixelMapper,
+        private ShapeMapper $shapeMapper,
     ) {
         /*_*/
     }
@@ -33,6 +36,9 @@ readonly class HabitMapper implements MapperInterface
     {
         /** @var array<array-key,Pixel> $pixelList */
         $pixelList = $object->getPixelList()->toArray();
+
+        /** @var array<array-key,Shape> $shapeList */
+        $shapeList = $object->getShapeList()->toArray();
 
         return new HabitDto(
             uuid: $object->getUuid(),
@@ -44,11 +50,17 @@ readonly class HabitMapper implements MapperInterface
                 ),
                 innerType: PixelDto::class,
             ),
+            shapeList: new Collection(
+                value: array_map(
+                    fn (Shape $shape): ShapeDto => $this->shapeMapper->mapDomainObjectToDto($shape),
+                    $shapeList,
+                ),
+                innerType: ShapeDto::class,
+            ),
             is_active: $object->isActive(),
             updated_at: $object->getUpdatedAt(),
             account_logical_id: $object->getAccountLogicalId(),
             priority: $object->getPriority(),
-            trigger_ocr: $object->getTriggerOcr(),
             trigger_shell: $object->getTriggerShell(),
             log_template: $object->getLogTemplate(),
             post_timeout_ms: $object->getPostTimeoutMs(),

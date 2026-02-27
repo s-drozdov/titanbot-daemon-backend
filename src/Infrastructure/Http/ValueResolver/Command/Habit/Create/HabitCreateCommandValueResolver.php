@@ -8,6 +8,7 @@ use Override;
 use Symfony\Component\HttpFoundation\Request;
 use Titanbot\Daemon\Library\Collection\Collection;
 use Titanbot\Daemon\Application\Dto\PixelRequestDto;
+use Titanbot\Daemon\Application\Dto\ShapeRequestDto;
 use Titanbot\Daemon\Library\Collection\ListInterface;
 use Titanbot\Daemon\Application\Bus\CqrsElementInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -21,6 +22,7 @@ use Titanbot\Daemon\Application\UseCase\Command\Habit\Create\HabitCreateCommand;
 final readonly class HabitCreateCommandValueResolver extends AbstractValueResolver
 {
     private const string PIXEL_LIST = 'pixel_list';
+    private const string SHAPE_LIST = 'shape_list';
 
     public function __construct(
         private DenormalizerInterface $denormalizer,
@@ -50,6 +52,15 @@ final readonly class HabitCreateCommandValueResolver extends AbstractValueResolv
             $data[self::PIXEL_LIST] = [
                 ListInterface::PROPERTY_VALUE => $pixelList,
                 ListInterface::PROPERTY_INNER_TYPE => PixelRequestDto::class,
+            ];
+        }
+
+        $shapeList = $data[self::SHAPE_LIST] ?? null;
+
+        if ($shapeList !== null) {
+            $data[self::SHAPE_LIST] = [
+                ListInterface::PROPERTY_VALUE => $shapeList,
+                ListInterface::PROPERTY_INNER_TYPE => ShapeRequestDto::class,
             ];
         }
 

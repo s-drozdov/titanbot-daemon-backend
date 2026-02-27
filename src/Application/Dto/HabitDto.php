@@ -20,11 +20,13 @@ readonly class HabitDto implements DtoInterface
         /** @var ListInterface<PixelDto> $pixelList */
         public ListInterface $pixelList,
 
+        /** @var ListInterface<ShapeDto> $shapeList */
+        public ListInterface $shapeList,
+
         public bool $is_active,
         public ?DateTimeImmutable $updated_at,
         public ?int $account_logical_id = null,
         public ?int $priority = null,
-        public ?string $trigger_ocr = null,
         public ?string $trigger_shell = null,
         public ?string $log_template = null,
         public ?int $post_timeout_ms = null,

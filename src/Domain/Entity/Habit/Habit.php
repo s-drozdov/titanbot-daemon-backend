@@ -19,16 +19,18 @@ class Habit implements AggregateInterface
 {
     use Eventable;
 
-    /** @var Collection<array-key,Pixel> $pixelList */ 
+    /** @var Collection<array-key,Pixel> $pixelList */
     private Collection $pixelList;
 
+    /** @var Collection<array-key,Shape> $shapeList */
+    private Collection $shapeList;
+
     private DateTimeImmutable $updatedAt;
-    
+
     public function __construct(
         private UuidInterface $uuid,
         private ?int $accountLogicalId,
         private ?int $priority,
-        private ?string $triggerOcr,
         private ?string $triggerShell,
         private ?string $logTemplate,
         private ?int $postTimeoutMs,
@@ -41,6 +43,7 @@ class Habit implements AggregateInterface
     ) {
         $this->updatedAt = new DateTimeImmutable();
         $this->pixelList = new ArrayCollection();
+        $this->shapeList = new ArrayCollection();
     }
 
     #[Override]
@@ -69,18 +72,6 @@ class Habit implements AggregateInterface
     public function setPriority(?int $priority): self
     {
         $this->priority = $priority;
-
-        return $this;
-    }
-
-    public function getTriggerOcr(): ?string
-    {
-        return $this->triggerOcr;
-    }
-
-    public function setTriggerOcr(?string $triggerOcr): self
-    {
-        $this->triggerOcr = $triggerOcr;
 
         return $this;
     }
@@ -159,6 +150,24 @@ class Habit implements AggregateInterface
     public function setPixelList(Collection $pixelList): self
     {
         $this->pixelList = $pixelList;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<array-key,Shape>
+     */
+    public function getShapeList(): Collection
+    {
+        return $this->shapeList;
+    }
+
+    /**
+     * @param Collection<array-key,Shape> $shapeList
+     */
+    public function setShapeList(Collection $shapeList): self
+    {
+        $this->shapeList = $shapeList;
 
         return $this;
     }

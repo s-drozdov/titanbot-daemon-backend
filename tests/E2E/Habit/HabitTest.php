@@ -8,6 +8,7 @@ use Titanbot\Daemon\Tests\E2E\E2eTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Titanbot\Daemon\Domain\Entity\Habit\Habit;
 use Titanbot\Daemon\Domain\Entity\Habit\Pixel;
+use Titanbot\Daemon\Domain\Entity\Habit\Shape;
 
 class HabitTest extends E2eTestCase
 {
@@ -19,10 +20,13 @@ class HabitTest extends E2eTestCase
         /** CREATE */
         $data = [
             'priority' => 1000,
-            'trigger_ocr' => null,
             'pixel_list' => [
                 ['x' => 1, 'y' => 1, 'rgb_hex' => 'FF0099', 'deviation' => 12],
                 ['x' => 2, 'y' => 2, 'rgb_hex' => '220099', 'deviation' => 4],
+            ],
+            'shape_list' => [
+                ['type' => 'rectangle', 'x' => 10, 'y' => 20, 'width' => 100, 'height' => 50, 'rgb_hex' => 'FF0000', 'size' => 5000],
+                ['type' => 'circle', 'x' => 30, 'y' => 40, 'width' => 60, 'height' => 60, 'rgb_hex' => '00FF00', 'size' => 2800],
             ],
             'trigger_shell' => 'trigger_shell',
             'log_template' => 'log_template',
@@ -30,11 +34,13 @@ class HabitTest extends E2eTestCase
         ];
 
         $entity = $this->createHabit($data);
-        
+
         $this->assertNotEmpty($entity->getPixelList()->toArray());
         $this->assertTrue(array_any($entity->getPixelList()->toArray(), fn (Pixel $pixel) => $pixel->getDot()->getX() === 2 && $pixel->getDot()->getY() === 2 && $pixel->getColor()->getRgbHex() === '220099' ));
+        $this->assertNotEmpty($entity->getShapeList()->toArray());
+        $this->assertCount(2, $entity->getShapeList()->toArray());
+        $this->assertTrue(array_any($entity->getShapeList()->toArray(), fn (Shape $shape) => $shape->getX() === 10 && $shape->getY() === 20 && $shape->getRgbHex() === 'FF0000'));
         $this->assertSame(1000, $entity->getPriority());
-        $this->assertNull($entity->getTriggerOcr());
         $this->assertSame('trigger_shell', $entity->getTriggerShell());
         $this->assertSame('log_template', $entity->getLogTemplate());
 
@@ -45,7 +51,7 @@ class HabitTest extends E2eTestCase
 
         $this->assertSame('trigger_shell', $data['habit']['trigger_shell']);
         $this->assertSame(1000, $data['habit']['priority']);
-        $this->assertNull($data['habit']['trigger_ocr']);
+        $this->assertNotEmpty($data['habit']['shapeList']);
 
         /** INDEX */
         $this->getAdminClient()->jsonRequest('GET', '/daemon/habits');
@@ -70,7 +76,6 @@ class HabitTest extends E2eTestCase
 
         $this->assertNotNull($entity);
         $this->assertSame(1001, $entity->getPriority());
-        $this->assertNull($entity->getTriggerOcr());
         $this->assertSame('trigger_shell2', $entity->getTriggerShell());
 
         /** DELETE */
@@ -99,7 +104,6 @@ class HabitTest extends E2eTestCase
         /** CREATE */
         $data = [
             'priority' => 1000,
-            'trigger_ocr' => null,
             'pixel_list' => [],
             'trigger_shell' => null,
             'log_template' => null,
@@ -125,7 +129,7 @@ class HabitTest extends E2eTestCase
         $data = ['action' => 'action'];
         $entity = $this->createHabit($data);
 
-        $this->assertNull($entity->getTriggerOcr());
+        $this->assertEmpty($entity->getShapeList()->toArray());
         $this->assertNull($entity->getPriority());
     }
 

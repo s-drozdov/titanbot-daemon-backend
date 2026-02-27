@@ -52,11 +52,15 @@ final readonly class DaemonDbGetService implements DaemonDbGetServiceInterface
 
         $pixelUuidList = $this->daemonDbExportDao->cloneHabitPixels($habitUuidList);
 
-        if (empty($pixelUuidList)) {
-            return $this->dbFile;
+        if (!empty($pixelUuidList)) {
+            $this->daemonDbExportDao->clonePixelsWithRelatives($pixelUuidList);
         }
 
-        $this->daemonDbExportDao->clonePixelsWithRelatives($pixelUuidList);
+        $shapeUuidList = $this->daemonDbExportDao->cloneHabitShapes($habitUuidList);
+
+        if (!empty($shapeUuidList)) {
+            $this->daemonDbExportDao->cloneShapes($shapeUuidList);
+        }
 
         return $this->dbFile;
     }

@@ -13,8 +13,6 @@
 
         <field name="priority" column="priority" type="integer" nullable="true"/>
 
-        <field name="triggerOcr" column="trigger_ocr" type="string" length="255" nullable="true"/>
-
         <field name="triggerShell" column="trigger_shell" type="string" length="255" nullable="true"/>
 
         <field name="logTemplate" column="log_template" type="string" length="255" nullable="true"/>
@@ -51,6 +49,29 @@
                 <inverse-join-columns>
                     <join-column
                         name="pixel_uuid"
+                        referenced-column-name="uuid"
+                        on-delete="CASCADE"
+                    />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <many-to-many
+            field="shapeList"
+            target-entity="Titanbot\Daemon\Domain\Entity\Habit\Shape"
+            inversed-by="habitList"
+        >
+            <join-table name="habit_shapes">
+                <join-columns>
+                    <join-column
+                        name="habit_uuid"
+                        referenced-column-name="uuid"
+                        on-delete="CASCADE"
+                    />
+                </join-columns>
+                <inverse-join-columns>
+                    <join-column
+                        name="shape_uuid"
                         referenced-column-name="uuid"
                         on-delete="CASCADE"
                     />

@@ -6,6 +6,7 @@ namespace Titanbot\Daemon\Domain\Dto\Habit\Update;
 
 use Titanbot\Daemon\Domain\Dto\DtoInterface;
 use Titanbot\Daemon\Domain\Entity\Habit\Pixel;
+use Titanbot\Daemon\Domain\Entity\Habit\Shape;
 use Titanbot\Daemon\Domain\ValueObject\UuidInterface;
 use Titanbot\Daemon\Library\Collection\ListInterface;
 
@@ -17,10 +18,12 @@ final readonly class HabitUpdateParamsDto implements DtoInterface
 
         /** @var ListInterface<Pixel>|null $pixelList */
         public ?ListInterface $pixelList,
-        
+
+        /** @var ListInterface<Shape>|null $shapeList */
+        public ?ListInterface $shapeList,
+
         public ?int $accountLogicalId,
         public ?int $priority,
-        public ?string $triggerOcr,
         public ?string $triggerShell,
         public ?string $logTemplate,
         public ?int $postTimeoutMs,
