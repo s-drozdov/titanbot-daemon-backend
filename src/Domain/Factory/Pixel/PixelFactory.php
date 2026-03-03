@@ -51,13 +51,13 @@ final readonly class PixelFactory implements PixelFactoryInterface
      * @throws InvalidArgumentException
      */
     public function guardInput(PixelCreateParamsDto $paramsDto): void {
-        Assert::positiveInteger($paramsDto->x);
-        Assert::positiveInteger($paramsDto->y);
+        Assert::natural($paramsDto->x);
+        Assert::natural($paramsDto->y);
         Assert::notEmpty($paramsDto->rgbHex);
         Assert::regex($paramsDto->rgbHex, self::REGEX_HEX_COLOR);
 
-        if ($paramsDto->deviation !== null && $paramsDto->deviation !== 0) {
-            Assert::positiveInteger($paramsDto->deviation);
+        if ($paramsDto->deviation !== null) {
+            Assert::natural($paramsDto->deviation);
         }
     }
 

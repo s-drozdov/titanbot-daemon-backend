@@ -52,8 +52,8 @@ final readonly class ShapeFactory implements ShapeFactoryInterface
      */
     private function guardInput(ShapeCreateParamsDto $paramsDto): void
     {
-        Assert::positiveInteger($paramsDto->x);
-        Assert::positiveInteger($paramsDto->y);
+        Assert::natural($paramsDto->x);
+        Assert::natural($paramsDto->y);
         Assert::positiveInteger($paramsDto->width);
         Assert::positiveInteger($paramsDto->height);
         Assert::positiveInteger($paramsDto->size);

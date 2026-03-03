@@ -141,6 +141,49 @@ class DeviceTest extends E2eTestCase
     }
 
     #[Test]
+    public function testResetInNeedUpdate(): void
+    {
+        $entity = $this->createDevice(['physical_id' => 999888]);
+
+        $this->getAdminClient()->jsonRequest('PATCH', sprintf('/daemon/devices/%s', (string) $entity->getUuid()), [
+            'is_need_to_update' => true,
+        ]);
+        $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
+
+        $em = self::getContainer()->get('doctrine')->getManager();
+
+        /** @var Device $entity */
+        $entity = $em->getRepository(Device::class)->find($entity->getUuid());
+        $this->assertSame(true, $entity->isNeedToUpdate());
+
+        $this->getDaemonClient()->jsonRequest('POST', sprintf('/daemon/devices/%s/is-need-update/reset', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
+        $em = self::getContainer()->get('doctrine')->getManager();
+
+        /** @var Device $entity */
+        $entity = $em->getRepository(Device::class)->find($entity->getUuid());
+        $this->assertSame(false, $entity->isNeedToUpdate());
+    }
+
+    #[Test]
+    public function testResetInNeedUpdateAccessAnonymous(): void
+    {
+        $entity = $this->createDevice(['physical_id' => 999777]);
+
+        $this->getAnonimousClient()->jsonRequest('POST', sprintf('/daemon/devices/%s/is-need-update/reset', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+    }
+
+    #[Test]
+    public function testResetInNeedUpdateAccessDaemon(): void
+    {
+        $entity = $this->createDevice(['physical_id' => 999666]);
+
+        $this->getDaemonClient()->jsonRequest('POST', sprintf('/daemon/devices/%s/is-need-update/reset', (string) $entity->getUuid()));
+        $this->assertResponseStatusCodeSame(Response::HTTP_ACCEPTED);
+    }
+
+    #[Test]
     public function testAccessAnonimous(): void
     {
         $entity = $this->createDevice(['physical_id' => 123456]);

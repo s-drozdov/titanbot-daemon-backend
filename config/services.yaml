@@ -331,7 +331,11 @@ services:
     Titanbot\Daemon\Application\UseCase\Command\Device\Delete\DeviceDeleteCommandHandler:
         tags:
             - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Device\Delete\DeviceDeleteCommand }
-    
+
+    Titanbot\Daemon\Application\UseCase\Command\Device\ResetInNeedUpdate\DeviceResetInNeedUpdateCommandHandler:
+        tags:
+            - { name: messenger.message_handler, handles: Titanbot\Daemon\Application\UseCase\Command\Device\ResetInNeedUpdate\DeviceResetInNeedUpdateCommand }
+
     # EmpireDate
     
     Titanbot\Daemon\Application\UseCase\Command\EmpireDate\Create\EmpireDateCreateCommandHandler:

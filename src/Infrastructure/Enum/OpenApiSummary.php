@@ -55,5 +55,7 @@ enum OpenApiSummary: string
     case LogClear = 'Clear all daemon logs';
     case LogBulkCreate = 'Create multiple logs';
 
+    case DeviceInNeedUpdateReset = 'Reset device in_need_update flag';
+
     case DeviceSshGet = 'Get device ssh';
 }

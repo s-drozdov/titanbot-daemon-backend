@@ -30,6 +30,8 @@ enum OpenApiOperationId: string
     case DeviceUpdate = 'updateDevice';
     case DeviceDelete = 'deleteDevice';
 
+    case DeviceInNeedUpdateReset = 'resetDeviceInNeedUpdate';
+
     case DeviceSshGet = 'getDeviceSsh';
 
     case EmpireDateCreate = 'createEmpireDate';

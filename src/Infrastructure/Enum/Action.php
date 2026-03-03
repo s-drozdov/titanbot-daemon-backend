@@ -29,6 +29,7 @@ enum Action: string
     case DeviceIndex = 'device_index';
     case DeviceUpdate = 'device_update';
     case DeviceDelete = 'device_delete';
+    case DeviceInNeedUpdateResetPost = 'device_in_need_update_reset';
 
     case EmpireDatePost = 'empire_date_create';
     case EmpireDateGet = 'empire_date_get';
